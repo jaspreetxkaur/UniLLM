@@ -1,9 +1,10 @@
 // AUTH PAGE: signup
-import { apiService } from "../../apiService.js?v=2";
+import { apiService, extractErrorMessage } from "../../apiService.js?v=2";
 import { components } from "../../components.js?v=2";
 import { router } from "../../router.js?v=2";
 
 let registeredEmail = "";
+let currentOrgContext = null;
 
 export function signup() {
   return `
@@ -242,15 +243,17 @@ export function bindSignup() {
     }
     
     const submitBtn = signupForm.querySelector("button[type='submit']");
+    const originalBtnText = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.innerText = "DEPLOYING GATEWAY SPACE...";
     
     const res = await apiService.signup(name, email, password, type, referralCode);
     submitBtn.disabled = false;
-    submitBtn.innerText = "Create Gateway Space";
+    submitBtn.innerHTML = originalBtnText;
 
     if (res.success) {
       registeredEmail = email;
+      currentOrgContext = res.orgContext || null;
       optTargetEmail.innerText = email;
       
       // Dynamic view transition
@@ -262,36 +265,38 @@ export function bindSignup() {
       if (res.otp) {
         devAlert.classList.remove("hidden");
         devCode.innerText = res.otp;
-        components.renderToast("success", `Verification code printed in terminal: ${res.otp}`);
+        components.renderToast("success", `Verification code generated: ${res.otp}`);
       }
     } else {
-      components.renderToast("error", res.message || "Failed to deploy space.");
+      components.renderToast("error", extractErrorMessage(res, "Failed to deploy space."));
     }
   });
 
   // Step 2: OTP verification submit
   otpForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const otp = document.getElementById("otp-val").value;
+    const otp = (document.getElementById("otp-val").value || "").trim();
     const submitBtn = otpForm.querySelector("button[type='submit']");
+    const originalBtnText = submitBtn.innerHTML;
     
     submitBtn.disabled = true;
     submitBtn.innerText = "AUTHENTICATING...";
 
-    const res = await apiService.verifyOtp(registeredEmail, otp);
+    const res = await apiService.verifyOtp(registeredEmail, otp, currentOrgContext);
     submitBtn.disabled = false;
-    submitBtn.innerText = "Verify Security Code";
+    submitBtn.innerHTML = originalBtnText;
 
     if (res.success) {
       components.renderToast("success", res.user?.role === "Employee" ? "Employee account verified!" : "Sandbox workspace verified!");
       const returnUrl = sessionStorage.getItem("redirect_after_login");
       if (returnUrl && returnUrl !== "/login") {
+        sessionStorage.removeItem("redirect_after_login");
         router.navigate(returnUrl);
       } else {
         router.navigate(res.user?.role === "Employee" ? "/app" : "/onboarding");
       }
     } else {
-      components.renderToast("error", res.message || "Invalid or expired OTP code.");
+      components.renderToast("error", extractErrorMessage(res, "Invalid or expired OTP code."));
     }
   });
 
@@ -310,20 +315,20 @@ export function bindSignup() {
     resendBtn.disabled = true;
     resendBtn.innerText = "Resending...";
     
-    const name = document.getElementById("signup-name").value;
-    const password = document.getElementById("signup-password").value;
-    const type = document.getElementById("signup-type").value;
-    const referralCode = document.getElementById("signup-referral")?.value.trim() || "";
-    
-    const res = await apiService.signup(name, registeredEmail, password, type, referralCode);
+    const res = await apiService.resendOtp(registeredEmail);
     resendBtn.disabled = false;
     resendBtn.innerText = "Resend Code";
 
-    if (res.success && res.otp) {
-      devCode.innerText = res.otp;
-      components.renderToast("success", `New OTP generated: ${res.otp}`);
+    if (res.success) {
+      if (res.otp) {
+        devCode.innerText = res.otp;
+        devAlert.classList.remove("hidden");
+        components.renderToast("success", `New OTP generated: ${res.otp}`);
+      } else {
+        components.renderToast("success", "New verification code generated!");
+      }
     } else {
-      components.renderToast("error", "Error resending security code.");
+      components.renderToast("error", extractErrorMessage(res, "Error resending security code."));
     }
   });
 }

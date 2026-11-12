@@ -27,6 +27,39 @@ export const workspaceController = {
     }
   },
 
+  getById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const workspace = await workspaceService.getWorkspaceById({
+        organizationId: req.user.organizationId,
+        workspaceId: id
+      });
+      return res.json({ success: true, workspace });
+    } catch (err) {
+      console.error('Get Workspace Error:', err);
+      const statusCode = err.statusCode || 500;
+      return res.status(statusCode).json({ success: false, message: err.message || 'Failed to get workspace.' });
+    }
+  },
+
+  update: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { name } = req.body;
+      const workspace = await workspaceService.updateWorkspace({
+        organizationId: req.user.organizationId,
+        userId: req.user.id,
+        workspaceId: id,
+        name
+      });
+      return res.json({ success: true, message: 'Workspace updated successfully.', workspace });
+    } catch (err) {
+      console.error('Update Workspace Error:', err);
+      const statusCode = err.statusCode || 500;
+      return res.status(statusCode).json({ success: false, message: err.message || 'Failed to update workspace.' });
+    }
+  },
+
   delete: async (req, res) => {
     try {
       const { id } = req.params;

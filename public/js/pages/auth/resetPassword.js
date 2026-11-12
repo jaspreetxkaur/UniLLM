@@ -9,41 +9,42 @@ export function resetPassword() {
   const emailVal = urlParams.get("email") || "";
 
   return `
-    <div class="flex flex-col gap-6 font-sans animate-fade-in-up max-w-md mx-auto">
-      <div class="flex flex-col gap-1.5 select-none text-center sm:text-left">
-        <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 border border-indigo-100 px-2.5 py-0.5 rounded self-center sm:self-start shadow-sm">
+    <div class="flex flex-col gap-6 font-sans animate-fade-in-up max-w-md mx-auto w-full text-left">
+      <div class="flex flex-col gap-1.5 select-none">
+        <span class="text-[9px] font-mono font-bold text-white uppercase tracking-widest bg-white/10 border border-white/20 px-2.5 py-0.5 rounded self-start">
           Credentials Config
         </span>
-        <h2 class="font-display font-black text-3xl text-slate-900 uppercase leading-none mt-1">Set Password</h2>
-        <p class="text-xs text-slate-500 font-semibold font-medium">Enter your recovery verification code and set a new password.</p>
+        <h2 class="font-sans font-bold text-2xl text-white tracking-tight mt-1">Set Password</h2>
+        <p class="text-xs text-[#A1A5AD]">Enter your recovery verification code and set a new password.</p>
       </div>
       
-      <form id="reset-form" class="flex flex-col gap-4 font-semibold text-xs text-slate-700">
+      <form id="reset-form" class="flex flex-col gap-4 text-xs">
         <div class="flex flex-col gap-1.5">
-          <label class="text-[9px] uppercase tracking-wider text-slate-400">Email Address</label>
-          <input id="reset-email" type="email" required value="${emailVal}" placeholder="sarah@cyberdyne.org" class="p-3.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:bg-[#161926] focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100/50 outline-none transition-all duration-200 font-semibold text-xs text-slate-800" />
+          <label class="text-[10px] font-mono uppercase tracking-wider text-[#A1A5AD]">Email Address</label>
+          <input id="reset-email" type="email" required value="${emailVal}" placeholder="sarah@cyberdyne.org" class="p-3.5 border border-[#292D34] rounded-xl bg-[#101216] focus:bg-[#15181D] focus:border-white/40 outline-none transition-all duration-200 text-xs text-white placeholder-[#A1A5AD]/40" />
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-[9px] uppercase tracking-wider text-slate-400">6-Digit Recovery Code</label>
-          <input id="reset-otp" type="text" required placeholder="000000" maxlength="6" class="p-3.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:bg-[#161926] focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100/50 outline-none transition-all duration-200 font-mono font-bold text-sm tracking-wider text-slate-800 text-center" />
+          <label class="text-[10px] font-mono uppercase tracking-wider text-[#A1A5AD]">6-Digit Recovery Code</label>
+          <input id="reset-otp" type="text" required placeholder="000000" maxlength="6" class="p-3.5 border border-[#292D34] rounded-xl bg-[#101216] focus:bg-[#15181D] focus:border-white/40 outline-none transition-all duration-200 font-mono font-bold text-sm tracking-wider text-white text-center" />
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <label class="text-[9px] uppercase tracking-wider text-slate-400">New Secure Password</label>
+          <label class="text-[10px] font-mono uppercase tracking-wider text-[#A1A5AD]">New Secure Password</label>
           <div class="relative">
-            <input id="reset-pass" type="password" required placeholder="At least 8 characters" class="w-full p-3.5 pr-10 border border-slate-200 rounded-xl bg-slate-50/50 focus:bg-[#161926] focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100/50 outline-none transition-all duration-200 font-semibold text-xs text-slate-800" />
-            <button type="button" id="reset-password-toggle" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none p-1 text-sm select-none">👁️</button>
+            <input id="reset-pass" type="password" required placeholder="At least 8 characters" class="w-full p-3.5 pr-10 border border-[#292D34] rounded-xl bg-[#101216] focus:bg-[#15181D] focus:border-white/40 outline-none transition-all duration-200 text-xs text-white placeholder-[#A1A5AD]/40" />
+            <button type="button" id="reset-password-toggle" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#A1A5AD] hover:text-white focus:outline-none p-1 text-sm select-none">👁️</button>
           </div>
         </div>
         
-        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-bold rounded-xl uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 mt-2">
+        <button type="submit" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black font-semibold text-xs rounded-xl transition-all duration-200 shadow-md hover:shadow-lg mt-2 flex items-center justify-center gap-1.5 group">
           Save New Credentials
+          <span class="transition-transform group-hover:translate-x-1 font-bold">→</span>
         </button>
       </form>
       
-      <span class="text-xs text-slate-500 text-center mt-2 font-medium">
-        <a href="/login" data-link class="text-indigo-600 font-bold hover:underline">&larr; Return to Login</a>
+      <span class="text-xs text-[#A1A5AD] text-center mt-2 font-medium">
+        <a href="/login" data-link class="text-white hover:underline">&larr; Return to Login</a>
       </span>
     </div>
   `;

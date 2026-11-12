@@ -65,7 +65,7 @@ export const apiService = {
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-UniLLM-Test-Sandbox": "true" },
         credentials: "same-origin",
         body: JSON.stringify({ email, password })
       });
@@ -93,7 +93,7 @@ export const apiService = {
     try {
       const response = await fetch("/api/auth/signup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-UniLLM-Test-Sandbox": "true" },
         credentials: "same-origin",
         body: JSON.stringify({ name, email, password, orgName, referralCode })
       });
@@ -103,13 +103,13 @@ export const apiService = {
     }
   },
 
-  verifyOtp: async (email, otp) => {
+  verifyOtp: async (email, otp, orgContext = null) => {
     try {
       const response = await fetch("/api/auth/verify-otp", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-UniLLM-Test-Sandbox": "true" },
         credentials: "same-origin",
-        body: JSON.stringify({ email, otp })
+        body: JSON.stringify({ email, otp, orgContext })
       });
       const data = await response.json();
       if (response.ok && data.success && data.user) {
@@ -131,11 +131,25 @@ export const apiService = {
     }
   },
 
+  resendOtp: async (email) => {
+    try {
+      const response = await fetch("/api/auth/resend-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-UniLLM-Test-Sandbox": "true" },
+        credentials: "same-origin",
+        body: JSON.stringify({ email })
+      });
+      return await response.json();
+    } catch (err) {
+      return { success: false, message: "Network connection failure resending verification code." };
+    }
+  },
+
   forgotPassword: async (email) => {
     try {
       const response = await fetch("/api/auth/forgot-password", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-UniLLM-Test-Sandbox": "true" },
         credentials: "same-origin",
         body: JSON.stringify({ email })
       });
@@ -164,6 +178,7 @@ export const apiService = {
     sessionStorage.removeItem("redirect_after_login");
     localStorage.removeItem("unillm_user");
     localStorage.removeItem("redirect_after_login");
+    document.cookie = "unillm_logged_in=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     try {
       await fetch("/api/auth/logout", {
         method: "POST",
@@ -189,7 +204,26 @@ export const apiService = {
     delete updated.token;
     delete updated.jwt;
     sessionStorage.setItem("unillm_user", JSON.stringify(updated));
+    localStorage.setItem("unillm_user", JSON.stringify(updated));
     return updated;
+  },
+
+  updateProfile: async ({ name, orgName }) => {
+    try {
+      const response = await fetch("/api/auth/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ name, orgName })
+      });
+      const data = await response.json();
+      if (data.success && data.user) {
+        apiService.updateCurrentUser(data.user);
+      }
+      return data;
+    } catch (err) {
+      return { success: false, message: "Network connection failure updating profile." };
+    }
   },
 
   // Authoritative Session Verification against GET /api/auth/me (Cookie-Auth)
@@ -216,6 +250,10 @@ export const apiService = {
         }
       } else if (response.status === 401) {
         sessionStorage.removeItem("unillm_user");
+        sessionStorage.removeItem("redirect_after_login");
+        localStorage.removeItem("unillm_user");
+        localStorage.removeItem("redirect_after_login");
+        document.cookie = "unillm_logged_in=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         return null;
       }
     } catch (err) {
@@ -298,13 +336,15 @@ export const apiService = {
         const telemetry = data.unillm_telemetry || {};
         const usage = data.usage || {};
 
-        // Stream text smoothly to the UI
-        const words = fullText.split(" ");
+        // Stream text smoothly and quickly while preserving 100% of spaces, newlines, and tabs
+        const tokens = fullText.match(/(\S+|\s+)/g) || [fullText];
         let currentIdx = 0;
+        const chunkSize = 3;
         const streamInterval = setInterval(() => {
-          if (currentIdx < words.length) {
-            onChunk(words[currentIdx] + (currentIdx < words.length - 1 ? " " : ""));
-            currentIdx++;
+          if (currentIdx < tokens.length) {
+            const nextBatch = tokens.slice(currentIdx, currentIdx + chunkSize).join("");
+            onChunk(nextBatch);
+            currentIdx += chunkSize;
           } else {
             clearInterval(streamInterval);
 
@@ -534,6 +574,98 @@ export const apiService = {
       return await response.json();
     } catch (err) {
       return { success: false, message: "Network connection failure deleting workspace." };
+    }
+  },
+
+  updateWorkspace: async (id, name) => {
+    try {
+      const response = await fetch(`/api/workspaces/${id}`, {
+        method: "PUT",
+        headers: apiService.getAuthHeaders(),
+        credentials: "same-origin",
+        body: JSON.stringify({ name })
+      });
+      return await response.json();
+    } catch (err) {
+      return { success: false, message: "Network connection failure updating workspace." };
+    }
+  },
+
+  // Workspace Document Management (Multer file upload)
+  uploadDocument: async (workspaceId, file) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // Note: Do NOT set Content-Type header manually; browser automatically sets boundary
+      const headers = {};
+      const token = apiService.getActiveToken?.();
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+
+      const response = await fetch(`/api/workspaces/${workspaceId}/documents`, {
+        method: "POST",
+        headers,
+        credentials: "same-origin",
+        body: formData
+      });
+      return await response.json();
+    } catch (err) {
+      return { success: false, message: "Network connection failure uploading document." };
+    }
+  },
+
+  getDocuments: async (workspaceId) => {
+    try {
+      const response = await fetch(`/api/workspaces/${workspaceId}/documents`, {
+        headers: apiService.getAuthHeaders(),
+        credentials: "same-origin"
+      });
+      return await response.json();
+    } catch (err) {
+      return { success: false, message: "Network connection failure fetching documents." };
+    }
+  },
+
+  downloadDocument: async (workspaceId, documentId) => {
+    try {
+      const response = await fetch(`/api/workspaces/${workspaceId}/documents/${documentId}/download`, {
+        credentials: "same-origin"
+      });
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        return { success: false, message: errorData.message || "Failed to download document." };
+      }
+      const blob = await response.blob();
+      const contentDisposition = response.headers.get("content-disposition");
+      let filename = "document";
+      if (contentDisposition && contentDisposition.includes("filename=")) {
+        const match = contentDisposition.match(/filename="?([^";]+)"?/);
+        if (match && match[1]) filename = match[1];
+      }
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(downloadUrl);
+      return { success: true, filename };
+    } catch (err) {
+      return { success: false, message: "Network connection failure downloading document." };
+    }
+  },
+
+  deleteDocument: async (workspaceId, documentId) => {
+    try {
+      const response = await fetch(`/api/workspaces/${workspaceId}/documents/${documentId}`, {
+        method: "DELETE",
+        headers: apiService.getAuthHeaders(),
+        credentials: "same-origin"
+      });
+      return await response.json();
+    } catch (err) {
+      return { success: false, message: "Network connection failure deleting document." };
     }
   },
 

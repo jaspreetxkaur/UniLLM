@@ -13,14 +13,14 @@ export function adminBilling() {
   return `
     <div class="flex flex-col gap-8 animate-fade-in-up font-sans select-none max-w-6xl">
       <!-- Top Header -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border pb-5">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#292D34] pb-5">
         <div class="flex flex-col gap-1">
           <div class="flex items-center gap-2">
             <span class="text-[9px] font-bold text-indigo-700 uppercase tracking-widest">Enterprise Finance</span>
             <span class="px-2 py-0.5 bg-amber-100 text-amber-800 border border-amber-300 rounded text-[9px] font-bold uppercase tracking-wider">Demo / Sandbox Mode</span>
           </div>
-          <h1 class="font-display font-black text-3xl text-brand-text uppercase leading-none font-bold">Corporate Billing & Contracts</h1>
-          <p class="text-xs text-brand-muted font-semibold mt-1">Enterprise Master Services Agreement (MSA), committed token allowances, and Net-30 invoicing (Simulated sandbox preview).</p>
+          <h1 class="font-display font-black text-3xl text-white uppercase leading-none font-bold">Corporate Billing & Contracts</h1>
+          <p class="text-xs text-[#A1A5AD] font-semibold mt-1">Enterprise Master Services Agreement (MSA), committed token allowances, and Net-30 invoicing (Simulated sandbox preview).</p>
         </div>
       </div>
 
@@ -41,7 +41,7 @@ export function adminBilling() {
           </div>
         </div>
 
-        <div class="p-6 bg-white border border-brand-border rounded-2xl shadow-xs flex flex-col justify-between gap-4">
+        <div class="p-6 bg-white border border-[#292D34] rounded-2xl shadow-xs flex flex-col justify-between gap-4">
           <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Payment Method</span>
           <div class="flex flex-col gap-1">
             <span class="font-bold text-sm text-slate-900">ACH / Wire Transfer (JPMorgan Chase)</span>
@@ -50,7 +50,7 @@ export function adminBilling() {
           <span class="text-[10px] text-slate-400 font-semibold pt-3 border-t">Tax Exemption ID: US-EIN-94820194</span>
         </div>
 
-        <div class="p-6 bg-white border border-brand-border rounded-2xl shadow-xs flex flex-col justify-between gap-4">
+        <div class="p-6 bg-white border border-[#292D34] rounded-2xl shadow-xs flex flex-col justify-between gap-4">
           <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Account Executive</span>
           <div class="flex flex-col gap-1">
             <span class="font-bold text-sm text-slate-900">Marcus Vance</span>
@@ -61,7 +61,7 @@ export function adminBilling() {
       </div>
 
       <!-- Purchase Orders Table -->
-      <div class="bg-white border border-brand-border rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
+      <div class="bg-white border border-[#292D34] rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
         <h3 class="font-bold text-base text-slate-900">Corporate Purchase Orders & Statements</h3>
 
         <div class="border border-slate-200 rounded-xl overflow-hidden text-xs">

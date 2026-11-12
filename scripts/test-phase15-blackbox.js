@@ -1,12 +1,9 @@
-import { Pool } from 'pg';
 import dotenv from 'dotenv';
 dotenv.config();
+import { connectMongo, disconnectMongo } from '../server/config/mongo.js';
+import { User, ApiKey, AuditLog, AiRequest, OrganizationMember } from '../server/models/index.js';
 
 const BASE_URL = 'http://localhost:5173';
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
 
 const results = [];
 
@@ -58,6 +55,8 @@ async function run() {
   console.log('🚀 STARTING UNI LLM PHASE 15 BLACK-BOX API VERIFICATION');
   console.log('====================================================\n');
 
+  await connectMongo();
+
   // 1. START SERVER & HEALTH CHECK
   try {
     const rootRes = await apiRequest('/');
@@ -94,8 +93,8 @@ async function run() {
   recordTest('2. Auth', 'Invalid OTP Rejection', '/api/auth/verify-otp', '400', String(invalidOtpRes.status), invalidOtpRes.status === 400);
 
   // Fetch actual OTP from database for valid verification test
-  const otpQuery = await pool.query('SELECT otp FROM users WHERE email = $1', [emailA]);
-  const realOtpA = otpQuery.rows[0]?.otp;
+  const userAObj = await User.findOne({ email: emailA }).lean();
+  const realOtpA = userAObj?.otp;
 
   // C. Valid OTP verification
   const verifyResA = await apiRequest('/api/auth/verify-otp', {
@@ -156,10 +155,10 @@ async function run() {
     method: 'POST',
     body: { name: 'Tenant B Owner', email: emailB, password, company: 'Company B' }
   });
-  const otpQueryB = await pool.query('SELECT otp FROM users WHERE email = $1', [emailB]);
+  const userBObj = await User.findOne({ email: emailB }).lean();
   await apiRequest('/api/auth/verify-otp', {
     method: 'POST',
-    body: { email: emailB, otp: otpQueryB.rows[0]?.otp }
+    body: { email: emailB, otp: userBObj?.otp }
   });
   const loginResB = await apiRequest('/api/auth/login', {
     method: 'POST',
@@ -188,8 +187,8 @@ async function run() {
   recordTest('4. API Keys', 'Raw Key Concealment in List', '/api/keys', 'raw_key undefined in list', `raw_key=${fetchedKeyA?.raw_key || fetchedKeyA?.rawKey}`, fetchedKeyA && !fetchedKeyA.raw_key && !fetchedKeyA.rawKey);
 
   // Database verification: SHA-256 hash stored, not raw key
-  const dbKeyCheck = await pool.query('SELECT key_hash, key_prefix FROM api_keys WHERE id = $1', [keyIdA]);
-  recordTest('4. API Keys', 'Database Stores SHA-256 Hash Only', 'PostgreSQL api_keys', 'key_hash 64-hex chars', `len=${dbKeyCheck.rows[0]?.key_hash?.length}`, dbKeyCheck.rows[0]?.key_hash?.length === 64);
+  const dbKeyCheck = await ApiKey.findById(keyIdA).lean();
+  recordTest('4. API Keys', 'Database Stores SHA-256 Hash Only', 'MongoDB api_keys', 'key_hash 64-hex chars', `len=${dbKeyCheck?.key_hash?.length}`, dbKeyCheck?.key_hash?.length === 64);
 
   // 5. GATEWAY HAPPY PATH
   const gatewayRes = await apiRequest('/api/v1/chat/completions', {
@@ -353,7 +352,8 @@ async function run() {
     method: 'POST',
     body: { name: 'Tenant A Member', email: memberEmail, password }
   });
-  const memberOtp = (await pool.query('SELECT otp FROM users WHERE email = $1', [memberEmail])).rows[0]?.otp;
+  const memberObj = await User.findOne({ email: memberEmail }).lean();
+  const memberOtp = memberObj?.otp;
   await apiRequest('/api/auth/verify-otp', {
     method: 'POST',
     body: { email: memberEmail, otp: memberOtp }
@@ -364,15 +364,17 @@ async function run() {
   });
   const memberCookie = memberLogin.cookie;
   const memberUserRes = await apiRequest('/api/auth/me', { headers: { Cookie: memberCookie } });
-  const memberUserId = memberUserRes.data?.user?.id || (await pool.query('SELECT id FROM users WHERE email = $1', [memberEmail])).rows[0]?.id;
+  const memberUserId = memberUserRes.data?.user?.id || memberObj?._id;
   
   if (memberUserId) {
     // Have Owner add Member to Org A
-    await pool.query('DELETE FROM organization_members WHERE user_id = $1', [memberUserId]);
-    await pool.query(
-      'INSERT INTO organization_members (organization_id, user_id, role) VALUES ($1, $2, $3)',
-      [orgAId, memberUserId, 'member']
-    );
+    await OrganizationMember.deleteMany({ user_id: memberUserId });
+    await OrganizationMember.create({
+      organization_id: orgAId,
+      user_id: memberUserId,
+      role: 'member',
+      status: 'active'
+    });
   }
   // Log in again to refresh JWT with orgAId and member role
   const refreshedMemberLogin = await apiRequest('/api/auth/login', {
@@ -441,11 +443,8 @@ async function run() {
   recordTest('13. Analytics', 'Cost Breakdown Returns Data', '/api/analytics/costs', '200 OK', `status=${analyticsCosts.status}`, analyticsCosts.status === 200);
 
   // 14. AUDIT LOG VERIFICATION
-  const auditLogs = await pool.query(
-    'SELECT action, details FROM audit_logs WHERE organization_id = $1 ORDER BY created_at DESC LIMIT 5',
-    [orgAId]
-  );
-  recordTest('14. Audit Logs', 'Audit Log Entries Created for Mutations', 'PostgreSQL audit_logs', 'audit actions recorded', `actions=${auditLogs.rows.map(r => r.action).join(', ')}`, auditLogs.rows.length > 0);
+  const auditLogs = await AuditLog.find({ organization_id: orgAId }).sort({ created_at: -1 }).limit(5).lean();
+  recordTest('14. Audit Logs', 'Audit Log Entries Created for Mutations', 'MongoDB audit_logs', 'audit actions recorded', `actions=${auditLogs.map(r => r.action).join(', ')}`, auditLogs.length > 0);
 
   // 15. CACHE CLEAR VERIFICATION
   const clearCacheRes = await apiRequest('/api/cache/clear', {
@@ -455,12 +454,8 @@ async function run() {
   recordTest('15. Cache Management', 'Tenant Scoped Cache Clear', '/api/cache/clear', '200 OK', `status=${clearCacheRes.status}`, clearCacheRes.status === 200);
 
   // 18. DATABASE POST-REQUEST VERIFICATION
-  const aiReqCheck = await pool.query(
-    "SELECT id, organization_id, model, latency_ms, cost_usd, total_tokens, status FROM ai_requests WHERE organization_id = $1 AND status = 'success' ORDER BY created_at DESC LIMIT 1",
-    [orgAId]
-  );
-  const latestReq = aiReqCheck.rows[0];
-  recordTest('18. Database Integrity', 'ai_requests Row Correctly Persisted', 'PostgreSQL ai_requests', 'valid row with tokens and cost', `model=${latestReq?.model}, latency=${latestReq?.latency_ms}ms, cost=$${latestReq?.cost_usd}, tokens=${latestReq?.total_tokens}`, Boolean(latestReq && latestReq.latency_ms > 0 && latestReq.total_tokens > 0));
+  const latestReq = await AiRequest.findOne({ organization_id: orgAId, status: 'success' }).sort({ created_at: -1 }).lean();
+  recordTest('18. Database Integrity', 'ai_requests Row Correctly Persisted', 'MongoDB ai_requests', 'valid row with tokens and cost', `model=${latestReq?.model}, latency=${latestReq?.latency_ms}ms, cost=$${latestReq?.cost_usd}, tokens=${latestReq?.total_tokens}`, Boolean(latestReq && latestReq.latency_ms > 0 && latestReq.total_tokens > 0));
 
   // Revoke Key Test
   const revokeKeyRes = await apiRequest(`/api/keys/${keyIdA}/revoke`, {
@@ -487,12 +482,11 @@ async function run() {
   console.log(`FAILED: ${totalCount - passedCount}`);
   console.log(`SUCCESS RATE: ${Math.round((passedCount / totalCount) * 100)}%`);
 
-  await pool.end();
+  await disconnectMongo();
   return { passedCount, totalCount, results };
 }
 
 run().catch(err => {
   console.error('Fatal execution error:', err);
-  pool.end();
   process.exit(1);
 });

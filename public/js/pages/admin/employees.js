@@ -8,18 +8,18 @@ export function adminEmployees() {
     <div class="flex flex-col gap-6 animate-fade-in-up font-sans">
       <div class="flex justify-between items-center select-none">
         <div class="flex flex-col gap-1">
-          <h1 class="font-display font-black text-2xl text-brand-text tracking-tight uppercase">ORGANIZATION TEAM MEMBERS</h1>
-          <p class="text-xs text-brand-muted font-semibold">Invite team members, assign RBAC roles, allocate monthly spend caps, and manage access in PostgreSQL.</p>
+          <h1 class="font-display font-black text-2xl text-white tracking-tight uppercase">ORGANIZATION TEAM MEMBERS</h1>
+          <p class="text-xs text-[#A1A5AD] font-semibold">Invite team members, assign RBAC roles, allocate monthly spend caps, and manage access in PostgreSQL.</p>
         </div>
-        <button id="add-member-btn" class="px-5 py-2.5 bg-brand-primary hover:bg-indigo-700 text-white font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 shadow-sm uppercase tracking-wider">
+        <button id="add-member-btn" class="px-5 py-2.5 bg-white text-black hover:bg-neutral-200 font-bold text-xs rounded-lg transition-colors flex items-center gap-1.5 shadow-sm uppercase tracking-wider">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
           Invite Member
         </button>
       </div>
 
-      <div class="border border-brand-border bg-white rounded-xl shadow-sm overflow-hidden select-text relative">
+      <div class="border border-[#292D34] bg-[#101216] rounded-xl shadow-sm overflow-hidden select-text relative">
         <table class="w-full text-xs text-left">
-          <thead class="bg-brand-bg text-[10px] font-bold text-brand-text uppercase tracking-wider border-b border-brand-border select-none">
+          <thead class="bg-[#15181D] text-[10px] font-bold text-white uppercase tracking-wider border-b border-[#292D34] select-none">
             <tr>
               <th class="px-6 py-4">Member</th>
               <th class="px-6 py-4">Role</th>
@@ -30,103 +30,103 @@ export function adminEmployees() {
               <th class="px-6 py-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody id="members-table-body" class="divide-y divide-brand-border font-semibold text-brand-muted">
+          <tbody id="members-table-body" class="divide-y divide-[#292D34] font-semibold text-[#A1A5AD]">
             <tr>
-              <td colspan="7" class="px-6 py-8 text-center text-brand-muted">
+              <td colspan="7" class="px-6 py-8 text-center text-[#A1A5AD]">
                 <div class="flex items-center justify-center gap-2">
-                  <svg class="animate-spin h-4 w-4 text-brand-primary" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                  <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
                   <span>Loading team members from database...</span>
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
 
-        <!-- Member Details Drawer -->
-        <div id="member-detail-drawer" class="fixed inset-y-0 right-0 w-80 bg-white border-l border-brand-border shadow-2xl flex flex-col justify-between p-6 transform translate-x-full transition-transform duration-300 select-none z-50">
-          <div class="flex flex-col gap-6">
-            <div class="flex justify-between items-center border-b pb-3">
-              <span class="font-display font-bold text-sm text-brand-text uppercase">Member Details</span>
-              <button id="close-member-drawer-btn" class="p-1 hover:bg-brand-secondary rounded-lg">
-                <svg class="w-5 h-5 text-brand-muted" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-              </button>
-            </div>
+    <!-- Member Details Drawer -->
+    <div id="member-detail-drawer" class="fixed inset-y-0 right-0 w-80 bg-[#101216] border-l border-[#292D34] shadow-2xl flex flex-col justify-between p-6 transform translate-x-full transition-transform duration-300 select-none z-50">
+      <div class="flex flex-col gap-6">
+        <div class="flex justify-between items-center border-b border-[#292D34] pb-3">
+          <span class="font-display font-bold text-sm text-white uppercase">Member Details</span>
+          <button id="close-member-drawer-btn" class="p-1 hover:bg-[#15181D] rounded-lg text-[#A1A5AD] hover:text-white">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
 
-            <div class="flex flex-col gap-4 text-xs font-semibold text-brand-muted">
-              <div class="flex flex-col gap-1">
-                <span class="text-[9px] uppercase font-bold text-brand-muted/70">Member Name</span>
-                <span id="member-lbl-name" class="font-bold text-sm text-brand-text">-</span>
-              </div>
-              <div class="flex flex-col gap-1">
-                <span class="text-[9px] uppercase font-bold text-brand-muted/70">Email Address</span>
-                <span id="member-lbl-email" class="font-bold text-brand-text font-mono text-xs">-</span>
-              </div>
-              <div class="flex flex-col gap-1">
-                <span class="text-[9px] uppercase font-bold text-brand-muted/70">Role Scope</span>
-                <span id="member-lbl-role" class="font-bold text-brand-text capitalize">-</span>
-              </div>
-              <div class="flex flex-col gap-1">
-                <span class="text-[9px] uppercase font-bold text-brand-muted/70">Current Spend</span>
-                <span id="member-lbl-spend" class="font-bold text-brand-text font-mono text-emerald-600">-</span>
-              </div>
-              <div class="flex flex-col gap-1">
-                <span class="text-[9px] uppercase font-bold text-brand-muted/70">Requests Processed</span>
-                <span id="member-lbl-requests" class="font-bold text-brand-text font-mono">-</span>
-              </div>
-            </div>
+        <div class="flex flex-col gap-4 text-xs font-semibold text-[#A1A5AD]">
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] uppercase font-bold text-[#A1A5AD]/70">Member Name</span>
+            <span id="member-lbl-name" class="font-bold text-sm text-white">-</span>
           </div>
-          
-          <button id="member-action-close" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-lg text-xs uppercase tracking-wider">Close Details</button>
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] uppercase font-bold text-[#A1A5AD]/70">Email Address</span>
+            <span id="member-lbl-email" class="font-bold text-white font-mono text-xs">-</span>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] uppercase font-bold text-[#A1A5AD]/70">Role Scope</span>
+            <span id="member-lbl-role" class="font-bold text-white capitalize">-</span>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] uppercase font-bold text-[#A1A5AD]/70">Current Spend</span>
+            <span id="member-lbl-spend" class="font-bold text-white font-mono text-emerald-400">-</span>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] uppercase font-bold text-[#A1A5AD]/70">Requests Processed</span>
+            <span id="member-lbl-requests" class="font-bold text-white font-mono">-</span>
+          </div>
         </div>
       </div>
+      
+      <button id="member-action-close" class="w-full py-2.5 bg-[#15181D] hover:bg-[#1E232B] text-white border border-[#292D34] font-bold rounded-lg text-xs uppercase tracking-wider transition-colors">Close Details</button>
+    </div>
 
-      <!-- Invite Member Modal -->
-      <div id="invite-modal" class="fixed inset-0 bg-[#07080B]/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-[#10121A] border border-[#1F2438] rounded-2xl p-6 shadow-2xl max-w-md w-full animate-scale-up">
-          <div class="flex justify-between items-center mb-4 border-b border-[#1F2438] pb-3">
-            <h3 class="font-bold text-base text-white uppercase tracking-tight">Invite New Team Member</h3>
-            <button id="close-invite-modal-btn" class="p-1 hover:bg-[#161926] rounded-lg text-[#8E98B0] hover:text-white transition-colors">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <!-- Invite Member Modal -->
+    <div id="invite-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+      <div class="bg-[#101216] border border-[#292D34] rounded-2xl p-6 shadow-2xl max-w-md w-full my-auto">
+        <div class="flex justify-between items-center mb-4 border-b border-[#292D34] pb-3">
+          <h3 class="font-bold text-base text-white uppercase tracking-tight">Invite New Team Member</h3>
+          <button id="close-invite-modal-btn" class="p-1 hover:bg-[#15181D] rounded-lg text-[#A1A5AD] hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        
+        <form id="invite-member-form" class="flex flex-col gap-4 text-xs font-semibold">
+          <div>
+            <label class="block text-[10px] font-bold text-[#A1A5AD] uppercase mb-1">Full Name</label>
+            <input type="text" id="invite-name" required placeholder="e.g. Alex Morgan" class="w-full p-2.5 border border-[#292D34] rounded-lg bg-[#15181D] text-white placeholder-[#A1A5AD]/50 focus:border-white outline-none font-bold" />
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-[#A1A5AD] uppercase mb-1">Email Address</label>
+            <input type="email" id="invite-email" required placeholder="alex@company.com" class="w-full p-2.5 border border-[#292D34] rounded-lg bg-[#15181D] text-white placeholder-[#A1A5AD]/50 focus:border-white outline-none font-bold" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[10px] font-bold text-[#A1A5AD] uppercase mb-1">Role</label>
+              <select id="invite-role" class="w-full p-2.5 border border-[#292D34] rounded-lg bg-[#15181D] text-white focus:border-white outline-none font-bold cursor-pointer">
+                <option value="developer" class="bg-[#101216] text-white">Developer</option>
+                <option value="admin" class="bg-[#101216] text-white">Admin</option>
+                <option value="viewer" class="bg-[#101216] text-white">Viewer</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-[10px] font-bold text-[#A1A5AD] uppercase mb-1">Monthly Spend Cap ($)</label>
+              <input type="number" id="invite-spend-cap" value="50" min="5" max="1000" class="w-full p-2.5 border border-[#292D34] rounded-lg bg-[#15181D] text-white focus:border-white outline-none font-mono font-bold" />
+            </div>
+          </div>
+
+          <div class="flex gap-2.5 mt-2">
+            <button type="button" id="cancel-invite-btn" class="w-1/2 py-2.5 border border-[#292D34] hover:bg-[#15181D] text-[#A1A5AD] hover:text-white font-bold rounded-lg uppercase tracking-wider text-[11px] transition-colors">
+              Cancel
+            </button>
+            <button type="submit" id="submit-invite-btn" class="w-1/2 py-2.5 bg-white hover:bg-neutral-200 text-[#08090B] font-bold rounded-lg uppercase tracking-wider text-[11px] shadow-sm transition-colors">
+              Send Invitation
             </button>
           </div>
-          
-          <form id="invite-member-form" class="flex flex-col gap-4 text-xs font-semibold">
-            <div>
-              <label class="block text-[10px] font-bold text-[#8E98B0] uppercase mb-1">Full Name</label>
-              <input type="text" id="invite-name" required placeholder="e.g. Alex Morgan" class="w-full p-2.5 border border-[#1F2438] rounded-lg bg-[#161926] text-white placeholder-[#8E98B0]/50 focus:border-[#38BDF8] outline-none font-bold" />
-            </div>
-
-            <div>
-              <label class="block text-[10px] font-bold text-[#8E98B0] uppercase mb-1">Email Address</label>
-              <input type="email" id="invite-email" required placeholder="alex@company.com" class="w-full p-2.5 border border-[#1F2438] rounded-lg bg-[#161926] text-white placeholder-[#8E98B0]/50 focus:border-[#38BDF8] outline-none font-bold" />
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-[10px] font-bold text-[#8E98B0] uppercase mb-1">Role</label>
-                <select id="invite-role" class="w-full p-2.5 border border-[#1F2438] rounded-lg bg-[#161926] text-white focus:border-[#38BDF8] outline-none font-bold cursor-pointer">
-                  <option value="developer" class="bg-[#10121A] text-white">Developer</option>
-                  <option value="admin" class="bg-[#10121A] text-white">Admin</option>
-                  <option value="viewer" class="bg-[#10121A] text-white">Viewer</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-[10px] font-bold text-[#8E98B0] uppercase mb-1">Monthly Spend Cap ($)</label>
-                <input type="number" id="invite-spend-cap" value="50" min="5" max="1000" class="w-full p-2.5 border border-[#1F2438] rounded-lg bg-[#161926] text-white focus:border-[#38BDF8] outline-none font-mono font-bold" />
-              </div>
-            </div>
-
-            <div class="flex gap-2.5 mt-2">
-              <button type="button" id="cancel-invite-btn" class="w-1/2 py-2.5 border border-[#1F2438] hover:bg-[#161926] text-[#8E98B0] hover:text-white font-bold rounded-lg uppercase tracking-wider text-[11px] transition-colors">
-                Cancel
-              </button>
-              <button type="submit" id="submit-invite-btn" class="w-1/2 py-2.5 bg-[#38BDF8] hover:bg-[#0EA5E9] text-[#07080B] font-bold rounded-lg uppercase tracking-wider text-[11px] shadow-sm transition-colors">
-                Send Invitation
-              </button>
-            </div>
-          </form>
-        </div>
+        </form>
       </div>
     </div>
   `;
@@ -156,7 +156,7 @@ export async function bindAdminEmployees() {
     if (!members || members.length === 0) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="7" class="px-6 py-8 text-center text-brand-muted">
+          <td colspan="7" class="px-6 py-8 text-center text-[#A1A5AD]">
             <p class="font-bold">No members found.</p>
             <p class="text-[11px] mt-1">Click "Invite Member" above to add developers to your organization.</p>
           </td>
@@ -172,10 +172,10 @@ export async function bindAdminEmployees() {
           data-role="${m.role}" 
           data-spend="$${parseFloat(m.currentSpend || m.current_spend || 0).toFixed(4)}"
           data-requests="${m.requestCount || m.request_count || 0}">
-        <td class="px-6 py-4 font-bold text-brand-text">
+        <td class="px-6 py-4 font-bold text-white">
           <div class="flex flex-col">
             <span>${m.name}</span>
-            <span class="text-[10px] text-brand-muted font-normal font-mono">${m.email}</span>
+            <span class="text-[10px] text-[#A1A5AD] font-normal font-mono">${m.email}</span>
           </div>
         </td>
         <td class="px-6 py-4">
@@ -185,7 +185,7 @@ export async function bindAdminEmployees() {
             'bg-slate-100 border border-slate-200 text-slate-700'
           }">${m.role}</span>
         </td>
-        <td class="px-6 py-4 font-mono text-brand-text">$${parseFloat(m.currentSpend || m.current_spend || 0).toFixed(4)}</td>
+        <td class="px-6 py-4 font-mono text-white">$${parseFloat(m.currentSpend || m.current_spend || 0).toFixed(4)}</td>
         <td class="px-6 py-4 font-mono">${m.monthlySpendLimitUsd || m.monthly_spend_limit_usd ? `$${(m.monthlySpendLimitUsd || m.monthly_spend_limit_usd).toFixed(2)}` : 'Unlimited'}</td>
         <td class="px-6 py-4">
           <span class="text-[10px] ${m.canCreateApiKeys !== false ? 'text-emerald-600 font-bold' : 'text-slate-400'}">${m.canCreateApiKeys !== false ? 'Allowed' : 'Disabled'}</span>

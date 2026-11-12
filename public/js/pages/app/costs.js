@@ -8,43 +8,43 @@ export function appCosts() {
     <div class="flex flex-col gap-6 animate-fade-in-up font-sans select-none">
       <div class="flex justify-between items-center">
         <div class="flex flex-col gap-1">
-          <span class="text-[9px] font-bold text-brand-primary uppercase tracking-widest">Financial Observability</span>
-          <h1 class="font-display font-black text-2xl text-brand-text uppercase leading-none">Cost & Budget Management</h1>
-          <p class="text-xs text-brand-muted font-bold">Monitor real-time AI spending and budget caps derived from Supabase PostgreSQL.</p>
+          <span class="text-[9px] font-bold text-white uppercase tracking-widest">Financial Observability</span>
+          <h1 class="font-display font-black text-2xl text-white uppercase leading-none">Cost & Budget Management</h1>
+          <p class="text-xs text-[#A1A5AD] font-bold">Monitor real-time AI spending and budget caps derived from Supabase PostgreSQL.</p>
         </div>
       </div>
       
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <!-- Account Balance Card -->
-        <div class="lg:col-span-4 border border-[#1F2438] bg-[#10121A] rounded-xl p-5 shadow-sm flex flex-col justify-between gap-6 font-semibold text-xs text-[#8E98B0]">
+        <div class="lg:col-span-4 border border-[#292D34] bg-[#101216] rounded-xl p-5 shadow-sm flex flex-col justify-between gap-6 font-semibold text-xs text-[#A1A5AD]">
           <div class="flex flex-col gap-4">
-            <h3 class="font-bold text-xs text-white border-b border-[#1F2438] pb-3 uppercase tracking-wider">Organization Budget</h3>
+            <h3 class="font-bold text-xs text-white border-b border-[#292D34] pb-3 uppercase tracking-wider">Organization Budget</h3>
             <div class="flex justify-between items-center">
               <span>Remaining Budget</span>
               <span id="cost-remaining-balance" class="text-lg font-bold text-emerald-400 font-mono">...</span>
             </div>
-            <div class="flex justify-between items-center border-t border-[#1F2438] pt-3">
+            <div class="flex justify-between items-center border-t border-[#292D34] pt-3">
               <span>Monthly Budget Cap</span>
               <span id="cost-budget-cap" class="text-white font-bold font-mono">...</span>
             </div>
-            <div class="flex justify-between items-center border-t border-[#1F2438] pt-3">
+            <div class="flex justify-between items-center border-t border-[#292D34] pt-3">
               <span>Total Month Spend</span>
-              <span id="cost-total-spend" class="text-white font-bold font-mono text-[#38BDF8]">...</span>
+              <span id="cost-total-spend" class="text-white font-bold font-mono text-white">...</span>
             </div>
           </div>
           
-          <div class="p-4 bg-[#161926] border border-[#1F2438] rounded-lg text-[11px] text-[#8E98B0]">
+          <div class="p-4 bg-[#15181D] border border-[#292D34] rounded-lg text-[11px] text-[#A1A5AD]">
             🔒 <strong class="text-white">Hard Limit Active:</strong> Requests will be gracefully throttled if your monthly spend reaches the cap to prevent surprise billing.
           </div>
         </div>
         
         <!-- Spend Breakdown by Model -->
-        <div class="lg:col-span-8 bg-[#10121A] border border-[#1F2438] rounded-xl p-6 shadow-sm flex flex-col gap-4">
-          <h3 class="font-bold text-xs text-white uppercase tracking-wider border-b border-[#1F2438] pb-3">Real-Time Expenditure by Model</h3>
+        <div class="lg:col-span-8 bg-[#101216] border border-[#292D34] rounded-xl p-6 shadow-sm flex flex-col gap-4">
+          <h3 class="font-bold text-xs text-white uppercase tracking-wider border-b border-[#292D34] pb-3">Real-Time Expenditure by Model</h3>
           
           <div class="overflow-x-auto">
             <table class="w-full text-xs text-left">
-              <thead class="bg-[#161926] text-[9px] font-bold text-white uppercase tracking-wider border-b border-[#1F2438]">
+              <thead class="bg-[#15181D] text-[9px] font-bold text-white uppercase tracking-wider border-b border-[#292D34]">
                 <tr>
                   <th class="px-4 py-3">Model</th>
                   <th class="px-4 py-3">Provider</th>
@@ -53,9 +53,9 @@ export function appCosts() {
                   <th class="px-4 py-3">Total Cost</th>
                 </tr>
               </thead>
-              <tbody id="cost-breakdown-body" class="divide-y divide-brand-border font-semibold text-brand-muted">
+              <tbody id="cost-breakdown-body" class="divide-y divide-[#292D34] font-semibold text-[#A1A5AD]">
                 <tr>
-                  <td colspan="5" class="px-4 py-8 text-center text-brand-muted">
+                  <td colspan="5" class="px-4 py-8 text-center text-[#A1A5AD]">
                     Loading cost breakdown from PostgreSQL...
                   </td>
                 </tr>
@@ -87,20 +87,20 @@ export async function bindAppCosts() {
     if (!costs.modelBreakdown || costs.modelBreakdown.length === 0) {
       breakdownBody.innerHTML = `
         <tr>
-          <td colspan="5" class="px-4 py-8 text-center text-brand-muted">
+          <td colspan="5" class="px-4 py-8 text-center text-[#A1A5AD]">
             <p class="font-bold">No AI usage recorded yet.</p>
-            <p class="text-[11px] mt-1">Send a query in the <a href="/app/playground" data-link class="text-brand-primary underline font-bold">Playground</a> to see live model expenditures.</p>
+            <p class="text-[11px] mt-1">Send a query in the <a href="/app/playground" data-link class="text-white underline font-bold">Playground</a> to see live model expenditures.</p>
           </td>
         </tr>
       `;
     } else {
       breakdownBody.innerHTML = costs.modelBreakdown.map(m => `
-        <tr class="hover:bg-brand-bg/40">
-          <td class="px-4 py-3 text-brand-text font-bold">${m.model}</td>
-          <td class="px-4 py-3 uppercase text-[10px] font-bold text-brand-muted">${m.provider}</td>
+        <tr class="hover:bg-[#15181D]">
+          <td class="px-4 py-3 text-white font-bold">${m.model}</td>
+          <td class="px-4 py-3 uppercase text-[10px] font-bold text-[#A1A5AD]">${m.provider}</td>
           <td class="px-4 py-3 font-mono">${m.requests}</td>
           <td class="px-4 py-3 font-mono">${m.tokens ? parseInt(m.tokens).toLocaleString() : 0}</td>
-          <td class="px-4 py-3 font-mono font-bold text-brand-text">$${parseFloat(m.cost).toFixed(6)}</td>
+          <td class="px-4 py-3 font-mono font-bold text-white">$${parseFloat(m.cost).toFixed(6)}</td>
         </tr>
       `).join("");
     }

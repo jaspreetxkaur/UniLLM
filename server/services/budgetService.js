@@ -1,4 +1,5 @@
-import { query } from '../config/db.js';
+import { OrganizationBudget, AiRequest, AuditLog } from '../models/index.js';
+import { realtimeService } from '../realtime/socket.js';
 
 export const budgetService = {
   /**
@@ -6,18 +7,7 @@ export const budgetService = {
    */
   getBudget: async (organizationId) => {
     // 1. Fetch budget config
-    const budgetRes = await query(`
-      SELECT 
-        monthly_budget_usd,
-        alert_threshold_percent,
-        hard_limit_enabled,
-        current_period_start
-      FROM organization_budgets
-      WHERE organization_id = $1
-      LIMIT 1;
-    `, [organizationId]);
-
-    const budget = budgetRes.rows[0] || {
+    const budget = await OrganizationBudget.findOne({ organization_id: organizationId }).lean() || {
       monthly_budget_usd: 100.00,
       alert_threshold_percent: 80,
       hard_limit_enabled: true,
@@ -28,20 +18,29 @@ export const budgetService = {
     const periodStart = budget.current_period_start || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
     // 2. Derive current spend dynamically from ai_requests
-    const spendRes = await query(`
-      SELECT COALESCE(SUM(cost_usd), 0)::DECIMAL(10,6) as current_spend
-      FROM ai_requests
-      WHERE organization_id = $1 AND created_at >= $2;
-    `, [organizationId, periodStart]);
+    const spendAgg = await AiRequest.aggregate([
+      {
+        $match: {
+          organization_id: organizationId,
+          created_at: { $gte: new Date(periodStart) }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          spend: { $sum: '$cost_usd' }
+        }
+      }
+    ]);
 
-    const currentSpendUsd = parseFloat(spendRes.rows[0].current_spend || 0);
+    const currentSpendUsd = spendAgg.length > 0 ? parseFloat(spendAgg[0].spend.toFixed(6)) : 0.0;
     const remainingBudgetUsd = Math.max(0, monthlyBudgetUsd - currentSpendUsd);
     const usagePercent = monthlyBudgetUsd > 0 ? ((currentSpendUsd / monthlyBudgetUsd) * 100).toFixed(2) : '0.00';
 
     return {
       monthlyBudgetUsd,
       alertThresholdPercent: budget.alert_threshold_percent || 80,
-      hardLimitEnabled: budget.hard_limit_enabled ?? true,
+      hardLimitEnabled: budget.hard_limit_enabled !== false,
       currentPeriodStart: periodStart,
       currentSpendUsd,
       remainingBudgetUsd,
@@ -76,36 +75,40 @@ export const budgetService = {
 
     const isHardLimit = Boolean(hardLimitEnabled);
 
-    // Upsert budget record
-    const res = await query(`
-      INSERT INTO organization_budgets (
-        organization_id, monthly_budget_usd, alert_threshold_percent, hard_limit_enabled
-      )
-      VALUES ($1, $2, $3, $4)
-      ON CONFLICT (organization_id)
-      DO UPDATE SET
-        monthly_budget_usd = EXCLUDED.monthly_budget_usd,
-        alert_threshold_percent = EXCLUDED.alert_threshold_percent,
-        hard_limit_enabled = EXCLUDED.hard_limit_enabled
-      RETURNING monthly_budget_usd, alert_threshold_percent, hard_limit_enabled, current_period_start;
-    `, [organizationId, parsedBudget, parsedThreshold, isHardLimit]);
+    // Upsert budget record in MongoDB
+    const updated = await OrganizationBudget.findOneAndUpdate(
+      { organization_id: organizationId },
+      {
+        $set: {
+          monthly_budget_usd: parsedBudget,
+          alert_threshold_percent: parsedThreshold,
+          hard_limit_enabled: isHardLimit
+        },
+        $setOnInsert: {
+          current_period_start: new Date()
+        }
+      },
+      { returnDocument: 'after', upsert: true }
+    ).lean();
 
-    const updated = res.rows[0];
+    realtimeService.emitBudgetUpdated(organizationId, updated);
 
     // Audit Log
     if (actorId) {
-      await query(`
-        INSERT INTO audit_logs (organization_id, actor_id, action, details)
-        VALUES ($1, $2, 'budget.update', $3);
-      `, [
-        organizationId,
-        actorId,
-        JSON.stringify({
-          monthlyBudgetUsd: parsedBudget,
-          alertThresholdPercent: parsedThreshold,
-          hardLimitEnabled: isHardLimit
-        })
-      ]);
+      try {
+        await AuditLog.create({
+          organization_id: organizationId,
+          actor_id: actorId,
+          action: 'budget.update',
+          details: {
+            monthlyBudgetUsd: parsedBudget,
+            alertThresholdPercent: parsedThreshold,
+            hardLimitEnabled: isHardLimit
+          }
+        });
+      } catch (auditErr) {
+        console.warn('Audit log write error (non-fatal):', auditErr.message);
+      }
     }
 
     return {

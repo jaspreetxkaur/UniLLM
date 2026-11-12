@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 160" fill="none">
+  <defs>
+    <!-- Top Arm Gradient: Cyan -> Sky Blue -> Lavender -> Coral -->
+    <linearGradient id="icon-top-arm" x1="0%" y1="0%" x2="100%" y2="70%">
+      <stop offset="0%" stop-color="#4BC2E4" />
+      <stop offset="35%" stop-color="#42A0F4" />
+      <stop offset="70%" stop-color="#A874D0" />
+      <stop offset="100%" stop-color="#FA917D" />
+    </linearGradient>
+
+    <!-- Bottom Arm Gradient: Violet -> Purple -> Rose -> Coral -->
+    <linearGradient id="icon-bot-arm" x1="0%" y1="100%" x2="100%" y2="30%">
+      <stop offset="0%" stop-color="#7B70D6" />
+      <stop offset="35%" stop-color="#9C6ED8" />
+      <stop offset="70%" stop-color="#D96D98" />
+      <stop offset="100%" stop-color="#FA917D" />
+    </linearGradient>
+
+    <!-- Upper Bar Gradient: Sky Blue -> Electric Blue -->
+    <linearGradient id="icon-bar-1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#4A80F3" />
+    </linearGradient>
+
+    <!-- Center Bar Gradient: Electric Blue -> Indigo -->
+    <linearGradient id="icon-bar-2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </linearGradient>
+
+    <!-- Lower Bar Gradient: Royal Blue -> Violet -->
+    <linearGradient id="icon-bar-3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#7B70D6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Top Converging Arm & Upper Socket -->
+  <path
+    d="
+      M 78 5
+      L 105 5
+      C 145 5, 175 35, 198 71
+      A 21 21 0 0 0 197 80
+      L 167 80
+      C 155 45, 135 23, 105 23
+      L 78 23
+      A 9 9 0 0 1 78 5
+      Z
+    "
+    fill="url(#icon-top-arm)"
+  />
+
+  <!-- Bottom Converging Arm & Lower Socket -->
+  <path
+    d="
+      M 78 155
+      L 105 155
+      C 145 155, 175 125, 198 89
+      A 21 21 0 0 1 197 80
+      L 167 80
+      C 155 115, 135 137, 105 137
+      L 78 137
+      A 9 9 0 0 1 78 155
+      Z
+    "
+    fill="url(#icon-bot-arm)"
+  />
+
+  <!-- Upper Routing Bar -->
+  <rect x="5" y="38" width="106" height="18" rx="9" fill="url(#icon-bar-1)" />
+
+  <!-- Center Routing Bar -->
+  <rect x="5" y="71" width="132" height="18" rx="9" fill="url(#icon-bar-2)" />
+
+  <!-- Lower Routing Bar -->
+  <rect x="5" y="104" width="106" height="18" rx="9" fill="url(#icon-bar-3)" />
+
+  <!-- Central Destination Circle Dot -->
+  <circle cx="227" cy="80" r="20" fill="#FA917D" />
+</svg>

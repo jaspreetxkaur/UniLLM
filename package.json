@@ -6,7 +6,12 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "test": "node scripts/test-phase11-hardening.js && node scripts/test-phase12-routing.js && node scripts/test-phase13b-security-cache.js"
+    "dev": "nodemon server.js",
+    "demo:node": "node scripts/demo-node-core.js",
+    "test": "node test_workspace_keys.mjs && node scripts/test-phase12-routing.js && node scripts/test-phase15-blackbox.js && node scripts/test-phase16b-frontend-integration.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "@google/genai": "^2.19.0",
@@ -15,7 +20,13 @@
     "express": "^4.21.2",
     "express-rate-limit": "^8.7.0",
     "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.11.3",
+    "multer": "^2.5.0",
     "openai": "^7.8.0",
-    "pg": "^8.23.0"
+    "pg": "^8.23.0",
+    "socket.io": "^4.8.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }

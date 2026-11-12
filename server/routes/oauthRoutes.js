@@ -1,7 +1,7 @@
 import express from 'express';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-import { query } from '../config/db.js';
+import { User, Organization, OrganizationMember, Workspace, OrganizationBudget, AuditLog } from '../models/index.js';
 
 const router = express.Router();
 
@@ -33,15 +33,14 @@ const provisionOAuthUser = async ({ email, name, provider, providerId }) => {
   const trimmedEmail = email.trim().toLowerCase();
 
   // 1. Check if user already exists
-  const existingRes = await query('SELECT * FROM users WHERE email = $1;', [trimmedEmail]);
-  let user;
+  let user = await User.findOne({ email: trimmedEmail });
 
-  if (existingRes.rows.length > 0) {
-    user = existingRes.rows[0];
+  if (user) {
     // Automatically verify email since provider (Google/GitHub) already authenticated ownership
     if (!user.verified) {
-      await query('UPDATE users SET verified = true, updated_at = NOW() WHERE id = $1;', [user.id]);
       user.verified = true;
+      user.updated_at = new Date();
+      await user.save();
     }
   } else {
     // Generate secure non-guessable scrypt password hash for OAuth users
@@ -51,61 +50,71 @@ const provisionOAuthUser = async ({ email, name, provider, providerId }) => {
     const passHash = `${salt}:${derivedKey.toString('hex')}`;
 
     const displayName = (name || trimmedEmail.split('@')[0]).trim();
-    const insertRes = await query(`
-      INSERT INTO users (name, email, password_hash, verified)
-      VALUES ($1, $2, $3, true)
-      RETURNING id, name, email;
-    `, [displayName, trimmedEmail, passHash]);
-
-    user = insertRes.rows[0];
+    user = await User.create({
+      name: displayName,
+      email: trimmedEmail,
+      password_hash: passHash,
+      verified: true
+    });
   }
 
-  // 2. Ensure user has a valid organization, workspace, and budget
-  const memberCheck = await query('SELECT * FROM organization_members WHERE user_id = $1;', [user.id]);
+  const userId = user._id;
 
-  if (memberCheck.rows.length === 0) {
+  // 2. Ensure user has a valid organization, workspace, and budget
+  const memberCheck = await OrganizationMember.findOne({ user_id: userId }).lean();
+
+  if (!memberCheck) {
     const initialOrgName = `${user.name || 'Developer'}'s Space`;
     const slug = `${initialOrgName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${crypto.randomBytes(3).toString('hex')}`;
     const refCode = generateReferralCode();
 
-    const orgRes = await query(`
-      INSERT INTO organizations (name, slug, referral_code, referral_enabled)
-      VALUES ($1, $2, $3, true)
-      RETURNING id, name;
-    `, [initialOrgName, slug, refCode]);
+    const org = await Organization.create({
+      name: initialOrgName,
+      slug,
+      referral_code: refCode,
+      referral_enabled: true
+    });
 
-    const activeOrgId = orgRes.rows[0].id;
+    const activeOrgId = org._id;
 
     // Assign user as Owner in organization_members
-    await query(`
-      INSERT INTO organization_members (organization_id, user_id, role, status, can_create_api_keys)
-      VALUES ($1, $2, 'owner', 'active', true);
-    `, [activeOrgId, user.id]);
+    await OrganizationMember.create({
+      organization_id: activeOrgId,
+      user_id: userId,
+      role: 'owner',
+      status: 'active',
+      can_create_api_keys: true
+    });
 
     // Create Default Workspace
-    await query(`
-      INSERT INTO workspaces (organization_id, name, is_default)
-      VALUES ($1, 'Default Workspace', true);
-    `, [activeOrgId]);
+    await Workspace.create({
+      organization_id: activeOrgId,
+      name: 'Default Workspace',
+      is_default: true
+    });
 
     // Initialize Default Budget ($100.00 USD)
-    await query(`
-      INSERT INTO organization_budgets (organization_id, monthly_budget_usd, alert_threshold_percent, hard_limit_enabled)
-      VALUES ($1, 100.00, 80, true);
-    `, [activeOrgId]);
+    await OrganizationBudget.create({
+      organization_id: activeOrgId,
+      monthly_budget_usd: 100.00,
+      alert_threshold_percent: 80,
+      hard_limit_enabled: true
+    });
 
     // Record Audit Log
     try {
-      await query(`
-        INSERT INTO audit_logs (organization_id, actor_id, action, details)
-        VALUES ($1, $2, 'OAUTH_ONBOARDING_COMPLETED', $3);
-      `, [activeOrgId, user.id, JSON.stringify({ email: user.email, provider, providerId })]);
+      await AuditLog.create({
+        organization_id: activeOrgId,
+        actor_id: userId,
+        action: 'OAUTH_ONBOARDING_COMPLETED',
+        details: { email: user.email, provider, providerId }
+      });
     } catch (auditErr) {
       console.warn('OAuth audit log error (non-fatal):', auditErr.message);
     }
   }
 
-  return user;
+  return { id: user._id, name: user.name, email: user.email };
 };
 
 /**
@@ -113,7 +122,7 @@ const provisionOAuthUser = async ({ email, name, provider, providerId }) => {
  */
 const setSessionAndRedirect = (res, user) => {
   const token = jwt.sign(
-    { userId: user.id },
+    { userId: user.id || user._id },
     process.env.JWT_SECRET || 'unillm_super_secret_jwt_key_development_2026',
     { expiresIn: '7d' }
   );
@@ -123,6 +132,13 @@ const setSessionAndRedirect = (res, user) => {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  });
+
+  res.cookie('unillm_logged_in', 'true', {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000
   });
 
   return res.redirect('/app');

@@ -1,6 +1,7 @@
 // Automated backend verification script for Workspace and API Key Management
 import jwt from 'jsonwebtoken';
-import { query } from './server/config/db.js';
+import { connectMongo, disconnectMongo } from './server/config/mongo.js';
+import { User } from './server/models/index.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'unillm_super_secret_jwt_key_development_2026';
 const BASE_URL = 'http://localhost:5173';
@@ -8,15 +9,18 @@ const BASE_URL = 'http://localhost:5173';
 async function runTests() {
   console.log('--- STARTING WORKSPACE & API KEY INTEGRATION TEST ---');
   
-  // 1. Get verified user
-  console.log('\n[TEST 1] Fetching verified user for test session...');
-  const userRes = await query("SELECT id, name, email FROM users WHERE verified = true LIMIT 1;");
-  if (userRes.rows.length === 0) {
+  await connectMongo();
+
+  // 1. Get verified owner user
+  console.log('\n[TEST 1] Fetching verified owner user for test session...');
+  const { OrganizationMember } = await import('./server/models/index.js');
+  const ownerMember = await OrganizationMember.findOne({ role: 'owner', status: 'active' }).lean();
+  const testUser = await User.findOne({ _id: ownerMember ? ownerMember.user_id : undefined, verified: true }).lean() || await User.findOne({ verified: true }).lean();
+  if (!testUser) {
     console.error('No verified user found in database!');
     process.exit(1);
   }
-  const testUser = userRes.rows[0];
-  const token = jwt.sign({ userId: testUser.id }, JWT_SECRET, { expiresIn: '7d' });
+  const token = jwt.sign({ userId: testUser._id }, JWT_SECRET, { expiresIn: '7d' });
   console.log(`✓ Token generated for: ${testUser.name} (${testUser.email})`);
 
   const authHeaders = {

@@ -1,56 +1,44 @@
-import { query } from '../config/db.js';
+import { RoutingPolicy } from '../models/index.js';
 import { auditService } from './auditService.js';
+import { realtimeService } from '../realtime/socket.js';
+
+const formatPolicy = (p) => ({
+  id: p._id,
+  organizationId: p.organization_id,
+  name: p.name,
+  description: p.description,
+  enabled: p.enabled,
+  priority: p.priority,
+  conditionType: p.condition_type,
+  conditionConfig: p.condition_config || {},
+  actionType: p.action_type,
+  actionConfig: p.action_config || {},
+  createdByUserId: p.created_by_user_id,
+  createdAt: p.created_at,
+  updatedAt: p.updated_at
+});
 
 export const policyService = {
   /**
    * List all routing policies for an organization ordered deterministically
    */
   getPolicies: async (organizationId) => {
-    const res = await query(`
-      SELECT 
-        id,
-        organization_id as "organizationId",
-        name,
-        description,
-        enabled,
-        priority,
-        condition_type as "conditionType",
-        condition_config as "conditionConfig",
-        action_type as "actionType",
-        action_config as "actionConfig",
-        created_by_user_id as "createdByUserId",
-        created_at as "createdAt",
-        updated_at as "updatedAt"
-      FROM routing_policies
-      WHERE organization_id = $1
-      ORDER BY priority ASC, created_at ASC;
-    `, [organizationId]);
-    return res.rows;
+    const policies = await RoutingPolicy.find({ organization_id: organizationId })
+      .sort({ priority: 1, created_at: 1 })
+      .lean();
+    return policies.map(formatPolicy);
   },
 
   /**
    * Get single policy by ID scoped to organization
    */
   getPolicyById: async (organizationId, policyId) => {
-    const res = await query(`
-      SELECT 
-        id,
-        organization_id as "organizationId",
-        name,
-        description,
-        enabled,
-        priority,
-        condition_type as "conditionType",
-        condition_config as "conditionConfig",
-        action_type as "actionType",
-        action_config as "actionConfig",
-        created_by_user_id as "createdByUserId",
-        created_at as "createdAt",
-        updated_at as "updatedAt"
-      FROM routing_policies
-      WHERE organization_id = $1 AND id = $2;
-    `, [organizationId, policyId]);
-    return res.rows[0] || null;
+    if (!policyId || typeof policyId !== 'string') return null;
+    const policy = await RoutingPolicy.findOne({
+      organization_id: organizationId,
+      _id: policyId
+    }).lean();
+    return policy ? formatPolicy(policy) : null;
   },
 
   /**
@@ -68,43 +56,45 @@ export const policyService = {
       action_config = {}
     } = data;
 
-    const res = await query(`
-      INSERT INTO routing_policies (
-        organization_id, name, description, enabled, priority,
-        condition_type, condition_config, action_type, action_config,
-        created_by_user_id
-      )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-      RETURNING 
-        id, organization_id as "organizationId", name, description, enabled, priority,
-        condition_type as "conditionType", condition_config as "conditionConfig",
-        action_type as "actionType", action_config as "actionConfig",
-        created_at as "createdAt", updated_at as "updatedAt";
-    `, [
-      organizationId,
-      name.trim(),
-      description ? description.trim() : null,
+    if (!name || typeof name !== 'string') {
+      const err = new Error('Policy name is required.');
+      err.statusCode = 400;
+      throw err;
+    }
+
+    const created = await RoutingPolicy.create({
+      organization_id: organizationId,
+      name: name.trim(),
+      description: description ? description.trim() : '',
       enabled,
       priority,
       condition_type,
-      JSON.stringify(condition_config),
+      condition_config,
       action_type,
-      JSON.stringify(action_config),
-      userId
-    ]);
+      action_config,
+      created_by_user_id: userId
+    });
 
-    const createdPolicy = res.rows[0];
+    const formatted = formatPolicy(created);
 
     // Record audit log
     await auditService.log({
       organizationId,
       actorId: userId,
       action: 'policy.create',
-      details: { policyId: createdPolicy.id, name: createdPolicy.name, priority, condition_type, action_type },
+      details: { policyId: formatted.id, name: formatted.name, priority, condition_type, action_type },
       ipAddress
     });
 
-    return createdPolicy;
+    realtimeService.emitPolicyChanged(organizationId, {
+      action: 'created',
+      policyId: formatted.id,
+      policyName: formatted.name,
+      enabled: formatted.enabled,
+      priority: formatted.priority
+    });
+
+    return formatted;
   },
 
   /**
@@ -116,58 +106,42 @@ export const policyService = {
       return null;
     }
 
-    const name = data.name !== undefined ? data.name.trim() : existing.name;
-    const description = data.description !== undefined ? (data.description ? data.description.trim() : null) : existing.description;
-    const enabled = data.enabled !== undefined ? data.enabled : existing.enabled;
-    const priority = data.priority !== undefined ? data.priority : existing.priority;
-    const condition_type = data.condition_type !== undefined ? data.condition_type : existing.conditionType;
-    const condition_config = data.condition_config !== undefined ? data.condition_config : existing.conditionConfig;
-    const action_type = data.action_type !== undefined ? data.action_type : existing.actionType;
-    const action_config = data.action_config !== undefined ? data.action_config : existing.actionConfig;
+    const update = { updated_at: new Date() };
+    if (data.name !== undefined) update.name = data.name.trim();
+    if (data.description !== undefined) update.description = data.description ? data.description.trim() : '';
+    if (data.enabled !== undefined) update.enabled = data.enabled;
+    if (data.priority !== undefined) update.priority = data.priority;
+    if (data.condition_type !== undefined) update.condition_type = data.condition_type;
+    if (data.condition_config !== undefined) update.condition_config = data.condition_config;
+    if (data.action_type !== undefined) update.action_type = data.action_type;
+    if (data.action_config !== undefined) update.action_config = data.action_config;
 
-    const res = await query(`
-      UPDATE routing_policies
-      SET 
-        name = $1,
-        description = $2,
-        enabled = $3,
-        priority = $4,
-        condition_type = $5,
-        condition_config = $6,
-        action_type = $7,
-        action_config = $8,
-        updated_at = NOW()
-      WHERE organization_id = $9 AND id = $10
-      RETURNING 
-        id, organization_id as "organizationId", name, description, enabled, priority,
-        condition_type as "conditionType", condition_config as "conditionConfig",
-        action_type as "actionType", action_config as "actionConfig",
-        created_at as "createdAt", updated_at as "updatedAt";
-    `, [
-      name,
-      description,
-      enabled,
-      priority,
-      condition_type,
-      JSON.stringify(condition_config),
-      action_type,
-      JSON.stringify(action_config),
-      organizationId,
-      policyId
-    ]);
+    const updated = await RoutingPolicy.findOneAndUpdate(
+      { organization_id: organizationId, _id: policyId },
+      { $set: update },
+      { returnDocument: 'after' }
+    ).lean();
 
-    const updated = res.rows[0];
+    const formatted = formatPolicy(updated);
 
     // Record audit log
     await auditService.log({
       organizationId,
       actorId: userId,
       action: 'policy.update',
-      details: { policyId, name: updated.name, changes: data },
+      details: { policyId, name: formatted.name, changes: data },
       ipAddress
     });
 
-    return updated;
+    realtimeService.emitPolicyChanged(organizationId, {
+      action: 'updated',
+      policyId: formatted.id,
+      policyName: formatted.name,
+      enabled: formatted.enabled,
+      priority: formatted.priority
+    });
+
+    return formatted;
   },
 
   /**
@@ -179,10 +153,7 @@ export const policyService = {
       return false;
     }
 
-    await query(`
-      DELETE FROM routing_policies
-      WHERE organization_id = $1 AND id = $2;
-    `, [organizationId, policyId]);
+    await RoutingPolicy.deleteOne({ organization_id: organizationId, _id: policyId });
 
     // Record audit log
     await auditService.log({
@@ -191,6 +162,12 @@ export const policyService = {
       action: 'policy.delete',
       details: { policyId, name: existing.name },
       ipAddress
+    });
+
+    realtimeService.emitPolicyChanged(organizationId, {
+      action: 'deleted',
+      policyId,
+      policyName: existing.name
     });
 
     return true;
@@ -207,18 +184,13 @@ export const policyService = {
 
     const nextEnabled = !existing.enabled;
 
-    const res = await query(`
-      UPDATE routing_policies
-      SET enabled = $1, updated_at = NOW()
-      WHERE organization_id = $2 AND id = $3
-      RETURNING 
-        id, organization_id as "organizationId", name, description, enabled, priority,
-        condition_type as "conditionType", condition_config as "conditionConfig",
-        action_type as "actionType", action_config as "actionConfig",
-        created_at as "createdAt", updated_at as "updatedAt";
-    `, [nextEnabled, organizationId, policyId]);
+    const updated = await RoutingPolicy.findOneAndUpdate(
+      { organization_id: organizationId, _id: policyId },
+      { $set: { enabled: nextEnabled, updated_at: new Date() } },
+      { returnDocument: 'after' }
+    ).lean();
 
-    const updated = res.rows[0];
+    const formatted = formatPolicy(updated);
 
     // Record audit log
     await auditService.log({
@@ -229,6 +201,14 @@ export const policyService = {
       ipAddress
     });
 
-    return updated;
+    realtimeService.emitPolicyChanged(organizationId, {
+      action: 'toggled',
+      policyId: formatted.id,
+      policyName: formatted.name,
+      enabled: formatted.enabled,
+      priority: formatted.priority
+    });
+
+    return formatted;
   }
 };

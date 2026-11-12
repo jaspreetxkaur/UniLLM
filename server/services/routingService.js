@@ -1,4 +1,4 @@
-import { query } from '../config/db.js';
+import { RoutingPolicy } from '../models/index.js';
 import { MODEL_CATALOG } from '../config/models.js';
 
 export const routingService = {
@@ -31,15 +31,14 @@ export const routingService = {
 
     try {
       // 1. Fetch enabled policies for this specific organization ordered by priority
-      const policyRes = await query(`
-        SELECT 
-          id, name, priority, condition_type, condition_config, action_type, action_config
-        FROM routing_policies
-        WHERE organization_id = $1 AND enabled = true
-        ORDER BY priority ASC, created_at ASC;
-      `, [organizationId]);
+      const policies = await RoutingPolicy.find({
+        organization_id: organizationId,
+        enabled: true
+      })
+        .sort({ priority: 1, created_at: 1 })
+        .lean();
 
-      if (policyRes.rows.length === 0) {
+      if (!policies || policies.length === 0) {
         return defaultDecision;
       }
 
@@ -53,37 +52,40 @@ export const routingService = {
       const lowerPrompt = promptText.toLowerCase();
 
       // 3. Evaluate policies in deterministic order
-      for (const policy of policyRes.rows) {
-        const { id, name, condition_type, condition_config, action_type, action_config } = policy;
-        const cond = condition_config || {};
-        const act = action_config || {};
+      for (const policy of policies) {
+        const id = policy._id;
+        const name = policy.name;
+        const condition_type = policy.condition_type;
+        const condition_config = policy.condition_config || {};
+        const action_type = policy.action_type;
+        const action_config = policy.action_config || {};
 
         let isMatch = false;
 
         if (condition_type === 'always') {
           isMatch = true;
         } else if (condition_type === 'model') {
-          isMatch = (cond.model && cond.model.toLowerCase() === (requestedModel || '').toLowerCase());
+          isMatch = (condition_config.model && condition_config.model.toLowerCase() === (requestedModel || '').toLowerCase());
         } else if (condition_type === 'keyword') {
-          if (Array.isArray(cond.keywords) && cond.keywords.length > 0) {
-            isMatch = cond.keywords.some(kw => typeof kw === 'string' && lowerPrompt.includes(kw.toLowerCase().trim()));
+          if (Array.isArray(condition_config.keywords) && condition_config.keywords.length > 0) {
+            isMatch = condition_config.keywords.some(kw => typeof kw === 'string' && lowerPrompt.includes(kw.toLowerCase().trim()));
           }
         } else if (condition_type === 'request_type') {
-          isMatch = (cond.request_type && cond.request_type.toLowerCase() === (requestType || '').toLowerCase());
+          isMatch = (condition_config.request_type && condition_config.request_type.toLowerCase() === (requestType || '').toLowerCase());
         }
 
         if (isMatch) {
           // Resolve Action
-          let targetModel = act.target_model;
+          let targetModel = action_config.target_model;
           if (!targetModel || !MODEL_CATALOG[targetModel]) {
             targetModel = defaultPrimary;
           }
 
           let fallbackCandidates = [];
-          if (action_type === 'fallback_chain' && Array.isArray(act.fallback_models)) {
+          if (action_type === 'fallback_chain' && Array.isArray(action_config.fallback_models)) {
             // Deduplicate and filter valid models
             const seen = new Set([targetModel]);
-            for (const fb of act.fallback_models) {
+            for (const fb of action_config.fallback_models) {
               if (MODEL_CATALOG[fb] && !seen.has(fb)) {
                 seen.add(fb);
                 fallbackCandidates.push(fb);

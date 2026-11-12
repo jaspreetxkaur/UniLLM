@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { query } from '../config/db.js';
+import { User, OrganizationMember, Organization } from '../models/index.js';
 
 export const authenticateUser = async (req, res, next) => {
   try {
@@ -20,42 +20,35 @@ export const authenticateUser = async (req, res, next) => {
     // Verify JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'unillm_super_secret_jwt_key_development_2026');
     
-    // Fetch user and organization context from PostgreSQL
-    const userRes = await query(`
-      SELECT 
-        u.id, u.name, u.email, u.verified,
-        om.organization_id, om.role, om.status as member_status,
-        om.monthly_token_limit, om.monthly_spend_limit_usd, om.can_create_api_keys,
-        o.name as org_name, o.slug as org_slug
-      FROM users u
-      LEFT JOIN organization_members om ON u.id = om.user_id
-      LEFT JOIN organizations o ON om.organization_id = o.id
-      WHERE u.id = $1
-      LIMIT 1;
-    `, [decoded.userId]);
-
-    if (userRes.rows.length === 0) {
+    // Fetch user from MongoDB
+    const user = await User.findById(decoded.userId).lean();
+    if (!user) {
       return res.status(401).json({ success: false, message: 'User account not found.' });
     }
 
-    const user = userRes.rows[0];
+    // Fetch primary organization membership
+    const member = await OrganizationMember.findOne({ user_id: user._id }).lean();
+    let org = null;
+    if (member && member.organization_id) {
+      org = await Organization.findById(member.organization_id).lean();
+    }
 
-    if (user.member_status === 'suspended') {
+    if (member && member.status === 'suspended') {
       return res.status(403).json({ success: false, message: 'Your account has been suspended by the organization administrator.' });
     }
 
-    // Attach to request
+    // Attach to request preserving exact contract
     req.user = {
-      id: user.id,
+      id: user._id,
       name: user.name,
       email: user.email,
       verified: user.verified,
-      organizationId: user.organization_id,
-      orgName: user.org_name || 'Personal Space',
-      role: user.role || 'owner',
-      canCreateApiKeys: user.can_create_api_keys !== false,
-      monthlyTokenLimit: user.monthly_token_limit,
-      monthlySpendLimitUsd: user.monthly_spend_limit_usd
+      organizationId: member ? member.organization_id : null,
+      orgName: org ? org.name : 'Personal Space',
+      role: member ? member.role : 'owner',
+      canCreateApiKeys: member ? member.can_create_api_keys !== false : true,
+      monthlyTokenLimit: member ? member.monthly_token_limit : null,
+      monthlySpendLimitUsd: member ? member.monthly_spend_limit_usd : null
     };
 
     next();

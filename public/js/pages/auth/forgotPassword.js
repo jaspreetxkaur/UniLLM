@@ -5,42 +5,43 @@ import { router } from "../../router.js?v=2";
 
 export function forgotPassword() {
   return `
-    <div class="flex flex-col gap-6 font-sans animate-fade-in-up max-w-md mx-auto">
-      <div class="flex flex-col gap-1.5 select-none text-center sm:text-left">
-        <span class="text-[9px] font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 border border-indigo-100 px-2.5 py-0.5 rounded self-center sm:self-start shadow-sm">
+    <div class="flex flex-col gap-6 font-sans animate-fade-in-up max-w-md mx-auto w-full text-left">
+      <div class="flex flex-col gap-1.5 select-none">
+        <span class="text-[9px] font-mono font-bold text-white uppercase tracking-widest bg-white/10 border border-white/20 px-2.5 py-0.5 rounded self-start">
           Password Recovery
         </span>
-        <h2 class="font-display font-black text-3xl text-slate-900 uppercase leading-none mt-1">Reset Access</h2>
-        <p class="text-xs text-slate-500 font-semibold font-medium">We will generate security credentials reset logs for your email.</p>
+        <h2 class="font-sans font-bold text-2xl text-white tracking-tight mt-1">Reset Access</h2>
+        <p class="text-xs text-[#A1A5AD]">We will generate a security recovery code for your account.</p>
       </div>
 
       <!-- DEV RECOVERY OTP DEBUG NOTIFICATION -->
-      <div id="dev-recovery-alert" class="hidden p-3.5 bg-indigo-50 border border-indigo-150 rounded-xl text-xs text-indigo-800 font-medium">
+      <div id="dev-recovery-alert" class="hidden p-3.5 bg-[#15181D] border border-white/20 rounded-xl text-xs text-white font-medium">
         <div class="flex items-center gap-2">
-          <span class="flex w-2 h-2 rounded-full bg-indigo-600 animate-pulse"></span>
-          <span class="font-bold uppercase tracking-wider text-[9px]">Development / Demo Mode OTP</span>
+          <span class="flex w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="font-bold uppercase tracking-wider text-[9px] text-white">Development / Demo Mode OTP</span>
         </div>
-        <div class="mt-1 text-slate-700">
-          Use recovery code <strong id="dev-recovery-code" class="font-mono text-indigo-700 bg-white border px-1.5 py-0.5 rounded text-sm tracking-widest">000000</strong> on the next screen.
+        <div class="mt-1 text-[#A1A5AD]">
+          Use recovery code <strong id="dev-recovery-code" class="font-mono text-white bg-[#101216] border border-[#292D34] px-1.5 py-0.5 rounded text-sm tracking-widest">000000</strong> on the next screen.
         </div>
-        <p class="mt-1.5 text-[9px] text-indigo-500 uppercase tracking-wider font-bold">
+        <p class="mt-1.5 text-[9px] text-[#A1A5AD]/80 uppercase tracking-wider font-mono">
           Demo mode — email delivery will be connected in a future backend phase.
         </p>
       </div>
       
-      <form id="forgot-form" class="flex flex-col gap-4 font-semibold text-xs text-slate-700">
+      <form id="forgot-form" class="flex flex-col gap-4 text-xs">
         <div class="flex flex-col gap-1.5">
-          <label class="text-[9px] uppercase tracking-wider text-slate-400">Email Address</label>
-          <input id="forgot-email" type="email" required placeholder="sarah@cyberdyne.org" class="p-3.5 border border-slate-200 rounded-xl bg-slate-50/50 focus:bg-[#161926] focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100/50 outline-none transition-all duration-200 font-semibold text-xs text-slate-800" />
+          <label class="text-[10px] font-mono uppercase tracking-wider text-[#A1A5AD]">Email Address</label>
+          <input id="forgot-email" type="email" required placeholder="sarah@cyberdyne.org" class="p-3.5 border border-[#292D34] rounded-xl bg-[#101216] focus:bg-[#15181D] focus:border-white/40 outline-none transition-all duration-200 text-xs text-white placeholder-[#A1A5AD]/40" />
         </div>
         
-        <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-bold rounded-xl uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 mt-2">
+        <button type="submit" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black font-semibold text-xs rounded-xl transition-all duration-200 shadow-md hover:shadow-lg mt-2 flex items-center justify-center gap-1.5 group">
           Send Recovery Code
+          <span class="transition-transform group-hover:translate-x-1 font-bold">→</span>
         </button>
       </form>
       
-      <span class="text-xs text-slate-500 text-center mt-2 font-medium">
-        <a href="/login" data-link class="text-indigo-600 font-bold hover:underline">&larr; Back to login</a>
+      <span class="text-xs text-[#A1A5AD] text-center mt-2 font-medium">
+        <a href="/login" data-link class="text-white hover:underline">&larr; Back to login</a>
       </span>
     </div>
   `;

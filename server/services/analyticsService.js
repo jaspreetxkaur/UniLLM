@@ -1,4 +1,4 @@
-import { query } from '../config/db.js';
+import { AiRequest, OrganizationBudget, User, ApiKey, Workspace } from '../models/index.js';
 
 export const analyticsService = {
   /**
@@ -12,36 +12,61 @@ export const analyticsService = {
     
     const sinceDate = new Date(Date.now() - intervalHours * 60 * 60 * 1000);
 
-    // 2. Aggregate Summary Metrics
-    const summaryRes = await query(`
-      SELECT 
-        COUNT(*)::INTEGER as total_requests,
-        COALESCE(SUM(total_tokens), 0)::BIGINT as total_tokens,
-        COALESCE(SUM(cost_usd), 0)::DECIMAL(10,6) as total_spend,
-        COALESCE(ROUND(AVG(latency_ms)), 0)::INTEGER as avg_latency,
-        COUNT(CASE WHEN status_code >= 200 AND status_code < 300 THEN 1 END)::INTEGER as success_count,
-        COUNT(CASE WHEN status_code >= 400 THEN 1 END)::INTEGER as failed_count,
-        COUNT(CASE WHEN cache_status = 'HIT' THEN 1 END)::INTEGER as cache_hits
-      FROM ai_requests
-      WHERE organization_id = $1 AND created_at >= $2;
-    `, [organizationId, sinceDate]);
+    // 2. Aggregate Summary Metrics via MongoDB Aggregation Pipeline
+    const summaryAgg = await AiRequest.aggregate([
+      { $match: { organization_id: organizationId, created_at: { $gte: sinceDate } } },
+      {
+        $group: {
+          _id: null,
+          total_requests: { $sum: 1 },
+          total_tokens: { $sum: '$total_tokens' },
+          total_spend: { $sum: '$cost_usd' },
+          avg_latency: { $avg: '$latency_ms' },
+          success_count: {
+            $sum: {
+              $cond: [{ $and: [{ $gte: ['$status_code', 200] }, { $lt: ['$status_code', 300] }] }, 1, 0]
+            }
+          },
+          failed_count: {
+            $sum: {
+              $cond: [{ $gte: ['$status_code', 400] }, 1, 0]
+            }
+          },
+          cache_hits: {
+            $sum: {
+              $cond: [{ $eq: ['$cache_status', 'HIT'] }, 1, 0]
+            }
+          }
+        }
+      }
+    ]);
 
-    const summary = summaryRes.rows[0];
+    const summary = summaryAgg[0] || {
+      total_requests: 0,
+      total_tokens: 0,
+      total_spend: 0,
+      avg_latency: 0,
+      success_count: 0,
+      failed_count: 0,
+      cache_hits: 0
+    };
+
     const totalRequests = summary.total_requests || 0;
     const cacheHits = summary.cache_hits || 0;
     const cacheHitRate = totalRequests > 0 ? ((cacheHits / totalRequests) * 100).toFixed(1) : '0.0';
 
     // 3. Aggregate Spend by Provider for Donut Chart
-    const providerRes = await query(`
-      SELECT 
-        provider,
-        COALESCE(SUM(cost_usd), 0)::DECIMAL(10,6) as total_cost,
-        COUNT(*)::INTEGER as request_count
-      FROM ai_requests
-      WHERE organization_id = $1 AND created_at >= $2
-      GROUP BY provider
-      ORDER BY total_cost DESC;
-    `, [organizationId, sinceDate]);
+    const providerRes = await AiRequest.aggregate([
+      { $match: { organization_id: organizationId, created_at: { $gte: sinceDate } } },
+      {
+        $group: {
+          _id: '$provider',
+          total_cost: { $sum: '$cost_usd' },
+          request_count: { $sum: 1 }
+        }
+      },
+      { $sort: { total_cost: -1 } }
+    ]);
 
     const providerColors = {
       gemini: '#10B981',
@@ -51,48 +76,35 @@ export const analyticsService = {
       unillm: '#94A3B8'
     };
 
-    const spendByProvider = providerRes.rows.map(r => ({
-      name: r.provider ? (r.provider.charAt(0).toUpperCase() + r.provider.slice(1)) : 'Unknown',
-      value: parseFloat(r.total_cost) || 0,
+    const spendByProvider = providerRes.map(r => ({
+      name: r._id ? (r._id.charAt(0).toUpperCase() + r._id.slice(1)) : 'Unknown',
+      value: parseFloat((r.total_cost || 0).toFixed(6)),
       requests: r.request_count,
-      color: providerColors[r.provider] || '#64748B'
+      color: providerColors[r._id] || '#64748B'
     }));
 
     // 4. Latency Time-Series (Last 7 samples for line/area chart)
-    const latencySeriesRes = await query(`
-      SELECT latency_ms as avg_lat
-      FROM ai_requests
-      WHERE organization_id = $1
-      ORDER BY created_at DESC
-      LIMIT 7;
-    `, [organizationId]);
+    const latencySeriesDocs = await AiRequest.find({ organization_id: organizationId })
+      .sort({ created_at: -1 })
+      .limit(7)
+      .select({ latency_ms: 1 })
+      .lean();
 
-    const latencyHistory = latencySeriesRes.rows.length > 0 
-      ? latencySeriesRes.rows.map(r => r.avg_lat).reverse()
+    const latencyHistory = latencySeriesDocs.length > 0
+      ? latencySeriesDocs.map(r => r.latency_ms || 0).reverse()
       : [0, 0, 0, 0, 0, 0, 0];
 
     // 5. Recent 5 Request Logs for Overview Table
-    const recentRes = await query(`
-      SELECT 
-        id,
-        model,
-        provider,
-        status_code as status,
-        cache_status as cache,
-        latency_ms as latency,
-        cost_usd as cost,
-        created_at as timestamp
-      FROM ai_requests
-      WHERE organization_id = $1
-      ORDER BY created_at DESC
-      LIMIT 5;
-    `, [organizationId]);
+    const recentDocs = await AiRequest.find({ organization_id: organizationId })
+      .sort({ created_at: -1 })
+      .limit(5)
+      .lean();
 
     return {
       totalRequests,
       totalTokens: summary.total_tokens || 0,
-      totalSpend: parseFloat(summary.total_spend) || 0,
-      averageLatency: summary.avg_latency || 0,
+      totalSpend: parseFloat((summary.total_spend || 0).toFixed(6)),
+      averageLatency: Math.round(summary.avg_latency || 0),
       successfulRequests: summary.success_count || 0,
       failedRequests: summary.failed_count || 0,
       cacheHitRate,
@@ -102,10 +114,15 @@ export const analyticsService = {
         { name: "Gemini", value: 0, color: "#10B981" },
         { name: "OpenAI", value: 0, color: "#4F46E5" }
       ],
-      recentRequests: recentRes.rows.map(r => ({
-        ...r,
-        cost: parseFloat(r.cost) || 0,
-        status: r.status === 200 ? 'Success' : 'Failed'
+      recentRequests: recentDocs.map(r => ({
+        id: r._id,
+        model: r.model,
+        provider: r.provider,
+        status: r.status_code === 200 ? 'Success' : 'Failed',
+        cache: r.cache_status,
+        latency: r.latency_ms,
+        cost: parseFloat((r.cost_usd || 0).toFixed(6)),
+        timestamp: r.created_at
       }))
     };
   },
@@ -114,37 +131,47 @@ export const analyticsService = {
    * Fetches full request trace logs for an organization
    */
   getRequestLogs: async (organizationId, limit = 50) => {
-    const res = await query(`
-      SELECT 
-        r.id,
-        r.model,
-        r.provider,
-        r.prompt_tokens as "tokensInput",
-        r.completion_tokens as "tokensOutput",
-        r.total_tokens as "totalTokens",
-        r.cost_usd as cost,
-        r.latency_ms as latency,
-        r.status_code as "statusCode",
-        r.status,
-        r.cache_status as cache,
-        r.is_fallback as "isFallback",
-        r.error_message as "errorMessage",
-        r.created_at as timestamp,
-        COALESCE(u.name, 'API Key User') as user,
-        COALESCE(k.name, 'Web Session') as "keyName",
-        w.name as "workspaceName"
-      FROM ai_requests r
-      LEFT JOIN users u ON r.user_id = u.id
-      LEFT JOIN api_keys k ON r.api_key_id = k.id
-      LEFT JOIN workspaces w ON r.workspace_id = w.id
-      WHERE r.organization_id = $1
-      ORDER BY r.created_at DESC
-      LIMIT $2;
-    `, [organizationId, limit]);
+    const safeLimit = Math.min(Math.max(1, parseInt(limit, 10) || 50), 200);
+    const requests = await AiRequest.find({ organization_id: organizationId })
+      .sort({ created_at: -1 })
+      .limit(safeLimit)
+      .lean();
 
-    return res.rows.map(r => ({
-      ...r,
-      cost: parseFloat(r.cost) || 0
+    if (requests.length === 0) return [];
+
+    // Collect distinct reference IDs
+    const userIds = [...new Set(requests.map(r => r.user_id).filter(Boolean))];
+    const keyIds = [...new Set(requests.map(r => r.api_key_id).filter(Boolean))];
+    const wsIds = [...new Set(requests.map(r => r.workspace_id).filter(Boolean))];
+
+    const [users, keys, workspaces] = await Promise.all([
+      User.find({ _id: { $in: userIds } }).lean(),
+      ApiKey.find({ _id: { $in: keyIds } }).lean(),
+      Workspace.find({ _id: { $in: wsIds } }).lean()
+    ]);
+
+    const userMap = new Map(users.map(u => [u._id, u.name]));
+    const keyMap = new Map(keys.map(k => [k._id, k.name]));
+    const wsMap = new Map(workspaces.map(w => [w._id, w.name]));
+
+    return requests.map(r => ({
+      id: r._id,
+      model: r.model,
+      provider: r.provider,
+      tokensInput: r.prompt_tokens,
+      tokensOutput: r.completion_tokens,
+      totalTokens: r.total_tokens,
+      cost: parseFloat((r.cost_usd || 0).toFixed(6)),
+      latency: r.latency_ms,
+      statusCode: r.status_code,
+      status: r.status,
+      cache: r.cache_status,
+      isFallback: r.is_fallback,
+      errorMessage: r.error_message,
+      timestamp: r.created_at,
+      user: (r.user_id && userMap.get(r.user_id)) || 'API Key User',
+      keyName: (r.api_key_id && keyMap.get(r.api_key_id)) || 'Web Session',
+      workspaceName: (r.workspace_id && wsMap.get(r.workspace_id)) || 'Workspace'
     }));
   },
 
@@ -153,14 +180,7 @@ export const analyticsService = {
    */
   getCostAnalytics: async (organizationId) => {
     // 1. Fetch Budget configuration
-    const budgetRes = await query(`
-      SELECT monthly_budget_usd, alert_threshold_percent, hard_limit_enabled, current_period_start
-      FROM organization_budgets
-      WHERE organization_id = $1
-      LIMIT 1;
-    `, [organizationId]);
-
-    const budget = budgetRes.rows[0] || {
+    const budget = await OrganizationBudget.findOne({ organization_id: organizationId }).lean() || {
       monthly_budget_usd: 100.00,
       alert_threshold_percent: 80,
       hard_limit_enabled: true
@@ -169,39 +189,46 @@ export const analyticsService = {
     const monthlyBudget = parseFloat(budget.monthly_budget_usd || 100.00);
 
     // 2. Calculate Actual Current Spend
-    const spendRes = await query(`
-      SELECT 
-        COALESCE(SUM(cost_usd), 0)::DECIMAL(10,6) as total_spend,
-        COUNT(*)::INTEGER as request_count
-      FROM ai_requests
-      WHERE organization_id = $1;
-    `, [organizationId]);
+    const spendAgg = await AiRequest.aggregate([
+      { $match: { organization_id: organizationId } },
+      {
+        $group: {
+          _id: null,
+          total_spend: { $sum: '$cost_usd' },
+          request_count: { $sum: 1 }
+        }
+      }
+    ]);
 
-    const totalSpend = parseFloat(spendRes.rows[0].total_spend || 0);
+    const totalSpend = spendAgg.length > 0 ? parseFloat(spendAgg[0].total_spend.toFixed(6)) : 0.0;
     const remainingCredit = Math.max(0, monthlyBudget - totalSpend);
+    const requestCount = spendAgg.length > 0 ? spendAgg[0].request_count : 0;
 
     // 3. Spend by Model
-    const modelRes = await query(`
-      SELECT 
-        model,
-        provider,
-        COALESCE(SUM(cost_usd), 0)::DECIMAL(10,6) as cost,
-        COUNT(*)::INTEGER as requests,
-        COALESCE(SUM(total_tokens), 0)::BIGINT as tokens
-      FROM ai_requests
-      WHERE organization_id = $1
-      GROUP BY model, provider
-      ORDER BY cost DESC;
-    `, [organizationId]);
+    const modelRes = await AiRequest.aggregate([
+      { $match: { organization_id: organizationId } },
+      {
+        $group: {
+          _id: { model: '$model', provider: '$provider' },
+          cost: { $sum: '$cost_usd' },
+          requests: { $sum: 1 },
+          tokens: { $sum: '$total_tokens' }
+        }
+      },
+      { $sort: { cost: -1 } }
+    ]);
 
     return {
       monthlyBudget,
       totalSpend,
       remainingCredit,
-      requestCount: spendRes.rows[0].request_count || 0,
-      modelBreakdown: modelRes.rows.map(r => ({
-        ...r,
-        cost: parseFloat(r.cost) || 0
+      requestCount,
+      modelBreakdown: modelRes.map(r => ({
+        model: r._id.model,
+        provider: r._id.provider,
+        cost: parseFloat(r.cost.toFixed(6)),
+        requests: r.requests,
+        tokens: r.tokens
       }))
     };
   }

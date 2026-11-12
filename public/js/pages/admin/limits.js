@@ -7,17 +7,17 @@ export function adminLimits() {
   return `
     <div class="flex flex-col gap-8 animate-fade-in-up font-sans select-none max-w-6xl">
       <!-- Top Header -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border pb-5">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#292D34] pb-5">
         <div class="flex flex-col gap-1">
           <span class="text-[9px] font-bold text-indigo-700 uppercase tracking-widest">Enterprise Governance</span>
-          <h1 class="font-display font-black text-3xl text-brand-text uppercase leading-none font-bold">Limits & Quota Controls</h1>
-          <p class="text-xs text-brand-muted font-semibold mt-1">Configure monthly organization spending ceilings, threshold alerts, and circuit breakers in PostgreSQL.</p>
+          <h1 class="font-display font-black text-3xl text-white uppercase leading-none font-bold">Limits & Quota Controls</h1>
+          <p class="text-xs text-[#A1A5AD] font-semibold mt-1">Configure monthly organization spending ceilings, threshold alerts, and circuit breakers in PostgreSQL.</p>
         </div>
       </div>
 
       <!-- Rate Limit Policy Presets -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="p-6 bg-white border border-brand-border rounded-2xl shadow-xs flex flex-col justify-between gap-4">
+        <div class="p-6 bg-white border border-[#292D34] rounded-2xl shadow-xs flex flex-col justify-between gap-4">
           <div class="flex justify-between items-start">
             <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Organization Monthly Budget</span>
             <span class="px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded text-[9px] font-bold">DATABASE</span>
@@ -31,7 +31,7 @@ export function adminLimits() {
           </button>
         </div>
 
-        <div class="p-6 bg-white border border-brand-border rounded-2xl shadow-xs flex flex-col justify-between gap-4">
+        <div class="p-6 bg-white border border-[#292D34] rounded-2xl shadow-xs flex flex-col justify-between gap-4">
           <div class="flex justify-between items-start">
             <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Gateway Rate Cap</span>
             <span class="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-[9px] font-bold">ACTIVE</span>
@@ -43,7 +43,7 @@ export function adminLimits() {
           <span class="text-[10px] text-emerald-600 font-bold pt-3 border-t">● Protected by backend rate limiter</span>
         </div>
 
-        <div class="p-6 bg-white border border-brand-border rounded-2xl shadow-xs flex flex-col justify-between gap-4">
+        <div class="p-6 bg-white border border-[#292D34] rounded-2xl shadow-xs flex flex-col justify-between gap-4">
           <div class="flex justify-between items-start">
             <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Hard Circuit Breaker</span>
             <span id="limit-card-breaker" class="px-2 py-0.5 bg-rose-50 text-rose-700 rounded text-[9px] font-bold">...</span>
@@ -57,10 +57,10 @@ export function adminLimits() {
       </div>
 
       <!-- Employee Limits Table -->
-      <div class="bg-white border border-brand-border rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
+      <div class="bg-white border border-[#292D34] rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
         <div class="flex justify-between items-center">
           <h3 class="font-bold text-base text-slate-900">Per-Member Spend Quotas</h3>
-          <a href="/admin/employees" data-link class="text-xs text-brand-primary font-bold hover:underline">Manage Team Members &rarr;</a>
+          <a href="/admin/employees" data-link class="text-xs text-white font-bold hover:underline">Manage Team Members &rarr;</a>
         </div>
 
         <div class="border border-slate-200 rounded-xl overflow-hidden text-xs">
@@ -82,43 +82,43 @@ export function adminLimits() {
           </table>
         </div>
       </div>
+    </div>
 
-      <!-- Edit Budget Modal -->
-      <div id="budget-modal" class="fixed inset-0 bg-[#07080B]/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-[#10121A] border border-[#1F2438] rounded-2xl p-6 shadow-2xl max-w-sm w-full animate-scale-up">
-          <div class="flex justify-between items-center mb-4 border-b border-[#1F2438] pb-3">
-            <h3 class="font-bold text-base text-white uppercase tracking-tight">Configure Monthly Budget</h3>
-            <button id="close-budget-modal-btn" class="p-1 hover:bg-[#161926] rounded-lg text-[#8E98B0] hover:text-white transition-colors">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <!-- Edit Budget Modal -->
+    <div id="budget-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+      <div class="bg-[#101216] border border-[#292D34] rounded-2xl p-6 shadow-2xl max-w-sm w-full my-auto">
+        <div class="flex justify-between items-center mb-4 border-b border-[#292D34] pb-3">
+          <h3 class="font-bold text-base text-white uppercase tracking-tight">Configure Monthly Budget</h3>
+          <button id="close-budget-modal-btn" class="p-1 hover:bg-[#15181D] rounded-lg text-[#A1A5AD] hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        
+        <form id="edit-budget-form" class="flex flex-col gap-4 text-xs font-semibold">
+          <div>
+            <label class="block text-[10px] font-bold text-[#A1A5AD] uppercase mb-1">Monthly Budget Cap ($)</label>
+            <input type="number" id="budget-input-amount" required min="10" max="100000" step="10" class="w-full p-2.5 border border-[#292D34] rounded-lg bg-[#15181D] text-white focus:border-white outline-none font-mono font-bold" />
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-[#A1A5AD] uppercase mb-1">Alert Notification Threshold (%)</label>
+            <input type="number" id="budget-input-threshold" required min="1" max="100" class="w-full p-2.5 border border-[#292D34] rounded-lg bg-[#15181D] text-white focus:border-white outline-none font-mono font-bold" />
+          </div>
+
+          <div class="flex items-center gap-2 pt-1">
+            <input type="checkbox" id="budget-input-hardlimit" class="accent-[white] w-4 h-4 cursor-pointer" />
+            <label for="budget-input-hardlimit" class="text-xs text-white font-bold cursor-pointer">Enforce Hard Limit (Block at 100%)</label>
+          </div>
+
+          <div class="flex gap-2.5 mt-3">
+            <button type="button" id="cancel-budget-btn" class="w-1/2 py-2.5 border border-[#292D34] hover:bg-[#15181D] text-[#A1A5AD] hover:text-white font-bold rounded-lg uppercase tracking-wider text-[11px] transition-colors">
+              Cancel
+            </button>
+            <button type="submit" id="save-budget-submit-btn" class="w-1/2 py-2.5 bg-white hover:bg-neutral-200 text-[#08090B] font-bold rounded-lg uppercase tracking-wider text-[11px] shadow-sm transition-colors">
+              Save Budget
             </button>
           </div>
-          
-          <form id="edit-budget-form" class="flex flex-col gap-4 text-xs font-semibold">
-            <div>
-              <label class="block text-[10px] font-bold text-[#8E98B0] uppercase mb-1">Monthly Budget Cap ($)</label>
-              <input type="number" id="budget-input-amount" required min="10" max="100000" step="10" class="w-full p-2.5 border border-[#1F2438] rounded-lg bg-[#161926] text-white focus:border-[#38BDF8] outline-none font-mono font-bold" />
-            </div>
-
-            <div>
-              <label class="block text-[10px] font-bold text-[#8E98B0] uppercase mb-1">Alert Notification Threshold (%)</label>
-              <input type="number" id="budget-input-threshold" required min="1" max="100" class="w-full p-2.5 border border-[#1F2438] rounded-lg bg-[#161926] text-white focus:border-[#38BDF8] outline-none font-mono font-bold" />
-            </div>
-
-            <div class="flex items-center gap-2 pt-1">
-              <input type="checkbox" id="budget-input-hardlimit" class="accent-[#38BDF8] w-4 h-4 cursor-pointer" />
-              <label for="budget-input-hardlimit" class="text-xs text-white font-bold cursor-pointer">Enforce Hard Limit (Block at 100%)</label>
-            </div>
-
-            <div class="flex gap-2.5 mt-3">
-              <button type="button" id="cancel-budget-btn" class="w-1/2 py-2.5 border border-[#1F2438] hover:bg-[#161926] text-[#8E98B0] hover:text-white font-bold rounded-lg uppercase tracking-wider text-[11px] transition-colors">
-                Cancel
-              </button>
-              <button type="submit" id="save-budget-submit-btn" class="w-1/2 py-2.5 bg-[#38BDF8] hover:bg-[#0EA5E9] text-[#07080B] font-bold rounded-lg uppercase tracking-wider text-[11px] shadow-sm transition-colors">
-                Save Budget
-              </button>
-            </div>
-          </form>
-        </div>
+        </form>
       </div>
     </div>
   `;

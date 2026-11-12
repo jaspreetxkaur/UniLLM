@@ -1,347 +1,265 @@
-// PUBLIC PAGE: product (AI Gateway Platform Redesign)
+// PUBLIC PAGE: product (Obsidian AI Gateway Platform Architecture)
 import { apiService } from "../../apiService.js?v=2";
 import { components } from "../../components.js?v=2";
 import { router } from "../../router.js?v=2";
 import { icons } from "../../icons.js?v=2";
 
 export function product() {
-  const testimonials = [
+  const architecturalPatterns = [
     {
-      quote: "UniLLM gives NVIDIA engineers a single, consistent way to access more than 100 AI model endpoints across cloud providers, open source deployments, and internal NVIDIA services.",
-      author: "Ajay Dogra",
-      role: "Product, NVIDIA",
-      avatarBg: "bg-[#76B900]/20 text-[#76B900] border border-[#76B900]/40",
-      company: "NVIDIA",
-      headline: "Single access source with consistency"
+      headline: "Multi-Cloud Dynamic Failover Matrix",
+      quote: "Automated routing across Anthropic, OpenAI, and Google Gemini with real-time circuit breakers eliminates single-provider downtime and mitigates 429 rate limit spikes instantly.",
+      author: "High-Availability Pattern",
+      role: "Global Edge Orchestration",
+      avatarBg: "bg-white/10 text-white border border-white/20",
+      company: "Failover Mesh"
     },
     {
-      quote: "UniLLM has let my team provide the latest LLM models to our users, usually within a day of them being released… it has saved us months of work.",
-      author: "David Leen",
-      role: "Staff Software Engineer, Netflix",
-      avatarBg: "bg-[#E50914]/20 text-[#E50914] border border-[#E50914]/40",
-      company: "Netflix",
-      headline: "New models in a day, not hours of rework"
+      headline: "Sub-10ms Semantic Vector Caching",
+      quote: "Zero-latency cache hits on semantically identical prompts bypass upstream inference charges entirely, slashing recurrent API expenditures by up to 68% while delivering near-instant responses.",
+      author: "Vector Cache Engine",
+      role: "Cosine Similarity Thresholds",
+      avatarBg: "bg-[#697DFF]/20 text-[#697DFF] border border-[#697DFF]/40",
+      company: "Semantic Edge"
     },
     {
-      quote: "UniLLM streamlines the complexities of managing multiple LLM models across our distributed production workloads.",
-      author: "Mark Koltnuk",
-      role: "Principal Architect, GenAI Platform, Lemonade",
-      avatarBg: "bg-[#FF0055]/20 text-[#FF0055] border border-[#FF0055]/40",
-      company: "Lemonade",
-      headline: "Multiple models, one interface"
+      headline: "Zero Data Retention & Real-Time Redaction",
+      quote: "Hardware-level memory routing strips credit card numbers, SSNs, and identifiable entities before payloads exit your virtual network perimeter. No prompts or completions are ever written to disk.",
+      author: "Privacy & Compliance Engine",
+      role: "Pre-Flight Guardrails",
+      avatarBg: "bg-[#FF9B72]/20 text-[#FF9B72] border border-[#FF9B72]/40",
+      company: "Data Guard"
     },
     {
-      quote: "If we decide to switch the backend model, it’s a simple configuration update in the gateway; no code changes, procurement cycles, or repetitive security reviews required.",
-      author: "Dennis Henry",
-      role: "Productivity Architect, Okta",
-      avatarBg: "bg-[#007DC1]/20 text-[#007DC1] border border-[#007DC1]/40",
-      company: "Okta",
-      headline: "Swap models without new security reviews"
+      headline: "Universal Wire-Compatible API Specification",
+      quote: "Drop-in OpenAI SDK compatibility requires exactly one line change: pointing your baseURL to api.unillm.io. Switch foundation models across providers with zero client-side refactoring.",
+      author: "Unified Ingress Standard",
+      role: "Standardized Schema Spec",
+      avatarBg: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40",
+      company: "Single Gateway"
     }
   ];
 
   return `
-    <div class="relative overflow-hidden w-full font-sans bg-[#07080B] text-white">
-      <!-- Ambient Radial Lighting -->
-      <div class="absolute top-[2%] left-[10%] w-[600px] h-[600px] rounded-full blur-[180px] bg-[#38BDF8]/5 pointer-events-none -z-10"></div>
-      <div class="absolute top-[40%] right-[5%] w-[700px] h-[700px] rounded-full blur-[200px] bg-indigo-500/5 pointer-events-none -z-10"></div>
+    <div class="relative overflow-hidden w-full font-sans bg-[#0B0C0D] text-[#F2EFE8]">
+      
+      <!-- Subtle monochromatic top vignette -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1100px] h-[450px] bg-gradient-to-b from-[#FF7849]/[0.04] via-[#42D6A4]/[0.02] to-transparent blur-[150px] pointer-events-none -z-10"></div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 flex flex-col gap-24">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-12 py-16 lg:py-24 flex flex-col gap-24">
 
         <!-- =========================================================
-             1. EDITORIAL HERO SECTION (Distinct from Landing Page)
+             1. HERO SECTION: TECHNICAL ARCHITECTURE GATEWAY
         ========================================================= -->
-        <section class="flex flex-col lg:flex-row items-center justify-between gap-12 pt-6 pb-12 border-b border-[#1F2438]">
-          <div class="flex-1 flex flex-col gap-6 max-w-2xl animate-fade-in-up">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#161926] border border-[#1F2438] text-[#38BDF8] text-[11px] font-mono font-bold tracking-wider self-start">
-              <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
-              AI GATEWAY ENGINE • PRODUCTION READY
-            </div>
-
-            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.1]">
-              A single intelligent proxy for all <span class="text-[#38BDF8]">frontier models</span>.
-            </h1>
-
-            <p class="text-sm sm:text-base text-[#8E98B0] leading-relaxed">
-              Standardize your AI infrastructure with a unified OpenAI-compatible endpoint. Route by latency, enforce budgets, cache semantically, and achieve zero downtime with automated upstream failovers.
-            </p>
-
-            <div class="flex flex-wrap items-center gap-4 pt-2">
-              <a
-                href="/get-started"
-                data-link
-                class="px-6 py-3 rounded-full bg-white hover:bg-slate-200 text-[#07080B] text-xs font-bold transition-all shadow-md inline-flex items-center gap-2"
-              >
-                <span>Deploy Gateway Free</span>
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-              </a>
-              <a
-                href="#connected-workflow"
-                class="px-6 py-3 rounded-full bg-[#161926] hover:bg-[#1F2438] text-white border border-[#1F2438] hover:border-[#38BDF8]/40 text-xs font-semibold transition-all inline-flex items-center gap-2"
-              >
-                <span>Explore Architecture</span>
-                <svg class="w-3.5 h-3.5 text-[#8E98B0]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
-              </a>
-            </div>
-
-            <!-- Fast Metrics Badges -->
-            <div class="grid grid-cols-3 gap-4 pt-6 border-t border-[#1F2438]/70 text-xs">
-              <div>
-                <div class="font-mono text-lg font-bold text-white">&lt; 1.2ms</div>
-                <div class="text-[11px] text-[#8E98B0]">Proxy Overhead</div>
-              </div>
-              <div>
-                <div class="font-mono text-lg font-bold text-emerald-400">99.99%</div>
-                <div class="text-[11px] text-[#8E98B0]">Uptime Guarantee</div>
-              </div>
-              <div>
-                <div class="font-mono text-lg font-bold text-[#38BDF8]">100+</div>
-                <div class="text-[11px] text-[#8E98B0]">Supported LLMs</div>
-              </div>
-            </div>
+        <section class="flex flex-col gap-8 max-w-4xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#141615] border border-[rgba(242,239,232,0.14)] text-[11px] font-mono tracking-wider text-[#A6A39C] uppercase self-start">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span>Universal AI Proxy Layer</span>
+            <span class="text-white/20">•</span>
+            <span class="text-[#F2EFE8]">v2.4 Spec</span>
           </div>
 
-          <!-- Hero Right: Live Gateway Edge Inspector Visual -->
-          <div class="flex-1 w-full max-w-lg lg:max-w-none rounded-2xl border border-[#1F2438] bg-[#10121A] p-5 shadow-2xl relative overflow-hidden">
-            <div class="flex items-center justify-between pb-3 mb-4 border-b border-[#1F2438] text-xs">
-              <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
-                <span class="font-mono text-[11px] text-[#8E98B0] ml-2">gateway-edge-us-east.unillm.io</span>
-              </div>
-              <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono text-[10px]">LIVE 200 OK</span>
+          <h1 class="font-sans font-extrabold text-4xl sm:text-6xl lg:text-[64px] tracking-[-0.03em] text-[#F2EFE8] leading-[1.05]">
+            Architected for resilient, zero-lock-in AI workloads.
+          </h1>
+
+          <p class="text-base sm:text-lg text-[#A6A39C] leading-relaxed max-w-2xl font-normal">
+            UniLLM sits between your applications and every frontier model provider. Route intelligently, eliminate downtime with automatic fallbacks, cache semantic queries at the edge, and enforce compliance across every token.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-4 pt-2">
+            <a
+              href="/get-started"
+              data-link
+              class="px-6 py-3 rounded-lg bg-[#FF7849] hover:bg-[#ff8a60] text-[#0B0C0D] font-bold shadow-[0_4px_25px_rgba(255,120,73,0.3)] text-xs font-semibold transition-all inline-flex items-center gap-2 shadow-sm"
+            >
+              <span>Deploy Ingress Key</span>
+              <span class="font-bold">→</span>
+            </a>
+            <a
+              href="/docs"
+              data-link
+              class="px-6 py-3 rounded-lg bg-[#141615] hover:bg-[#1A1D1B] text-[#F2EFE8] border border-[rgba(242,239,232,0.14)] text-xs font-semibold transition-all inline-flex items-center gap-2"
+            >
+              <span>Explore Technical Docs</span>
+            </a>
+          </div>
+
+          <!-- Key Infrastructure Attributes -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[rgba(242,239,232,0.14)]">
+            <div class="flex flex-col gap-1">
+              <div class="font-mono text-xl font-bold text-white">&lt;14ms</div>
+              <div class="text-xs text-[#A6A39C]">Proxy Overhead (P95)</div>
             </div>
-
-            <!-- Live Routing Pipeline View -->
-            <div class="space-y-3 font-mono text-xs">
-              <div class="p-3 rounded-xl bg-[#0A0C13] border border-[#1F2438] flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                  <span class="px-2 py-0.5 rounded bg-[#38BDF8]/10 text-[#38BDF8] text-[10px] font-bold">POST</span>
-                  <span class="text-white">/v1/chat/completions</span>
-                </div>
-                <span class="text-[#8E98B0] text-[11px]">420 tokens</span>
-              </div>
-
-              <!-- Gateway Processing Steps -->
-              <div class="pl-4 border-l-2 border-[#38BDF8]/40 space-y-2 py-1 text-[11px]">
-                <div class="flex items-center justify-between text-[#8E98B0]">
-                  <span class="flex items-center gap-1.5 text-white">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#38BDF8]"></span>
-                    1. Semantic Cache Check
-                  </span>
-                  <span class="text-amber-400 font-bold">MISS (0.8ms)</span>
-                </div>
-                <div class="flex items-center justify-between text-[#8E98B0]">
-                  <span class="flex items-center gap-1.5 text-white">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#38BDF8]"></span>
-                    2. Data Masking & PII Filter
-                  </span>
-                  <span class="text-emerald-400 font-bold">CLEAN (0.3ms)</span>
-                </div>
-                <div class="flex items-center justify-between text-[#8E98B0]">
-                  <span class="flex items-center gap-1.5 text-white">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                    3. Smart Route: Target
-                  </span>
-                  <span class="text-[#38BDF8] font-bold">anthropic/claude-3-5-sonnet</span>
-                </div>
-                <div class="flex items-center justify-between text-[#8E98B0]">
-                  <span class="flex items-center gap-1.5 text-white">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                    4. Streaming Stream-Through
-                  </span>
-                  <span class="text-emerald-400 font-bold">285ms to first token</span>
-                </div>
-              </div>
-
-              <!-- Provider Health Status Row -->
-              <div class="pt-3 border-t border-[#1F2438] flex items-center justify-between text-[11px]">
-                <div class="flex items-center gap-3">
-                  <span class="flex items-center gap-1 text-[#8E98B0]"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> OpenAI</span>
-                  <span class="flex items-center gap-1 text-[#8E98B0]"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Anthropic</span>
-                  <span class="flex items-center gap-1 text-[#8E98B0]"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Gemini</span>
-                </div>
-                <span class="text-[#38BDF8] text-[10px]">Zero Down-Time Mesh</span>
-              </div>
+            <div class="flex flex-col gap-1">
+              <div class="font-mono text-xl font-bold text-white">100+</div>
+              <div class="text-xs text-[#A6A39C]">Frontier Models Supported</div>
+            </div>
+            <div class="flex flex-col gap-1">
+              <div class="font-mono text-xl font-bold text-white">100%</div>
+              <div class="text-xs text-[#A6A39C]">OpenAI SDK Compatible</div>
+            </div>
+            <div class="flex flex-col gap-1">
+              <div class="font-mono text-xl font-bold text-emerald-400">0B</div>
+              <div class="text-xs text-[#A6A39C]">Prompt Data Retained</div>
             </div>
           </div>
         </section>
 
         <!-- =========================================================
-             2. SECTION B: CONNECTED VISUAL FLOW (APPLICATION -> GATEWAY -> PROVIDER -> RESPONSE)
+             2. LIVE ARCHITECTURAL PIPELINE (INSPECTOR VISUAL)
         ========================================================= -->
-        <section id="connected-workflow" class="reveal-on-scroll flex flex-col gap-10">
-          <div class="flex flex-col gap-3 text-center max-w-2xl mx-auto">
-            <span class="text-xs font-mono font-bold text-[#38BDF8] uppercase tracking-wider">End-to-End Visual Workflow</span>
-            <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-              How requests flow through the UniLLM Gateway
+        <section class="flex flex-col gap-8">
+          <div class="flex flex-col gap-2">
+            <span class="text-xs font-mono font-bold text-[#A6A39C] uppercase tracking-wider">Gateway Anatomy</span>
+            <h2 class="text-2xl sm:text-4xl font-bold tracking-[-0.03em] text-[#F2EFE8]">
+              Deterministic request lifecycle at the global edge
             </h2>
-            <p class="text-xs sm:text-sm text-[#8E98B0] leading-relaxed">
-              Every query executes in real-time through an ultra-fast proxy pipeline with hardware-accelerated routing, automatic fallback, and instant token streaming.
+            <p class="text-sm text-[#A6A39C] max-w-2xl">
+              Inspect how UniLLM receives standard OpenAI-format inference calls, evaluates policies in streaming memory, and routes to provider backends with zero disk buffering.
             </p>
           </div>
 
-          <!-- The 4-Step Connected Workflow Diagram with Animated SVG Beam -->
-          <div class="relative rounded-2xl bg-[#10121A] border border-[#1F2438] p-6 lg:p-10 overflow-hidden">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             
-            <!-- SVG Flow Line on Desktop -->
-            <div class="hidden lg:block absolute top-[90px] left-[12%] right-[12%] h-4 pointer-events-none z-0">
-              <svg class="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 800 20">
-                <!-- Base Track -->
-                <line x1="0" y1="10" x2="800" y2="10" stroke="#1F2438" stroke-width="2" stroke-dasharray="4 4" />
-                <!-- Animated Travelling Electric Blue Beam -->
-                <line x1="0" y1="10" x2="800" y2="10" stroke="#38BDF8" stroke-width="2.5" class="animate-flow-beam" />
-              </svg>
+            <!-- Step 1 -->
+            <div class="p-6 rounded-xl bg-[#141615] border border-[rgba(242,239,232,0.14)] flex flex-col justify-between hover:border-white/30 transition-all">
+              <div class="flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="w-8 h-8 rounded-lg bg-white/5 text-white flex items-center justify-center font-mono font-bold text-xs border border-[rgba(242,239,232,0.14)]">01</span>
+                  <span class="text-[10px] font-mono text-[#A6A39C] uppercase">Client Ingress</span>
+                </div>
+                <h3 class="text-sm font-semibold text-white">Inference Request</h3>
+                <p class="text-xs text-[#A6A39C] leading-relaxed">
+                  Your application dispatches calls to <code class="text-white font-mono text-[11px]">api.unillm.io/v1</code> using any standard OpenAI client library.
+                </p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-[rgba(242,239,232,0.14)] text-[11px] font-mono text-[#A6A39C]">
+                HTTP/2 • SSL Session Cache
+              </div>
             </div>
 
-            <!-- Steps Grid -->
-            <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              
-              <!-- Step 1: Application Client -->
-              <div class="p-5 rounded-xl bg-[#0A0C13] border border-[#1F2438] hover:border-[#38BDF8]/60 transition-all group flex flex-col justify-between">
-                <div class="flex flex-col gap-3">
-                  <div class="flex items-center justify-between">
-                    <span class="w-8 h-8 rounded-lg bg-[#38BDF8]/10 text-[#38BDF8] flex items-center justify-center font-mono font-bold text-xs border border-[#38BDF8]/20 group-hover:scale-110 transition-transform">
-                      01
-                    </span>
-                    <span class="text-[10px] font-mono text-[#8E98B0] px-2 py-0.5 rounded bg-[#161926]">Input</span>
-                  </div>
-                  <h3 class="text-sm font-bold text-white group-hover:text-[#38BDF8] transition-colors">1. Application Client</h3>
-                  <p class="text-xs text-[#8E98B0] leading-relaxed">
-                    Your service sends standard OpenAI SDK requests pointing to <code class="text-[#38BDF8] text-[10px]">api.unillm.io/v1</code>.
-                  </p>
+            <!-- Step 2 -->
+            <div class="p-6 rounded-xl bg-[#141615] border border-[rgba(242,239,232,0.14)] flex flex-col justify-between hover:border-white/30 transition-all">
+              <div class="flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="w-8 h-8 rounded-lg bg-white/5 text-white flex items-center justify-center font-mono font-bold text-xs border border-[rgba(242,239,232,0.14)]">02</span>
+                  <span class="text-[10px] font-mono text-[#697DFF] uppercase">Edge Logic</span>
                 </div>
-                <div class="mt-4 pt-3 border-t border-[#1F2438]/80 text-[10px] font-mono text-emerald-400 flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Standard SDK Compatibility
-                </div>
+                <h3 class="text-sm font-semibold text-white">Policy & Vector Cache</h3>
+                <p class="text-xs text-[#A6A39C] leading-relaxed">
+                  The gateway evaluates rate limits, redacts configured PII patterns, and queries the semantic cache via vector cosine similarity.
+                </p>
               </div>
-
-              <!-- Step 2: UniLLM Gateway Edge -->
-              <div class="p-5 rounded-xl bg-[#0A0C13] border border-[#1F2438] hover:border-[#38BDF8]/60 transition-all group flex flex-col justify-between">
-                <div class="flex flex-col gap-3">
-                  <div class="flex items-center justify-between">
-                    <span class="w-8 h-8 rounded-lg bg-[#38BDF8]/10 text-[#38BDF8] flex items-center justify-center font-mono font-bold text-xs border border-[#38BDF8]/20 group-hover:scale-110 transition-transform">
-                      02
-                    </span>
-                    <span class="text-[10px] font-mono text-[#38BDF8] px-2 py-0.5 rounded bg-[#38BDF8]/10">Edge Core</span>
-                  </div>
-                  <h3 class="text-sm font-bold text-white group-hover:text-[#38BDF8] transition-colors">2. UniLLM Gateway</h3>
-                  <p class="text-xs text-[#8E98B0] leading-relaxed">
-                    Instantly verifies API key credentials, queries the semantic cache, applies PII masking, and picks the optimal route.
-                  </p>
-                </div>
-                <div class="mt-4 pt-3 border-t border-[#1F2438]/80 text-[10px] font-mono text-[#38BDF8] flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[#38BDF8]"></span> Cache, Guardrails & Policy
-                </div>
+              <div class="mt-6 pt-4 border-t border-[rgba(242,239,232,0.14)] text-[11px] font-mono text-[#697DFF]">
+                Sub-5ms Cache Resolution
               </div>
-
-              <!-- Step 3: Model Provider -->
-              <div class="p-5 rounded-xl bg-[#0A0C13] border border-[#1F2438] hover:border-[#38BDF8]/60 transition-all group flex flex-col justify-between">
-                <div class="flex flex-col gap-3">
-                  <div class="flex items-center justify-between">
-                    <span class="w-8 h-8 rounded-lg bg-[#38BDF8]/10 text-[#38BDF8] flex items-center justify-center font-mono font-bold text-xs border border-[#38BDF8]/20 group-hover:scale-110 transition-transform">
-                      03
-                    </span>
-                    <span class="text-[10px] font-mono text-indigo-400 px-2 py-0.5 rounded bg-indigo-500/10">Upstream</span>
-                  </div>
-                  <h3 class="text-sm font-bold text-white group-hover:text-[#38BDF8] transition-colors">3. Model Provider</h3>
-                  <p class="text-xs text-[#8E98B0] leading-relaxed">
-                    Executes query across OpenAI, Anthropic, Gemini, Groq, or AWS Bedrock with automatic retry on 429/5xx.
-                  </p>
-                </div>
-                <div class="mt-4 pt-3 border-t border-[#1F2438]/80 text-[10px] font-mono text-indigo-400 flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span> 50ms Auto-Fallback
-                </div>
-              </div>
-
-              <!-- Step 4: Streamed Response -->
-              <div class="p-5 rounded-xl bg-[#0A0C13] border border-[#1F2438] hover:border-[#38BDF8]/60 transition-all group flex flex-col justify-between">
-                <div class="flex flex-col gap-3">
-                  <div class="flex items-center justify-between">
-                    <span class="w-8 h-8 rounded-lg bg-[#38BDF8]/10 text-[#38BDF8] flex items-center justify-center font-mono font-bold text-xs border border-[#38BDF8]/20 group-hover:scale-110 transition-transform">
-                      04
-                    </span>
-                    <span class="text-[10px] font-mono text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10">Output</span>
-                  </div>
-                  <h3 class="text-sm font-bold text-white group-hover:text-[#38BDF8] transition-colors">4. Stream Response</h3>
-                  <p class="text-xs text-[#8E98B0] leading-relaxed">
-                    Streams Server-Sent Events (SSE) tokens directly to client, records trace latency, and updates spend quotas.
-                  </p>
-                </div>
-                <div class="mt-4 pt-3 border-t border-[#1F2438]/80 text-[10px] font-mono text-emerald-400 flex items-center gap-1.5">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Real-Time Telemetry
-                </div>
-              </div>
-
             </div>
+
+            <!-- Step 3 -->
+            <div class="p-6 rounded-xl bg-[#141615] border border-[rgba(242,239,232,0.14)] flex flex-col justify-between hover:border-white/30 transition-all">
+              <div class="flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="w-8 h-8 rounded-lg bg-white/5 text-white flex items-center justify-center font-mono font-bold text-xs border border-[rgba(242,239,232,0.14)]">03</span>
+                  <span class="text-[10px] font-mono text-emerald-400 uppercase">Resilience</span>
+                </div>
+                <h3 class="text-sm font-semibold text-white">Intelligent Failover</h3>
+                <p class="text-xs text-[#A6A39C] leading-relaxed">
+                  If the target provider returns 429 or 5xx, the gateway activates your fallback chain with sub-50ms failover before the client disconnects.
+                </p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-[rgba(242,239,232,0.14)] text-[11px] font-mono text-emerald-400">
+                Zero Upstream Downtime
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="p-6 rounded-xl bg-[#141615] border border-[rgba(242,239,232,0.14)] flex flex-col justify-between hover:border-white/30 transition-all">
+              <div class="flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="w-8 h-8 rounded-lg bg-white/5 text-white flex items-center justify-center font-mono font-bold text-xs border border-[rgba(242,239,232,0.14)]">04</span>
+                  <span class="text-[10px] font-mono text-[#FF9B72] uppercase">Egress</span>
+                </div>
+                <h3 class="text-sm font-semibold text-white">Token Streaming</h3>
+                <p class="text-xs text-[#A6A39C] leading-relaxed">
+                  Server-Sent Events (SSE) stream directly to your client. Token metrics, latency telemetry, and cost calculations are logged asynchronously.
+                </p>
+              </div>
+              <div class="mt-6 pt-4 border-t border-[rgba(242,239,232,0.14)] text-[11px] font-mono text-[#FF9B72]">
+                Zero Memory Retention
+              </div>
+            </div>
+
           </div>
         </section>
 
         <!-- =========================================================
-             3. SPLIT-SCREEN ARCHITECTURE DEEP-DIVE WITH CODE SWITCHER
+             3. CAPABILITY MATRIX WITH INTERACTIVE CODE PANEL
         ========================================================= -->
-        <section class="reveal-on-scroll flex flex-col lg:flex-row items-center gap-12">
+        <section class="flex flex-col lg:flex-row gap-8 items-start">
           
-          <!-- Left: Feature Tabs & Bullet Points -->
-          <div class="flex-1 flex flex-col gap-6">
+          <!-- Left: Tab Selectors -->
+          <div class="w-full lg:w-5/12 flex flex-col gap-6">
             <div class="flex flex-col gap-2">
-              <span class="text-xs font-mono font-bold text-[#38BDF8] uppercase tracking-wider">Enterprise Capabilities</span>
-              <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-                Eliminate fragility without refactoring your codebase.
+              <span class="text-xs font-mono font-bold text-[#A6A39C] uppercase tracking-wider">Control Plane Features</span>
+              <h2 class="text-2xl sm:text-3xl font-bold tracking-[-0.03em] text-[#F2EFE8]">
+                Engineered for enterprise production
               </h2>
-              <p class="text-xs sm:text-sm text-[#8E98B0] leading-relaxed">
-                Click a capability below to inspect how the gateway handles enterprise traffic automatically.
+              <p class="text-xs text-[#A6A39C]">
+                Select a capability to inspect header configurations and code integration patterns.
               </p>
             </div>
 
-            <!-- Tab Buttons -->
-            <div class="flex flex-col gap-3" id="product-capability-tabs">
+            <div class="flex flex-col gap-3">
               
-              <button data-tab="routing" class="capability-tab-btn active text-left p-4 rounded-xl border border-[#38BDF8] bg-[#161926] transition-all">
+              <!-- Tab 1: Routing -->
+              <button data-tab="routing" class="capability-tab-btn active text-left p-4 rounded-xl border border-white bg-[#1A1D1B] transition-all">
                 <div class="flex items-center justify-between mb-1">
-                  <span class="text-sm font-bold text-white">1. Intelligent Multi-Provider Fallback</span>
-                  <span class="text-[10px] font-mono text-[#38BDF8] font-bold">ACTIVE</span>
+                  <span class="text-xs font-semibold text-white">Dynamic Fallback Chains</span>
+                  <span class="text-[10px] font-mono text-white font-bold">ACTIVE</span>
                 </div>
-                <p class="text-xs text-[#8E98B0]">When OpenAI returns 429 or 503, the gateway immediately fails over to Claude 3.5 or Groq without client disruption.</p>
+                <p class="text-xs text-[#A6A39C]">Define ordered failover arrays. If primary models rate limit, traffic shifts without interrupting active users.</p>
               </button>
 
-              <button data-tab="caching" class="capability-tab-btn text-left p-4 rounded-xl border border-[#1F2438] bg-[#10121A] hover:border-[#38BDF8]/40 transition-all">
+              <!-- Tab 2: Caching -->
+              <button data-tab="caching" class="capability-tab-btn text-left p-4 rounded-xl border border-[rgba(242,239,232,0.14)] bg-[#141615] hover:border-white/30 transition-all">
                 <div class="flex items-center justify-between mb-1">
-                  <span class="text-sm font-bold text-white">2. High-Hit Semantic Caching</span>
-                  <span class="text-[10px] font-mono text-[#8E98B0]">SUB-10MS</span>
+                  <span class="text-xs font-semibold text-white">Semantic Vector Caching</span>
+                  <span class="text-[10px] font-mono text-[#A6A39C]">LATENCY & COST</span>
                 </div>
-                <p class="text-xs text-[#8E98B0]">Vector-similarity cache serves semantically identical requests in under 10ms, cutting API costs by up to 88%.</p>
+                <p class="text-xs text-[#A6A39C]">Vector embeddings analyze semantic intent to serve identical answers in &lt;10ms at zero API cost.</p>
               </button>
 
-              <button data-tab="guardrails" class="capability-tab-btn text-left p-4 rounded-xl border border-[#1F2438] bg-[#10121A] hover:border-[#38BDF8]/40 transition-all">
+              <!-- Tab 3: Guardrails -->
+              <button data-tab="guardrails" class="capability-tab-btn text-left p-4 rounded-xl border border-[rgba(242,239,232,0.14)] bg-[#141615] hover:border-white/30 transition-all">
                 <div class="flex items-center justify-between mb-1">
-                  <span class="text-sm font-bold text-white">3. PII Masking & Data Residency</span>
-                  <span class="text-[10px] font-mono text-[#8E98B0]">COMPLIANCE</span>
+                  <span class="text-xs font-semibold text-white">PII & Data Guardrails</span>
+                  <span class="text-[10px] font-mono text-[#A6A39C]">COMPLIANCE</span>
                 </div>
-                <p class="text-xs text-[#8E98B0]">Redacts credit cards, SSNs, and medical records before payloads exit your private network perimeter.</p>
+                <p class="text-xs text-[#A6A39C]">Redact credit cards, government IDs, and sensitive tokens in memory before payloads exit your perimeter.</p>
               </button>
 
             </div>
           </div>
 
           <!-- Right: Interactive Code Panel matching Active Tab -->
-          <div class="flex-1 w-full rounded-2xl bg-[#0A0C13] border border-[#1F2438] p-5 shadow-2xl overflow-hidden font-mono text-xs">
+          <div class="w-full lg:w-7/12 rounded-xl bg-[#141615] border border-[rgba(242,239,232,0.14)] p-5 shadow-2xl overflow-hidden font-mono text-xs">
             
             <!-- Code Header with Language Switchers -->
-            <div class="flex items-center justify-between pb-3 mb-4 border-b border-[#1F2438]">
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-[rgba(242,239,232,0.14)]">
               <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-white/20"></span>
                 <span id="code-snippet-title" class="text-xs font-semibold text-white">Fallback Configuration (TypeScript)</span>
               </div>
               <div class="flex items-center gap-1.5" id="code-lang-selector">
-                <button data-lang="ts" class="code-lang-btn px-2.5 py-1 rounded bg-[#161926] text-white border border-[#1F2438] text-[10px]">TS</button>
-                <button data-lang="py" class="code-lang-btn px-2.5 py-1 rounded text-[#8E98B0] hover:text-white text-[10px]">Python</button>
-                <button data-lang="curl" class="code-lang-btn px-2.5 py-1 rounded text-[#8E98B0] hover:text-white text-[10px]">cURL</button>
+                <button data-lang="ts" class="code-lang-btn px-2.5 py-1 rounded bg-[#1A1D1B] text-white border border-[rgba(242,239,232,0.14)] text-[10px]">TS</button>
+                <button data-lang="py" class="code-lang-btn px-2.5 py-1 rounded text-[#A6A39C] hover:text-white text-[10px]">Python</button>
+                <button data-lang="curl" class="code-lang-btn px-2.5 py-1 rounded text-[#A6A39C] hover:text-white text-[10px]">cURL</button>
               </div>
             </div>
 
             <!-- Preformatted Code Block -->
-            <pre class="overflow-x-auto text-[#8E98B0] leading-relaxed text-[11px] p-2" id="product-code-display"><code>import OpenAI from 'openai';
+            <pre class="overflow-x-auto text-[#A6A39C] leading-relaxed text-[11px] p-2" id="product-code-display"><code>import OpenAI from 'openai';
 
 // Simply swap the baseURL to your UniLLM Gateway
 const client = new OpenAI({
@@ -364,59 +282,62 @@ const response = await client.chat.completions.create({
         <!-- =========================================================
              4. AUTHENTIC PRODUCT INTERFACE PREVIEW (INTERACTIVE SIMULATOR)
         ========================================================= -->
-        <section class="reveal-on-scroll flex flex-col gap-6">
+        <section class="flex flex-col gap-6">
           <div class="flex flex-col gap-2">
             <div class="flex items-center gap-2">
-              <span class="text-xs font-mono font-bold text-[#38BDF8] uppercase tracking-wider">Live Edge Interactive Playground</span>
-              <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[10px] font-mono">SIMULATED EDGE</span>
+              <span class="text-xs font-mono font-bold text-[#A6A39C] uppercase tracking-wider">Gateway Live Simulation</span>
+              <span class="px-2 py-0.5 rounded bg-white/5 text-white/80 border border-white/10 text-[10px] font-mono">SANDBOX ENGINE</span>
             </div>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-              Test gateway failover and caching in real time
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-[-0.03em] text-[#F2EFE8]">
+              Observe automated gateway behaviors
             </h2>
-            <p class="text-xs text-[#8E98B0]">
-              Trigger simulated network conditions below to observe the gateway’s automated protection behaviors.
+            <p class="text-xs text-[#A6A39C]">
+              Trigger simulated network conditions below to observe automated failover, semantic caching, and PII masking events.
             </p>
           </div>
 
-          <div class="rounded-2xl border border-[#1F2438] bg-[#10121A] p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="rounded-xl border border-[rgba(242,239,232,0.14)] bg-[#141615] p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             <!-- Controls (Col 5) -->
             <div class="lg:col-span-5 flex flex-col gap-4 text-xs font-sans">
-              <div class="p-4 rounded-xl bg-[#0A0C13] border border-[#1F2438] flex flex-col gap-3">
-                <span class="font-bold text-white text-xs">Simulate Scenario:</span>
+              <div class="p-4 rounded-xl bg-[#1A1D1B] border border-[rgba(242,239,232,0.14)] flex flex-col gap-3">
+                <span class="font-bold text-white text-xs">Simulate Edge Scenario:</span>
                 
-                <button id="sim-failover-btn" class="w-full py-2.5 px-4 rounded-xl bg-[#161926] hover:bg-[#1E2235] border border-[#1F2438] hover:border-[#38BDF8]/40 text-left flex items-center justify-between text-white transition-all">
+                <button id="sim-failover-btn" class="w-full py-2.5 px-4 rounded-lg bg-[#141615] hover:bg-[#1A1D1B] border border-[rgba(242,239,232,0.14)] hover:border-white/30 text-left flex items-center justify-between text-white transition-all">
                   <span class="font-medium">Upstream 429 Rate Limit</span>
-                  <span class="text-[10px] font-mono text-[#38BDF8]">Test Failover →</span>
+                  <span class="text-[10px] font-mono text-emerald-400">Trigger Failover →</span>
                 </button>
 
-                <button id="sim-cache-btn" class="w-full py-2.5 px-4 rounded-xl bg-[#161926] hover:bg-[#1E2235] border border-[#1F2438] hover:border-[#38BDF8]/40 text-left flex items-center justify-between text-white transition-all">
+                <button id="sim-cache-btn" class="w-full py-2.5 px-4 rounded-lg bg-[#141615] hover:bg-[#1A1D1B] border border-[rgba(242,239,232,0.14)] hover:border-white/30 text-left flex items-center justify-between text-white transition-all">
                   <span class="font-medium">Repeat Semantic Query</span>
-                  <span class="text-[10px] font-mono text-emerald-400">Test Cache →</span>
+                  <span class="text-[10px] font-mono text-[#697DFF]">Trigger Cache →</span>
                 </button>
 
-                <button id="sim-pii-btn" class="w-full py-2.5 px-4 rounded-xl bg-[#161926] hover:bg-[#1E2235] border border-[#1F2438] hover:border-[#38BDF8]/40 text-left flex items-center justify-between text-white transition-all">
-                  <span class="font-medium">Prompt with Credit Card</span>
-                  <span class="text-[10px] font-mono text-purple-400">Test Masking →</span>
+                <button id="sim-pii-btn" class="w-full py-2.5 px-4 rounded-lg bg-[#141615] hover:bg-[#1A1D1B] border border-[rgba(242,239,232,0.14)] hover:border-white/30 text-left flex items-center justify-between text-white transition-all">
+                  <span class="font-medium">Prompt with Sensitive Token</span>
+                  <span class="text-[10px] font-mono text-[#FF9B72]">Trigger Masking →</span>
                 </button>
               </div>
 
-              <div class="p-3 bg-[#161926]/60 border border-[#1F2438] rounded-xl text-[11px] text-[#8E98B0]">
-                ℹ️ All operations execute locally in this interactive demo to demonstrate gateway response envelopes without requiring an active card.
+              <div class="p-3 bg-[#1A1D1B] border border-[rgba(242,239,232,0.14)] rounded-lg text-[11px] text-[#A6A39C]">
+                ℹ️ Executes live in memory to illustrate gateway response envelopes without consuming live API credits.
               </div>
             </div>
 
             <!-- Terminal Output (Col 7) -->
-            <div class="lg:col-span-7 rounded-xl bg-[#07080B] border border-[#1F2438] p-4 flex flex-col justify-between font-mono text-xs">
-              <div class="flex items-center justify-between pb-2 mb-3 border-b border-[#1F2438] text-[11px] text-[#8E98B0]">
-                <span>Gateway Event Stream</span>
+            <div class="lg:col-span-7 rounded-xl bg-[#0B0C0D] border border-[rgba(242,239,232,0.14)] p-4 flex flex-col justify-between font-mono text-xs">
+              <div class="flex items-center justify-between pb-2 mb-3 border-b border-[rgba(242,239,232,0.14)] text-[11px] text-[#A6A39C]">
+                <span class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span>Gateway Telemetry Stream</span>
+                </span>
                 <span id="sim-status-pill" class="text-emerald-400 font-bold">READY</span>
               </div>
-              <div id="sim-log-output" class="h-48 overflow-y-auto space-y-1.5 text-[11px] text-[#8E98B0] pr-2">
-                <div>[SYSTEM] UniLLM Gateway edge connected. Ready for traffic.</div>
-                <div>[SYSTEM] Listening on https://api.unillm.io/v1</div>
+              <div id="sim-log-output" class="h-48 overflow-y-auto space-y-1.5 text-[11px] text-[#A6A39C] pr-2">
+                <div>[GATEWAY] UniLLM edge node online. Listening on https://api.unillm.io/v1</div>
+                <div>[STATUS] Routing tables initialized for 100+ model targets. Ready.</div>
               </div>
-              <div class="pt-2 border-t border-[#1F2438] flex items-center justify-between text-[10px] text-[#8E98B0]">
+              <div class="pt-2 border-t border-[rgba(242,239,232,0.14)] flex items-center justify-between text-[10px] text-[#A6A39C]">
                 <span>Click a scenario button to dispatch simulated traffic.</span>
                 <button id="sim-clear-btn" class="hover:text-white transition-colors">Clear Console</button>
               </div>
@@ -426,54 +347,54 @@ const response = await client.chat.completions.create({
         </section>
 
         <!-- =========================================================
-             5. PRODUCTION CAROUSEL (AUTHENTIC CUSTOMER TESTIMONIALS)
+             5. ARCHITECTURAL PATTERNS CAROUSEL
         ========================================================= -->
-        <section class="reveal-on-scroll flex flex-col gap-8">
+        <section class="flex flex-col gap-8">
           <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <span class="text-xs font-mono font-bold text-[#38BDF8] uppercase tracking-wider">Enterprise In Production</span>
-              <h2 class="text-3xl font-bold tracking-tight text-white mt-1">
-                Trusted by engineering teams at scale
+              <span class="text-xs font-mono font-bold text-[#A6A39C] uppercase tracking-wider">Production Architecture</span>
+              <h2 class="text-2xl sm:text-3xl font-bold tracking-[-0.03em] text-[#F2EFE8] mt-1">
+                Verified deployment architectures
               </h2>
             </div>
             
             <!-- Prev / Next Carousel Buttons -->
             <div class="flex items-center gap-2">
-              <button id="car-prev-btn" aria-label="Previous Testimonial" class="w-10 h-10 rounded-xl bg-[#10121A] hover:bg-[#161926] border border-[#1F2438] flex items-center justify-center text-white transition-colors">
+              <button id="car-prev-btn" aria-label="Previous Pattern" class="w-10 h-10 rounded-lg bg-[#141615] hover:bg-[#1A1D1B] border border-[rgba(242,239,232,0.14)] flex items-center justify-center text-white transition-colors">
                 ←
               </button>
-              <button id="car-next-btn" aria-label="Next Testimonial" class="w-10 h-10 rounded-xl bg-[#10121A] hover:bg-[#161926] border border-[#1F2438] flex items-center justify-center text-white transition-colors">
+              <button id="car-next-btn" aria-label="Next Pattern" class="w-10 h-10 rounded-lg bg-[#141615] hover:bg-[#1A1D1B] border border-[rgba(242,239,232,0.14)] flex items-center justify-center text-white transition-colors">
                 →
               </button>
             </div>
           </div>
 
           <!-- Carousel Container -->
-          <div class="relative overflow-hidden rounded-2xl border border-[#1F2438] bg-[#10121A] p-8 md:p-12">
+          <div class="relative overflow-hidden rounded-xl border border-[rgba(242,239,232,0.14)] bg-[#141615] p-8 md:p-12">
             <div id="testimonial-slide-container" class="transition-opacity duration-300">
               <div class="flex flex-col gap-6 max-w-3xl">
-                <span id="test-headline" class="text-base sm:text-lg font-bold text-[#38BDF8]">
-                  ${testimonials[0].headline}
+                <span id="test-headline" class="text-base sm:text-lg font-bold text-white">
+                  ${architecturalPatterns[0].headline}
                 </span>
-                <blockquote id="test-quote" class="text-lg sm:text-2xl font-medium text-white leading-relaxed">
-                  "${testimonials[0].quote}"
+                <blockquote id="test-quote" class="text-base sm:text-xl font-normal text-[#A6A39C] leading-relaxed">
+                  "${architecturalPatterns[0].quote}"
                 </blockquote>
                 <div class="flex items-center gap-3 pt-2">
-                  <div id="test-avatar" class="w-10 h-10 rounded-xl ${testimonials[0].avatarBg} flex items-center justify-center font-bold text-xs">
-                    ${testimonials[0].company.slice(0, 2).toUpperCase()}
+                  <div id="test-avatar" class="w-9 h-9 rounded-lg ${architecturalPatterns[0].avatarBg} flex items-center justify-center font-bold text-xs font-mono">
+                    01
                   </div>
                   <div>
-                    <div id="test-author" class="text-sm font-bold text-white">${testimonials[0].author}</div>
-                    <div id="test-role" class="text-xs text-[#8E98B0]">${testimonials[0].role}</div>
+                    <div id="test-author" class="text-sm font-semibold text-white">${architecturalPatterns[0].author}</div>
+                    <div id="test-role" class="text-xs text-[#A6A39C] font-mono">${architecturalPatterns[0].role}</div>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- Dots Indicator -->
-            <div class="flex items-center gap-2 mt-8 pt-6 border-t border-[#1F2438]" id="carousel-dots">
-              ${testimonials.map((_, i) => `
-                <button data-slide="${i}" class="car-dot w-2.5 h-2.5 rounded-full transition-all ${i === 0 ? 'bg-[#38BDF8] w-6' : 'bg-[#1F2438] hover:bg-[#8E98B0]'}" aria-label="Go to slide ${i+1}"></button>
+            <div class="flex items-center gap-2 mt-8 pt-6 border-t border-[rgba(242,239,232,0.14)]" id="carousel-dots">
+              ${architecturalPatterns.map((_, i) => `
+                <button data-slide="${i}" class="car-dot h-1.5 rounded-full transition-all ${i === 0 ? 'bg-white w-6' : 'bg-[rgba(242,239,232,0.14)] w-2 hover:bg-[#A6A39C]'}" aria-label="Go to pattern ${i+1}"></button>
               `).join("")}
             </div>
           </div>
@@ -482,40 +403,40 @@ const response = await client.chat.completions.create({
         <!-- =========================================================
              6. TECHNICAL FAQ ACCORDION
         ========================================================= -->
-        <section class="reveal-on-scroll flex flex-col gap-8 max-w-4xl mx-auto w-full">
+        <section class="flex flex-col gap-8 max-w-4xl mx-auto w-full">
           <div class="text-center">
-            <span class="text-xs font-mono font-bold text-[#38BDF8] uppercase tracking-wider">Frequently Asked Questions</span>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">Everything you need to know about the AI Gateway</h2>
+            <span class="text-xs font-mono font-bold text-[#A6A39C] uppercase tracking-wider">Frequently Asked Questions</span>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-[-0.03em] text-[#F2EFE8] mt-1">Everything you need to know about the AI Gateway</h2>
           </div>
 
           <div class="flex flex-col gap-3 faq-accordion-group">
             
-            <div class="faq-accordion-item rounded-xl border border-[#1F2438] bg-[#10121A] overflow-hidden">
-              <button class="faq-accordion-trigger w-full px-6 py-4 text-left flex items-center justify-between text-white font-semibold text-sm hover:text-[#38BDF8] transition-colors">
-                <span>How does UniLLM maintain sub-2ms proxy latency?</span>
-                <span class="faq-accordion-chevron text-[#8E98B0] transition-transform">▼</span>
+            <div class="faq-accordion-item rounded-xl border border-[rgba(242,239,232,0.14)] bg-[#141615] overflow-hidden">
+              <button class="faq-accordion-trigger w-full px-6 py-4 text-left flex items-center justify-between text-white font-semibold text-sm hover:text-white/80 transition-colors">
+                <span>How does UniLLM maintain sub-14ms proxy overhead?</span>
+                <span class="faq-accordion-chevron text-[#A6A39C] transition-transform">▼</span>
               </button>
-              <div class="faq-accordion-content px-6 pb-4 text-xs text-[#8E98B0] leading-relaxed max-h-0 opacity-0 overflow-hidden transition-all duration-200">
-                UniLLM routes all ingress traffic through Cloudflare & Fastly global edge networks directly to provider endpoints using persistent HTTP/2 connection pooling. Payloads are processed in streaming memory without disk serialization.
+              <div class="faq-accordion-content px-6 pb-4 text-xs text-[#A6A39C] leading-relaxed max-h-0 opacity-0 overflow-hidden transition-all duration-200">
+                UniLLM routes all ingress traffic through global edge Anycast nodes directly to provider endpoints using persistent HTTP/2 connection pooling. Payloads are processed entirely in streaming memory without disk serialization.
               </div>
             </div>
 
-            <div class="faq-accordion-item rounded-xl border border-[#1F2438] bg-[#10121A] overflow-hidden">
-              <button class="faq-accordion-trigger w-full px-6 py-4 text-left flex items-center justify-between text-white font-semibold text-sm hover:text-[#38BDF8] transition-colors">
+            <div class="faq-accordion-item rounded-xl border border-[rgba(242,239,232,0.14)] bg-[#141615] overflow-hidden">
+              <button class="faq-accordion-trigger w-full px-6 py-4 text-left flex items-center justify-between text-white font-semibold text-sm hover:text-white/80 transition-colors">
                 <span>Do I need to rewrite my existing application code?</span>
-                <span class="faq-accordion-chevron text-[#8E98B0] transition-transform">▼</span>
+                <span class="faq-accordion-chevron text-[#A6A39C] transition-transform">▼</span>
               </button>
-              <div class="faq-accordion-content px-6 pb-4 text-xs text-[#8E98B0] leading-relaxed max-h-0 opacity-0 overflow-hidden transition-all duration-200">
-                No. UniLLM is 100% wire-compatible with the standard OpenAI API specification. You simply point your existing client's <code class="text-[#38BDF8]">baseURL</code> to <code class="text-white">https://api.unillm.io/v1</code>.
+              <div class="faq-accordion-content px-6 pb-4 text-xs text-[#A6A39C] leading-relaxed max-h-0 opacity-0 overflow-hidden transition-all duration-200">
+                No. UniLLM is 100% wire-compatible with the standard OpenAI API specification. You simply point your existing client's <code class="text-white font-mono">baseURL</code> to <code class="text-white font-mono">https://api.unillm.io/v1</code> and use your unified UniLLM API key.
               </div>
             </div>
 
-            <div class="faq-accordion-item rounded-xl border border-[#1F2438] bg-[#10121A] overflow-hidden">
-              <button class="faq-accordion-trigger w-full px-6 py-4 text-left flex items-center justify-between text-white font-semibold text-sm hover:text-[#38BDF8] transition-colors">
+            <div class="faq-accordion-item rounded-xl border border-[rgba(242,239,232,0.14)] bg-[#141615] overflow-hidden">
+              <button class="faq-accordion-trigger w-full px-6 py-4 text-left flex items-center justify-between text-white font-semibold text-sm hover:text-white/80 transition-colors">
                 <span>Does UniLLM store or train on my prompt data?</span>
-                <span class="faq-accordion-chevron text-[#8E98B0] transition-transform">▼</span>
+                <span class="faq-accordion-chevron text-[#A6A39C] transition-transform">▼</span>
               </button>
-              <div class="faq-accordion-content px-6 pb-4 text-xs text-[#8E98B0] leading-relaxed max-h-0 opacity-0 overflow-hidden transition-all duration-200">
+              <div class="faq-accordion-content px-6 pb-4 text-xs text-[#A6A39C] leading-relaxed max-h-0 opacity-0 overflow-hidden transition-all duration-200">
                 UniLLM guarantees a Zero Data Retention (ZDR) policy. Prompts and completions are passed directly in memory to your chosen model provider. No payload text is ever retained, logged, or used for model training.
               </div>
             </div>
@@ -526,12 +447,12 @@ const response = await client.chat.completions.create({
         <!-- =========================================================
              7. BOTTOM CALL TO ACTION
         ========================================================= -->
-        <section class="reveal-on-scroll rounded-2xl bg-gradient-to-b from-[#10121A] to-[#0A0C13] border border-[#1F2438] p-8 sm:p-12 text-center flex flex-col items-center gap-6">
+        <section class="rounded-xl bg-[#141615] border border-[rgba(242,239,232,0.14)] p-8 sm:p-12 text-center flex flex-col items-center gap-6">
           <div class="max-w-xl flex flex-col gap-2">
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-[-0.03em] text-[#F2EFE8]">
               Ready to unify your AI infrastructure?
             </h2>
-            <p class="text-xs sm:text-sm text-[#8E98B0]">
+            <p class="text-xs sm:text-sm text-[#A6A39C]">
               Deploy in under 5 minutes with free gateway tier. No credit card required.
             </p>
           </div>
@@ -540,17 +461,17 @@ const response = await client.chat.completions.create({
             <a
               href="/get-started"
               data-link
-              class="px-6 py-3 rounded-full bg-white hover:bg-slate-200 text-[#07080B] text-xs font-bold transition-all shadow-md inline-flex items-center gap-2"
+              class="px-6 py-3 rounded-lg bg-[#FF7849] hover:bg-[#ff8a60] text-[#0B0C0D] font-bold shadow-[0_4px_25px_rgba(255,120,73,0.3)] text-xs font-semibold transition-all shadow-sm inline-flex items-center gap-2"
             >
               <span>Get Started Free</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              <span class="font-bold">→</span>
             </a>
             <a
               href="/docs"
               data-link
-              class="px-6 py-3 rounded-full bg-[#161926] hover:bg-[#1F2438] text-white border border-[#1F2438] text-xs font-semibold transition-all"
+              class="px-6 py-3 rounded-lg bg-[#1A1D1B] hover:bg-[#141615] text-[#F2EFE8] border border-[rgba(242,239,232,0.14)] text-xs font-semibold transition-all inline-flex items-center gap-2"
             >
-              Read Documentation →
+              <span>Read Documentation</span>
             </a>
           </div>
         </section>
@@ -561,75 +482,100 @@ const response = await client.chat.completions.create({
 }
 
 export function bindProduct() {
-  const testimonials = [
+  // 1. FAQ Accordions
+  const accordionTriggers = document.querySelectorAll(".faq-accordion-trigger");
+  accordionTriggers.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const content = btn.nextElementSibling;
+      const chevron = btn.querySelector(".faq-accordion-chevron");
+      const isOpen = content.classList.contains("max-h-96");
+
+      document.querySelectorAll(".faq-accordion-content").forEach(c => {
+        c.classList.remove("max-h-96", "opacity-100");
+        c.classList.add("max-h-0", "opacity-0");
+      });
+      document.querySelectorAll(".faq-accordion-chevron").forEach(ch => {
+        ch.style.transform = "rotate(0deg)";
+      });
+
+      if (!isOpen) {
+        content.classList.remove("max-h-0", "opacity-0");
+        content.classList.add("max-h-96", "opacity-100");
+        if (chevron) chevron.style.transform = "rotate(180deg)";
+      }
+    });
+  });
+
+  // 2. Production Patterns Carousel
+  const architecturalPatterns = [
     {
-      quote: "UniLLM gives NVIDIA engineers a single, consistent way to access more than 100 AI model endpoints across cloud providers, open source deployments, and internal NVIDIA services.",
-      author: "Ajay Dogra",
-      role: "Product, NVIDIA",
-      avatarBg: "bg-[#76B900]/20 text-[#76B900] border border-[#76B900]/40",
-      company: "NVIDIA",
-      headline: "Single access source with consistency"
+      headline: "Multi-Cloud Dynamic Failover Matrix",
+      quote: "Automated routing across Anthropic, OpenAI, and Google Gemini with real-time circuit breakers eliminates single-provider downtime and mitigates 429 rate limit spikes instantly.",
+      author: "High-Availability Pattern",
+      role: "Global Edge Orchestration",
+      avatarBg: "bg-white/10 text-white border border-white/20",
+      company: "Failover Mesh"
     },
     {
-      quote: "UniLLM has let my team provide the latest LLM models to our users, usually within a day of them being released… it has saved us months of work.",
-      author: "David Leen",
-      role: "Staff Software Engineer, Netflix",
-      avatarBg: "bg-[#E50914]/20 text-[#E50914] border border-[#E50914]/40",
-      company: "Netflix",
-      headline: "New models in a day, not hours of rework"
+      headline: "Sub-10ms Semantic Vector Caching",
+      quote: "Zero-latency cache hits on semantically identical prompts bypass upstream inference charges entirely, slashing recurrent API expenditures by up to 68% while delivering near-instant responses.",
+      author: "Vector Cache Engine",
+      role: "Cosine Similarity Thresholds",
+      avatarBg: "bg-[#697DFF]/20 text-[#697DFF] border border-[#697DFF]/40",
+      company: "Semantic Edge"
     },
     {
-      quote: "UniLLM streamlines the complexities of managing multiple LLM models across our distributed production workloads.",
-      author: "Mark Koltnuk",
-      role: "Principal Architect, GenAI Platform, Lemonade",
-      avatarBg: "bg-[#FF0055]/20 text-[#FF0055] border border-[#FF0055]/40",
-      company: "Lemonade",
-      headline: "Multiple models, one interface"
+      headline: "Zero Data Retention & Real-Time Redaction",
+      quote: "Hardware-level memory routing strips credit card numbers, SSNs, and identifiable entities before payloads exit your virtual network perimeter. No prompts or completions are ever written to disk.",
+      author: "Privacy & Compliance Engine",
+      role: "Pre-Flight Guardrails",
+      avatarBg: "bg-[#FF9B72]/20 text-[#FF9B72] border border-[#FF9B72]/40",
+      company: "Data Guard"
     },
     {
-      quote: "If we decide to switch the backend model, it’s a simple configuration update in the gateway; no code changes, procurement cycles, or repetitive security reviews required.",
-      author: "Dennis Henry",
-      role: "Productivity Architect, Okta",
-      avatarBg: "bg-[#007DC1]/20 text-[#007DC1] border border-[#007DC1]/40",
-      company: "Okta",
-      headline: "Swap models without new security reviews"
+      headline: "Universal Wire-Compatible API Specification",
+      quote: "Drop-in OpenAI SDK compatibility requires exactly one line change: pointing your baseURL to api.unillm.io. Switch foundation models across providers with zero client-side refactoring.",
+      author: "Unified Ingress Standard",
+      role: "Standardized Schema Spec",
+      avatarBg: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40",
+      company: "Single Gateway"
     }
   ];
 
-  // 1. Carousel Logic
   let currentSlide = 0;
+  const slideContainer = document.getElementById("testimonial-slide-container");
+  const headlineEl = document.getElementById("test-headline");
   const quoteEl = document.getElementById("test-quote");
+  const avatarEl = document.getElementById("test-avatar");
   const authorEl = document.getElementById("test-author");
   const roleEl = document.getElementById("test-role");
-  const headlineEl = document.getElementById("test-headline");
-  const avatarEl = document.getElementById("test-avatar");
   const dotsContainer = document.getElementById("carousel-dots");
-  const slideContainer = document.getElementById("testimonial-slide-container");
 
   const updateSlide = (idx) => {
-    currentSlide = (idx + testimonials.length) % testimonials.length;
-    const t = testimonials[currentSlide];
+    if (idx < 0) currentSlide = architecturalPatterns.length - 1;
+    else if (idx >= architecturalPatterns.length) currentSlide = 0;
+    else currentSlide = idx;
+
+    const data = architecturalPatterns[currentSlide];
 
     if (slideContainer) {
       slideContainer.style.opacity = "0";
       setTimeout(() => {
-        if (quoteEl) quoteEl.innerText = `"${t.quote}"`;
-        if (authorEl) authorEl.innerText = t.author;
-        if (roleEl) roleEl.innerText = t.role;
-        if (headlineEl) headlineEl.innerText = t.headline;
+        if (headlineEl) headlineEl.innerText = data.headline;
+        if (quoteEl) quoteEl.innerText = `"${data.quote}"`;
+        if (authorEl) authorEl.innerText = data.author;
+        if (roleEl) roleEl.innerText = data.role;
         if (avatarEl) {
-          avatarEl.className = `w-10 h-10 rounded-xl ${t.avatarBg} flex items-center justify-center font-bold text-xs`;
-          avatarEl.innerText = t.company.slice(0, 2).toUpperCase();
+          avatarEl.className = `w-9 h-9 rounded-lg ${data.avatarBg} flex items-center justify-center font-bold text-xs font-mono`;
+          avatarEl.innerText = `0${currentSlide + 1}`;
         }
 
-        // Update dots
         if (dotsContainer) {
-          const dots = dotsContainer.querySelectorAll(".car-dot");
-          dots.forEach((d, i) => {
+          dotsContainer.querySelectorAll(".car-dot").forEach((d, i) => {
             if (i === currentSlide) {
-              d.className = "car-dot w-6 h-2.5 rounded-full transition-all bg-[#38BDF8]";
+              d.className = "car-dot w-6 h-1.5 rounded-full transition-all bg-white";
             } else {
-              d.className = "car-dot w-2.5 h-2.5 rounded-full transition-all bg-[#1F2438] hover:bg-[#8E98B0]";
+              d.className = "car-dot w-2 h-1.5 rounded-full transition-all bg-[rgba(242,239,232,0.14)] hover:bg-[#A6A39C]";
             }
           });
         }
@@ -649,7 +595,7 @@ export function bindProduct() {
     });
   });
 
-  // 2. Capability Tabs & Code Switcher
+  // 3. Capability Tabs & Code Switcher
   const capabilityTabs = document.querySelectorAll(".capability-tab-btn");
   const codeDisplay = document.getElementById("product-code-display");
   const snippetTitle = document.getElementById("code-snippet-title");
@@ -709,7 +655,6 @@ const client = new OpenAI({
 const res = await client.chat.completions.create({
   model: 'anthropic/claude-3-5-sonnet',
   messages: [{ role: 'user', content: 'What is our return policy for enterprise tier?' }],
-  // Cache header instructs the edge to return vector hits with >= 0.95 similarity
   headers: { 'x-unillm-cache-ttl': '86400', 'x-unillm-cache-threshold': '0.95' }
 });`,
       py: `from openai import OpenAI
@@ -796,14 +741,14 @@ response = client.chat.completions.create(
       activeCapability = tab;
 
       capabilityTabs.forEach(b => {
-        b.className = "capability-tab-btn text-left p-4 rounded-xl border border-[#1F2438] bg-[#10121A] hover:border-[#38BDF8]/40 transition-all";
+        b.className = "capability-tab-btn text-left p-4 rounded-xl border border-[rgba(242,239,232,0.14)] bg-[#141615] hover:border-white/30 transition-all";
         const badge = b.querySelector(".font-mono");
-        if (badge) badge.className = "text-[10px] font-mono text-[#8E98B0]";
+        if (badge) badge.className = "text-[10px] font-mono text-[#A6A39C]";
       });
 
-      btn.className = "capability-tab-btn active text-left p-4 rounded-xl border border-[#38BDF8] bg-[#161926] transition-all";
+      btn.className = "capability-tab-btn active text-left p-4 rounded-xl border border-white bg-[#1A1D1B] transition-all";
       const activeBadge = btn.querySelector(".font-mono");
-      if (activeBadge) activeBadge.className = "text-[10px] font-mono text-[#38BDF8] font-bold";
+      if (activeBadge) activeBadge.className = "text-[10px] font-mono text-white font-bold";
 
       updateCodeDisplay();
     });
@@ -816,14 +761,14 @@ response = client.chat.completions.create(
       if (!lang) return;
       activeLang = lang;
       langBtns.forEach(b => {
-        b.className = "code-lang-btn px-2.5 py-1 rounded text-[#8E98B0] hover:text-white text-[10px]";
+        b.className = "code-lang-btn px-2.5 py-1 rounded text-[#A6A39C] hover:text-white text-[10px]";
       });
-      btn.className = "code-lang-btn px-2.5 py-1 rounded bg-[#161926] text-white border border-[#1F2438] text-[10px]";
+      btn.className = "code-lang-btn px-2.5 py-1 rounded bg-[#1A1D1B] text-white border border-[rgba(242,239,232,0.14)] text-[10px]";
       updateCodeDisplay();
     });
   });
 
-  // 3. Simulated Edge Interactive Playground
+  // 4. Simulated Edge Interactive Playground
   const simOutput = document.getElementById("sim-log-output");
   const simPill = document.getElementById("sim-status-pill");
 
@@ -831,7 +776,7 @@ response = client.chat.completions.create(
     if (!simOutput) return;
     const time = new Date().toLocaleTimeString();
     const colors = {
-      info: "text-[#8E98B0]",
+      info: "text-[#A6A39C]",
       success: "text-emerald-400 font-bold",
       warning: "text-amber-400 font-bold",
       error: "text-rose-400 font-bold"
@@ -851,10 +796,10 @@ response = client.chat.completions.create(
     logSim("→ POST /v1/chat/completions (model: openai/gpt-4o)", "info");
     logSim("Gateway attempting upstream connect to api.openai.com...", "info");
     setTimeout(() => {
-      logSim("⚠️ Upstream returned HTTP 429: Rate limit exceeded on OpenAI tier.", "warning");
-      logSim("⚡ Fallback engine activated. Executing failover target #1: anthropic/claude-3-5-sonnet", "info");
+      logSim("⚠️ Upstream returned HTTP 429: Rate limit reached.", "warning");
+      logSim("⚡ Fallback activated. Executing target: anthropic/claude-3-5-sonnet", "info");
       setTimeout(() => {
-        logSim("✓ Failover succeeded in 48ms. Upstream 200 OK from Anthropic. Streaming tokens to client.", "success");
+        logSim("✓ Failover completed in 42ms. Upstream 200 OK. Streaming tokens to client.", "success");
         if (simPill) {
           simPill.innerText = "FAILOVER RESOLVED (200 OK)";
           simPill.className = "text-emerald-400 font-bold";
@@ -866,7 +811,7 @@ response = client.chat.completions.create(
   document.getElementById("sim-cache-btn")?.addEventListener("click", () => {
     if (simPill) {
       simPill.innerText = "CACHE QUERY";
-      simPill.className = "text-[#38BDF8] font-bold";
+      simPill.className = "text-[#697DFF] font-bold";
     }
     logSim("→ POST /v1/chat/completions (model: anthropic/claude-3-5-sonnet)", "info");
     logSim("Vector similarity hash computed (cosine similarity = 0.982 against key #cache_7f21)", "info");
@@ -883,7 +828,7 @@ response = client.chat.completions.create(
   document.getElementById("sim-pii-btn")?.addEventListener("click", () => {
     if (simPill) {
       simPill.innerText = "PII GUARDRAIL";
-      simPill.className = "text-purple-400 font-bold";
+      simPill.className = "text-[#FF9B72] font-bold";
     }
     logSim("→ Inbound payload: \"Process refund for card 4111-2222-3333-4444 exp 12/28\"", "warning");
     logSim("Regex & NLP entity scanner matching pattern: [CREDIT_CARD_VISA]", "info");
@@ -892,7 +837,7 @@ response = client.chat.completions.create(
       logSim("✓ Sanitized payload securely routed to model provider.", "success");
       if (simPill) {
         simPill.innerText = "PAYLOAD SANITIZED";
-        simPill.className = "text-purple-400 font-bold";
+        simPill.className = "text-[#FF9B72] font-bold";
       }
     }, 250);
   });
@@ -900,8 +845,8 @@ response = client.chat.completions.create(
   document.getElementById("sim-clear-btn")?.addEventListener("click", () => {
     if (simOutput) {
       simOutput.innerHTML = `
-        <div>[SYSTEM] UniLLM Gateway edge connected. Ready for traffic.</div>
-        <div>[SYSTEM] Listening on https://api.unillm.io/v1</div>
+        <div>[GATEWAY] UniLLM edge node online. Listening on https://api.unillm.io/v1</div>
+        <div>[STATUS] Routing tables initialized for 100+ model targets. Ready.</div>
       `;
     }
     if (simPill) {

@@ -7,17 +7,17 @@ export function adminCosts() {
   return `
     <div class="flex flex-col gap-8 animate-fade-in-up font-sans select-none max-w-6xl">
       <!-- Top Header -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border pb-5">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#292D34] pb-5">
         <div class="flex flex-col gap-1">
           <span class="text-[9px] font-bold text-indigo-700 uppercase tracking-widest">Enterprise Finance</span>
-          <h1 class="font-display font-black text-3xl text-brand-text uppercase leading-none font-bold">Cost Intelligence & Budgets</h1>
-          <p class="text-xs text-brand-muted font-semibold mt-1">Organization monthly spend quotas, real-time expenditure caps, and model unit costs in PostgreSQL.</p>
+          <h1 class="font-display font-black text-3xl text-white uppercase leading-none font-bold">Cost Intelligence & Budgets</h1>
+          <p class="text-xs text-[#A1A5AD] font-semibold mt-1">Organization monthly spend quotas, real-time expenditure caps, and model unit costs in PostgreSQL.</p>
         </div>
       </div>
 
       <!-- Cost Summary Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="p-6 bg-white border border-brand-border rounded-2xl shadow-xs flex flex-col justify-between gap-4">
+        <div class="p-6 bg-white border border-[#292D34] rounded-2xl shadow-xs flex flex-col justify-between gap-4">
           <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Organization Monthly Budget</span>
           <div class="flex items-baseline gap-2">
             <span id="admin-costs-allocated" class="text-3xl font-display font-black text-slate-900 font-mono">...</span>
@@ -25,7 +25,7 @@ export function adminCosts() {
           <span id="admin-costs-remaining" class="text-xs text-slate-500 font-semibold pt-3 border-t">Remaining limit: ...</span>
         </div>
 
-        <div class="p-6 bg-white border border-brand-border rounded-2xl shadow-xs flex flex-col justify-between gap-4">
+        <div class="p-6 bg-white border border-[#292D34] rounded-2xl shadow-xs flex flex-col justify-between gap-4">
           <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Month-to-Date Spend</span>
           <div class="flex items-baseline gap-2">
             <span id="admin-costs-spent" class="text-3xl font-display font-black text-indigo-600 font-mono">...</span>
@@ -34,7 +34,7 @@ export function adminCosts() {
           <span id="admin-costs-status" class="text-xs text-emerald-600 font-bold pt-3 border-t">● Within active threshold</span>
         </div>
 
-        <div class="p-6 bg-white border border-brand-border rounded-2xl shadow-xs flex flex-col justify-between gap-4">
+        <div class="p-6 bg-white border border-[#292D34] rounded-2xl shadow-xs flex flex-col justify-between gap-4">
           <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Semantic Cache Savings</span>
           <div class="flex items-baseline gap-2">
             <span id="admin-costs-cache-saved" class="text-3xl font-display font-black text-emerald-600 font-mono">...</span>
@@ -44,7 +44,7 @@ export function adminCosts() {
       </div>
 
       <!-- Model Expenditure Table -->
-      <div class="bg-white border border-brand-border rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
+      <div class="bg-white border border-[#292D34] rounded-2xl p-6 sm:p-8 shadow-xs flex flex-col gap-6">
         <h3 class="font-bold text-base text-slate-900">Model Expenditure & Token Attribution</h3>
 
         <div class="border border-slate-200 rounded-xl overflow-hidden text-xs">
@@ -62,7 +62,7 @@ export function adminCosts() {
               <tr>
                 <td colspan="5" class="px-5 py-8 text-center text-slate-400">
                   <div class="flex items-center justify-center gap-2">
-                    <svg class="animate-spin h-4 w-4 text-brand-primary" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                    <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
                     <span>Loading financial expenditure from PostgreSQL...</span>
                   </div>
                 </td>
@@ -104,7 +104,7 @@ export async function bindAdminCosts() {
           <tr>
             <td colspan="5" class="px-5 py-8 text-center text-slate-400">
               <p class="font-bold">No expenditure recorded yet.</p>
-              <p class="text-[11px] mt-1">Send requests in the <a href="/app/playground" data-link class="text-brand-primary underline font-bold">Playground</a> to see live attribution.</p>
+              <p class="text-[11px] mt-1">Send requests in the <a href="/app/playground" data-link class="text-white underline font-bold">Playground</a> to see live attribution.</p>
             </td>
           </tr>
         `;

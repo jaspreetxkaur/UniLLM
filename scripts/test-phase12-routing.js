@@ -1,4 +1,7 @@
-import { query } from '../server/config/db.js';
+import dotenv from 'dotenv';
+dotenv.config();
+import { connectMongo, disconnectMongo } from '../server/config/mongo.js';
+import { Organization, User, Workspace, OrganizationBudget, AuditLog, AiRequest } from '../server/models/index.js';
 import { policyService } from '../server/services/policyService.js';
 import { policyValidator } from '../server/utils/policyValidator.js';
 import { routingService } from '../server/services/routingService.js';
@@ -22,45 +25,56 @@ async function runPhase12Tests() {
   console.log('⚡ Starting Comprehensive Phase 12 Dynamic Routing Engine Test Suite...\n');
 
   try {
+    await connectMongo();
     const timestamp = Date.now();
 
     // -------------------------------------------------------------
     // Setup 2 Isolated Test Tenants
     // -------------------------------------------------------------
     console.log('--- Step 1: Setting up isolated multi-tenant organizations ---');
-    const orgARes = await query(`
-      INSERT INTO organizations (name, slug, referral_code, referral_enabled)
-      VALUES ($1, $2, $3, true) RETURNING id;
-    `, [`Routing Tenant A ${timestamp}`, `tenant-a-${timestamp}`, `ROUTA-${timestamp}`]);
-    const tenantAId = orgARes.rows[0].id;
+    const orgA = await Organization.create({
+      name: `Routing Tenant A ${timestamp}`,
+      slug: `tenant-a-${timestamp}`,
+      referral_code: `ROUTA-${timestamp}`,
+      referral_enabled: true
+    });
+    const tenantAId = orgA._id;
 
-    const orgBRes = await query(`
-      INSERT INTO organizations (name, slug, referral_code, referral_enabled)
-      VALUES ($1, $2, $3, true) RETURNING id;
-    `, [`Routing Tenant B ${timestamp}`, `tenant-b-${timestamp}`, `ROUTB-${timestamp}`]);
-    const tenantBId = orgBRes.rows[0].id;
+    const orgB = await Organization.create({
+      name: `Routing Tenant B ${timestamp}`,
+      slug: `tenant-b-${timestamp}`,
+      referral_code: `ROUTB-${timestamp}`,
+      referral_enabled: true
+    });
+    const tenantBId = orgB._id;
 
-    const userARes = await query(`
-      INSERT INTO users (name, email, password_hash, verified)
-      VALUES ($1, $2, 'scrypt:salt:hash', true) RETURNING id;
-    `, [`User A`, `usera_${timestamp}@test.com`]);
-    const userAId = userARes.rows[0].id;
+    const userA = await User.create({
+      name: 'User A',
+      email: `usera_${timestamp}@test.com`,
+      password_hash: 'scrypt:salt:hash',
+      verified: true
+    });
+    const userAId = userA._id;
 
-    await query(`
-      INSERT INTO workspaces (organization_id, name, is_default)
-      VALUES ($1, 'Default Workspace', true);
-    `, [tenantAId]);
+    await Workspace.create({
+      organization_id: tenantAId,
+      name: 'Default Workspace',
+      is_default: true
+    });
 
-    await query(`
-      INSERT INTO workspaces (organization_id, name, is_default)
-      VALUES ($1, 'Default Workspace', true);
-    `, [tenantBId]);
+    await Workspace.create({
+      organization_id: tenantBId,
+      name: 'Default Workspace',
+      is_default: true
+    });
 
     // Initialize budgets for both
-    await query(`
-      INSERT INTO organization_budgets (organization_id, monthly_budget_usd, alert_threshold_percent, hard_limit_enabled)
-      VALUES ($1, 500.00, 80, true);
-    `, [tenantAId]);
+    await OrganizationBudget.create({
+      organization_id: tenantAId,
+      monthly_budget_usd: 500.00,
+      alert_threshold_percent: 80,
+      hard_limit_enabled: true
+    });
 
     console.log(`Tenant A ID: ${tenantAId}`);
     console.log(`Tenant B ID: ${tenantBId}`);
@@ -136,10 +150,8 @@ async function runPhase12Tests() {
     assert(createdP1.name === 'Coding Assistant Router', 'Policy name stored correctly');
 
     // Check Audit Log for create
-    const auditRes = await query(`
-      SELECT * FROM audit_logs WHERE organization_id = $1 AND action = 'policy.create';
-    `, [tenantAId]);
-    assert(auditRes.rows.length > 0, 'Audit log recorded for policy.create');
+    const auditRes = await AuditLog.find({ organization_id: tenantAId, action: 'policy.create' }).lean();
+    assert(auditRes.length > 0, 'Audit log recorded for policy.create');
 
     // Update Policy
     const updatedP1 = await policyService.updatePolicy(tenantAId, createdP1.id, userAId, {
@@ -286,13 +298,11 @@ async function runPhase12Tests() {
     assert(completionRes.choices[0].message.content.length > 0, 'Gateway executed and returned text');
     assert(completionRes.unillm_telemetry.policyId === fbPolicy.id, 'Gateway telemetry recorded policyId');
 
-    // Verify Telemetry in Supabase `ai_requests`
-    const reqLog = await query(`
-      SELECT * FROM ai_requests WHERE id = $1;
-    `, [completionRes.unillm_telemetry.requestId]);
-    assert(reqLog.rows.length === 1, 'Single telemetry record logged for request');
-    assert(reqLog.rows[0].request_metadata.policyId === fbPolicy.id, 'request_metadata contains policyId');
-    assert(reqLog.rows[0].request_metadata.attemptsCount === 1, 'attemptsCount recorded accurately');
+    // Verify Telemetry in `ai_requests`
+    const reqLog = await AiRequest.findById(completionRes.unillm_telemetry.requestId).lean();
+    assert(reqLog !== null, 'Single telemetry record logged for request');
+    assert(reqLog.request_metadata.policyId === fbPolicy.id, 'request_metadata contains policyId');
+    assert(reqLog.request_metadata.attemptsCount === 1, 'attemptsCount recorded accurately');
 
     // -------------------------------------------------------------
     // Step 8: Cache Key Model Isolation
@@ -307,9 +317,11 @@ async function runPhase12Tests() {
     console.log(`\n==================================================`);
     console.log(`🎉 ALL ${testsPassed} PHASE 12 TESTS PASSED WITH 0 FAILURES!`);
     console.log(`==================================================`);
+    await disconnectMongo();
     process.exit(0);
   } catch (err) {
     console.error('\n❌ [TEST ABORTED]:', err);
+    await disconnectMongo();
     process.exit(1);
   }
 }

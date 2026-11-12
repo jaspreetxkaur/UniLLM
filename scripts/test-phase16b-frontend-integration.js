@@ -1,14 +1,10 @@
-import { Pool } from 'pg';
 import dotenv from 'dotenv';
 dotenv.config();
+import { connectMongo, disconnectMongo } from '../server/config/mongo.js';
+import { User } from '../server/models/index.js';
 
 const PORT = process.env.PORT || 5173;
 const BASE_URL = `http://localhost:${PORT}`;
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
 
 let totalPassed = 0;
 let totalFailed = 0;
@@ -59,6 +55,8 @@ async function runTests() {
   console.log('🚀 RUNNING PHASE 16B LIVE FRONTEND INTEGRATION TESTS');
   console.log('====================================================');
 
+  await connectMongo();
+
   const ts = Date.now();
   const testEmail = `frontend_test_${ts}@unillm.internal`;
   const testPassword = 'Password123!Secure';
@@ -70,8 +68,8 @@ async function runTests() {
   });
   logResult('1. Auth', 'Signup API Contract', signupRes.status === 200 || signupRes.status === 201, `Status: ${signupRes.status}`);
 
-  const userRow = (await pool.query('SELECT otp, id FROM users WHERE email = $1', [testEmail])).rows[0];
-  const otpCode = userRow?.otp;
+  const userDoc = await User.findOne({ email: testEmail }).lean();
+  const otpCode = userDoc?.otp;
 
   const verifyRes = await request('/api/auth/verify-otp', {
     method: 'POST',
@@ -217,7 +215,7 @@ async function runTests() {
   });
   logResult('11. Cleanup', 'DELETE /api/policies/:id Cleanup', deletePolicyRes.status === 200, `Deleted Policy: ${policyId}`);
 
-  await pool.end();
+  await disconnectMongo();
 
   console.log('====================================================');
   console.log(`📊 INTEGRATION SUMMARY: ${totalPassed} PASSED, ${totalFailed} FAILED (${Math.round(totalPassed / (totalPassed + totalFailed) * 100)}%)`);

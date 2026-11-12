@@ -1,40 +1,47 @@
 import crypto from 'crypto';
-import { query } from '../config/db.js';
+import { ApiKey, Workspace, User, AuditLog } from '../models/index.js';
+import { realtimeService } from '../realtime/socket.js';
 
 export const keyService = {
   /**
-   * Generates a new cryptographically secure API key, stores its SHA-256 hash in PostgreSQL,
+   * Generates a new cryptographically secure API key, stores its SHA-256 hash in MongoDB,
    * and returns the raw key ONLY once to the caller.
    */
   createKey: async ({ organizationId, userId, name, workspaceId }) => {
+    if (!name || typeof name !== 'string') {
+      const err = new Error('API key name is required.');
+      err.statusCode = 400;
+      throw err;
+    }
+
     // 1. Resolve Workspace ID if not provided (use default workspace) or verify tenant ownership
-    let targetWorkspaceId = workspaceId;
+    let targetWorkspaceId = (workspaceId && typeof workspaceId === 'string') ? workspaceId.trim() : null;
     if (targetWorkspaceId) {
-      const checkWs = await query(
-        'SELECT id FROM workspaces WHERE id = $1 AND organization_id = $2 LIMIT 1;',
-        [targetWorkspaceId, organizationId]
-      );
-      if (checkWs.rows.length > 0) {
-        targetWorkspaceId = checkWs.rows[0].id;
+      const checkWs = await Workspace.findOne({
+        _id: targetWorkspaceId,
+        organization_id: organizationId
+      }).lean();
+      if (checkWs) {
+        targetWorkspaceId = checkWs._id;
       } else {
         targetWorkspaceId = null;
       }
     }
 
     if (!targetWorkspaceId) {
-      const wsRes = await query(
-        'SELECT id FROM workspaces WHERE organization_id = $1 ORDER BY is_default DESC, created_at ASC LIMIT 1;',
-        [organizationId]
-      );
-      if (wsRes.rows.length === 0) {
+      const ws = await Workspace.findOne({ organization_id: organizationId })
+        .sort({ is_default: -1, created_at: 1 })
+        .lean();
+      if (!ws) {
         // Fallback: create default workspace if none exists
-        const newWs = await query(
-          'INSERT INTO workspaces (organization_id, name, is_default) VALUES ($1, $2, true) RETURNING id;',
-          [organizationId, 'Default Workspace']
-        );
-        targetWorkspaceId = newWs.rows[0].id;
+        const newWs = await Workspace.create({
+          organization_id: organizationId,
+          name: 'Default Workspace',
+          is_default: true
+        });
+        targetWorkspaceId = newWs._id;
       } else {
-        targetWorkspaceId = wsRes.rows[0].id;
+        targetWorkspaceId = ws._id;
       }
     }
 
@@ -46,31 +53,33 @@ export const keyService = {
     // 3. Compute SHA-256 hash
     const keyHash = crypto.createHash('sha256').update(rawKey).digest('hex');
 
-    // 4. Store in PostgreSQL api_keys table
-    const insertRes = await query(`
-      INSERT INTO api_keys (
-        organization_id, workspace_id, created_by_user_id,
-        name, key_prefix, key_hash, status
-      )
-      VALUES ($1, $2, $3, $4, $5, $6, 'active')
-      RETURNING id, name, key_prefix, workspace_id, status, created_at;
-    `, [organizationId, targetWorkspaceId, userId, name.trim(), keyPrefix, keyHash]);
-
-    const createdKey = insertRes.rows[0];
+    // 4. Store in MongoDB api_keys collection
+    const createdKey = await ApiKey.create({
+      organization_id: organizationId,
+      workspace_id: targetWorkspaceId,
+      created_by_user_id: userId,
+      name: name.trim(),
+      key_prefix: keyPrefix,
+      key_hash: keyHash,
+      key_secret: rawKey,
+      status: 'active'
+    });
 
     // 5. Record Audit Log
     try {
-      await query(`
-        INSERT INTO audit_logs (organization_id, actor_id, action, details)
-        VALUES ($1, $2, 'API_KEY_CREATED', $3);
-      `, [organizationId, userId, JSON.stringify({ keyId: createdKey.id, keyName: name, keyPrefix, workspaceId: targetWorkspaceId })]);
+      await AuditLog.create({
+        organization_id: organizationId,
+        actor_id: userId,
+        action: 'API_KEY_CREATED',
+        details: { keyId: createdKey._id, keyName: name, keyPrefix, workspaceId: targetWorkspaceId }
+      });
     } catch (auditErr) {
       console.warn('Audit log write error (non-fatal):', auditErr.message);
     }
 
     // Return the raw key ONLY here
     return {
-      id: createdKey.id,
+      id: createdKey._id,
       name: createdKey.name,
       keyPrefix: createdKey.key_prefix,
       workspaceId: createdKey.workspace_id,
@@ -84,62 +93,80 @@ export const keyService = {
    * Lists all API keys for an organization. Never returns the SHA-256 hash or raw key.
    */
   listKeys: async (organizationId, workspaceId = null) => {
-    let sql = `
-      SELECT 
-        k.id,
-        k.name,
-        k.key_prefix as "keyPrefix",
-        k.status,
-        k.last_used_at as "lastUsedAt",
-        k.created_at as "createdAt",
-        k.workspace_id as "workspaceId",
-        w.name as "workspaceName",
-        u.name as "createdByName"
-      FROM api_keys k
-      LEFT JOIN workspaces w ON k.workspace_id = w.id
-      LEFT JOIN users u ON k.created_by_user_id = u.id
-      WHERE k.organization_id = $1
-    `;
-    const params = [organizationId];
-
+    const filter = { organization_id: organizationId };
     if (workspaceId && typeof workspaceId === 'string' && workspaceId.trim()) {
-      params.push(workspaceId.trim());
-      sql += ` AND k.workspace_id = $${params.length}`;
+      filter.workspace_id = workspaceId.trim();
     }
 
-    sql += ` ORDER BY k.created_at DESC;`;
+    const keys = await ApiKey.find(filter).sort({ created_at: -1 }).lean();
+    if (keys.length === 0) return [];
 
-    const res = await query(sql, params);
-    return res.rows;
+    // Collect distinct workspace and user IDs for resolution
+    const wsIds = [...new Set(keys.map(k => k.workspace_id).filter(Boolean))];
+    const userIds = [...new Set(keys.map(k => k.created_by_user_id).filter(Boolean))];
+
+    const [workspaces, users] = await Promise.all([
+      Workspace.find({ _id: { $in: wsIds } }).lean(),
+      User.find({ _id: { $in: userIds } }).lean()
+    ]);
+
+    const wsMap = new Map(workspaces.map(w => [w._id, w.name]));
+    const userMap = new Map(users.map(u => [u._id, u.name]));
+
+    return keys.map(k => ({
+      id: k._id,
+      name: k.name,
+      keyPrefix: k.key_prefix,
+      keySecret: k.key_secret || null,
+      status: k.status,
+      lastUsedAt: k.last_used_at,
+      createdAt: k.created_at,
+      workspaceId: k.workspace_id,
+      workspaceName: wsMap.get(k.workspace_id) || 'Workspace',
+      createdByName: userMap.get(k.created_by_user_id) || 'Member'
+    }));
   },
 
   /**
    * Revokes an API key belonging to the tenant. Ensures cross-organization isolation.
    */
   revokeKey: async (organizationId, keyId, actorId) => {
-    const res = await query(`
-      UPDATE api_keys
-      SET status = 'revoked'
-      WHERE id = $1 AND organization_id = $2
-      RETURNING id, name, key_prefix;
-    `, [keyId, organizationId]);
-
-    if (res.rows.length === 0) {
+    if (!keyId || typeof keyId !== 'string') {
       return null;
     }
 
-    const revoked = res.rows[0];
+    const revoked = await ApiKey.findOneAndUpdate(
+      { _id: keyId, organization_id: organizationId },
+      { $set: { status: 'revoked' } },
+      { returnDocument: 'after' }
+    ).lean();
+
+    if (!revoked) {
+      return null;
+    }
 
     // Record Audit Log
     try {
-      await query(`
-        INSERT INTO audit_logs (organization_id, actor_id, action, details)
-        VALUES ($1, $2, 'API_KEY_REVOKED', $3);
-      `, [organizationId, actorId, JSON.stringify({ keyId: revoked.id, keyName: revoked.name, keyPrefix: revoked.key_prefix })]);
+      await AuditLog.create({
+        organization_id: organizationId,
+        actor_id: actorId,
+        action: 'API_KEY_REVOKED',
+        details: { keyId: revoked._id, keyName: revoked.name, keyPrefix: revoked.key_prefix }
+      });
     } catch (auditErr) {
       console.warn('Audit log write error (non-fatal):', auditErr.message);
     }
 
-    return revoked;
+    realtimeService.emitKeyRevoked(organizationId, {
+      keyId: revoked._id,
+      keyName: revoked.name,
+      keyPrefix: revoked.key_prefix
+    });
+
+    return {
+      id: revoked._id,
+      name: revoked.name,
+      key_prefix: revoked.key_prefix
+    };
   }
 };

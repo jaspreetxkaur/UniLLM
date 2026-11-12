@@ -1,7 +1,7 @@
 // Client-side Router for UniLLM SPA (Single Page Application)
-import { apiService } from "./apiService.js?v=7";
-import { components } from "./components.js?v=7";
-import { pages } from "./pages.js?v=7";
+import { apiService } from "./apiService.js?v=35";
+import { components } from "./components.js?v=35";
+import { pages } from "./pages.js?v=35";
 
 // Helper to convert route path (e.g. '/app/requests/:id') to Regex
 const pathToRegex = (path) => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -126,7 +126,16 @@ export const router = {
     }
 
     // Session Guard check
-    const isLoggedIn = !!(sessionStorage.getItem("unillm_user") || localStorage.getItem("unillm_user"));
+    const hasCookieSession = document.cookie.split(";").some(c => c.trim().startsWith("unillm_logged_in=true"));
+    const hasStoredUser = !!(sessionStorage.getItem("unillm_user") || localStorage.getItem("unillm_user"));
+    
+    // If cookie session is absent, purge stale stored user to prevent broken redirect loops
+    if (!hasCookieSession && hasStoredUser) {
+      sessionStorage.removeItem("unillm_user");
+      localStorage.removeItem("unillm_user");
+    }
+
+    const isLoggedIn = hasCookieSession && !!(sessionStorage.getItem("unillm_user") || localStorage.getItem("unillm_user"));
     if (route) {
       const isProtectedRoute = ["app", "admin"].includes(route.layout);
       if (isProtectedRoute && !isLoggedIn) {
@@ -310,5 +319,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (isProtectedRoute && !verifiedUser) {
     sessionStorage.setItem("redirect_after_login", currentPath);
     router.navigate("/login");
+  } else if (verifiedUser && ["/login", "/signup", "/forgot-password", "/reset-password"].includes(currentPath)) {
+    const redirectUrl = sessionStorage.getItem("redirect_after_login") || "/app";
+    sessionStorage.removeItem("redirect_after_login");
+    router.navigate(redirectUrl);
   }
 });

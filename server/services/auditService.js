@@ -1,4 +1,4 @@
-import { query } from '../config/db.js';
+import { AuditLog, User } from '../models/index.js';
 
 export const auditService = {
   /**
@@ -6,18 +6,14 @@ export const auditService = {
    */
   log: async ({ organizationId, actorId = null, action, details = {}, ipAddress = null }) => {
     try {
-      const res = await query(`
-        INSERT INTO audit_logs (organization_id, actor_id, action, details, ip_address)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING id, created_at;
-      `, [
-        organizationId,
-        actorId,
+      const entry = await AuditLog.create({
+        organization_id: organizationId,
+        actor_id: actorId,
         action,
-        typeof details === 'string' ? details : JSON.stringify(details),
-        ipAddress
-      ]);
-      return res.rows[0];
+        details: typeof details === 'string' ? JSON.parse(details) : details,
+        ip_address: ipAddress
+      });
+      return { id: entry._id, created_at: entry.created_at };
     } catch (err) {
       console.warn(`[Audit Log Error]: Failed to write audit event '${action}': ${err.message}`);
       return null;
@@ -28,30 +24,29 @@ export const auditService = {
    * Retrieves security audit logs for an organization
    */
   listLogs: async (organizationId, limit = 50) => {
-    const res = await query(`
-      SELECT 
-        a.id,
-        a.action,
-        a.details,
-        a.ip_address,
-        a.created_at as timestamp,
-        COALESCE(u.name, 'System Administrator') as user,
-        COALESCE(u.email, 'admin@unillm.ai') as email
-      FROM audit_logs a
-      LEFT JOIN users u ON a.actor_id = u.id
-      WHERE a.organization_id = $1
-      ORDER BY a.created_at DESC
-      LIMIT $2;
-    `, [organizationId, limit]);
+    const safeLimit = Math.min(Math.max(1, parseInt(limit, 10) || 50), 200);
+    const logs = await AuditLog.find({ organization_id: organizationId })
+      .sort({ created_at: -1 })
+      .limit(safeLimit)
+      .lean();
 
-    return res.rows.map(r => ({
-      id: r.id,
-      action: r.action,
-      details: r.details,
-      ipAddress: r.ip_address || '127.0.0.1',
-      timestamp: r.timestamp,
-      user: r.user,
-      email: r.email
-    }));
+    if (logs.length === 0) return [];
+
+    const actorIds = [...new Set(logs.map(l => l.actor_id).filter(Boolean))];
+    const users = await User.find({ _id: { $in: actorIds } }).lean();
+    const userMap = new Map(users.map(u => [u._id, u]));
+
+    return logs.map(a => {
+      const u = userMap.get(a.actor_id);
+      return {
+        id: a._id,
+        action: a.action,
+        details: a.details,
+        ipAddress: a.ip_address || '127.0.0.1',
+        timestamp: a.created_at,
+        user: u ? u.name : 'System Administrator',
+        email: u ? u.email : 'admin@unillm.ai'
+      };
+    });
   }
 };

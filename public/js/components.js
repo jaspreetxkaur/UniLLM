@@ -17,17 +17,15 @@ export const components = {
     <div class="flex items-center gap-10">
 
       <!-- =====================================================
-           LOGO (Screen 01 Reference: ✦ UniLLM)
+           LOGO (UniLLM Official Vector Logo)
       ====================================================== -->
       <a
         href="/"
         data-link
-        class="group flex items-center gap-2 shrink-0 select-none"
+        class="group flex items-center shrink-0 select-none"
+        aria-label="UniLLM Home"
       >
-        <span class="text-sky-400 font-extrabold text-lg transition-transform group-hover:rotate-45 duration-300">✦</span>
-        <span class="font-sans font-bold text-[19px] tracking-tight text-white">
-          UniLLM
-        </span>
+        <img src="/unillm-logo.svg?v=2" alt="UniLLM" class="h-7 w-auto transition-transform group-hover:scale-[1.02]" />
       </a>
 
       <!-- =====================================================
@@ -416,10 +414,9 @@ export const components = {
         <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
           <!-- Col 1: Brand Info -->
           <div class="col-span-2 flex flex-col gap-3.5">
-            <div class="flex items-center gap-2">
-              <span class="text-sky-400 font-extrabold text-lg">✦</span>
-              <span class="font-sans font-bold text-lg text-white">UniLLM</span>
-            </div>
+            <a href="/" data-link class="flex items-center shrink-0 select-none" aria-label="UniLLM Home">
+              <img src="/unillm-logo.svg?v=2" alt="UniLLM" class="h-7 w-auto" />
+            </a>
             <p class="text-[10px] font-mono font-bold text-sky-400/90 tracking-widest uppercase">ONE API. EVERY AI MODEL. COMPLETE CONTROL.</p>
             <p class="text-xs text-slate-400 leading-relaxed max-w-sm font-medium">Access, route and manage 50+ leading AI models through a single, intelligent API — built for developers, teams and enterprises.</p>
           </div>
@@ -485,9 +482,8 @@ export const components = {
         <!-- Left Branding Pane with Celestial Crescent Arc (Screens 02 & 03) -->
         <div class="hidden md:flex md:w-5/12 bg-[#090B10] text-white p-12 lg:p-16 flex-col justify-between relative overflow-hidden select-none border-r border-[#1F2438] crescent-light-bg min-h-screen">
           
-          <a href="/" data-link class="flex items-center gap-2 z-10 self-start group">
-            <span class="text-sky-400 font-extrabold text-xl">✦</span>
-            <span class="font-sans font-bold text-xl tracking-tight text-white">UniLLM</span>
+          <a href="/" data-link class="flex items-center z-10 self-start group shrink-0 select-none" aria-label="UniLLM Home">
+            <img src="/unillm-logo.svg?v=2" alt="UniLLM" class="h-8 w-auto transition-transform group-hover:scale-[1.02]" />
           </a>
           
           <div class="flex flex-col gap-6 z-10 my-auto max-w-sm">
@@ -522,14 +518,17 @@ export const components = {
         </div>
         
         <!-- Right Auth Content Frame (Screens 02 & 03 Card) -->
-        <div class="flex-grow flex flex-col items-center justify-center p-6 sm:p-12 md:p-16 md:w-7/12 bg-[#07080B] min-h-screen">
+        <div class="flex-grow flex flex-col items-center justify-center p-6 sm:p-12 md:p-16 md:w-7/12 bg-[#07080B] min-h-screen relative overflow-hidden auth-form-stage">
+          
+          <!-- Extremely Subtle Ambient Glow Behind Form -->
+          <div class="auth-ambient-glow" aria-hidden="true"></div>
+
           <!-- Mobile Brand Logo -->
-          <a href="/" data-link class="md:hidden flex items-center gap-2 mb-8 select-none group">
-            <span class="text-sky-400 font-extrabold text-xl">✦</span>
-            <span class="font-sans font-bold text-xl tracking-tight text-white">UniLLM</span>
+          <a href="/" data-link class="md:hidden flex items-center mb-8 select-none group relative z-10 shrink-0" aria-label="UniLLM Home">
+            <img src="/unillm-logo.svg?v=2" alt="UniLLM" class="h-8 w-auto" />
           </a>
 
-          <div class="w-full max-w-md bg-[#10121A] border border-[#1F2438] rounded-2xl p-8 sm:p-10 shadow-2xl animate-fade-in-up">
+          <div class="w-full max-w-md auth-card-container rounded-2xl p-8 sm:p-10 animate-fade-in-up relative z-10">
             <!-- Tabs (Sign In / Create Account) -->
             <div class="flex items-center bg-[#07080B] p-1 border border-[#1F2438] rounded-xl mb-6 text-xs font-bold select-none">
               <a href="/login" data-link class="flex-1 py-2 text-center rounded-lg transition-all ${!isSignup ? 'bg-[#161926] text-white shadow-xs' : 'text-slate-400 hover:text-white'}">
@@ -567,76 +566,76 @@ export const components = {
       <div class="relative" id="topbar-user-profile-container">
         <button
           id="topbar-profile-btn"
-          class="flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-full border border-[#1F2438] bg-[#10121A] hover:bg-[#161926] hover:border-[#38BDF8]/40 transition-all duration-200 shadow-sm outline-none select-none group"
+          class="flex items-center gap-2.5 pl-1.5 pr-3 py-1 rounded-full border border-[rgba(242,239,232,0.12)] bg-[#141615] hover:bg-[#1A1D1B] hover:border-[rgba(242,239,232,0.22)] transition-all duration-200 shadow-xs outline-none select-none group"
           title="Account Profile (${roleTitle})"
         >
-          <div class="w-7 h-7 rounded-full bg-slate-800 border border-[#1F2438] flex items-center justify-center font-mono font-bold text-[11px] text-white tracking-wider shadow-xs shrink-0">
+          <div class="w-7 h-7 rounded-full bg-[#1A1D1B] border border-[rgba(242,239,232,0.14)] flex items-center justify-center font-mono font-semibold text-[11px] text-[#F2EFE8] tracking-wider shrink-0">
             ${initials}
           </div>
           
           <div class="hidden sm:flex flex-col items-start text-left leading-tight">
-            <span class="text-[12px] font-bold text-white tracking-tight group-hover:text-[#38BDF8] transition-colors truncate max-w-[120px]">${user.name}</span>
+            <span class="text-[12px] font-semibold text-[#F2EFE8] tracking-tight group-hover:text-white transition-colors truncate max-w-[120px]">${user.name}</span>
             <div class="flex items-center gap-1 mt-0.5">
               ${isAdmin ? `
-                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold tracking-wider bg-purple-500/10 text-purple-400 border border-purple-500/20 leading-none">
+                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8.5px] font-mono font-semibold tracking-wider bg-[#FF7849]/10 text-[#FF7849] border border-[#FF7849]/20 leading-none">
                   ADMIN
                 </span>
               ` : `
-                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8.5px] font-mono font-extrabold tracking-wider bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/20 leading-none">
+                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8.5px] font-mono font-semibold tracking-wider bg-[#42D6A4]/10 text-[#42D6A4] border border-[#42D6A4]/20 leading-none">
                   MEMBER
                 </span>
               `}
             </div>
           </div>
 
-          <svg class="w-3.5 h-3.5 text-[#8E98B0] group-hover:text-white group-hover:translate-y-0.5 transition-all" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+          <svg class="w-3.5 h-3.5 text-[#A6A39C] group-hover:text-[#F2EFE8] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
         </button>
 
         <!-- Dropdown Menu Box -->
         <div
           id="topbar-profile-menu"
-          class="hidden absolute right-0 top-[48px] z-50 w-72 bg-[#10121A] border border-[#1F2438] rounded-2xl shadow-2xl p-2.5 select-none animate-fade-in-up text-white"
+          class="hidden absolute right-0 top-[48px] z-50 w-72 bg-[#141615] border border-[rgba(242,239,232,0.14)] rounded-xl shadow-2xl p-2.5 select-none animate-fade-in-up text-[#F2EFE8]"
         >
-          <div class="px-3.5 py-3 rounded-xl bg-[#161926] border border-[#1F2438] mb-2">
+          <div class="px-3.5 py-3 rounded-lg bg-[#1A1D1B] border border-[rgba(242,239,232,0.08)] mb-2">
             <div class="flex items-center justify-between mb-1.5">
-              <span class="text-[9px] font-mono font-extrabold text-[#8E98B0] uppercase tracking-widest">Active Identity</span>
-              <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider ${isAdmin ? "bg-purple-500/10 text-purple-400 border border-purple-500/20" : "bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/20"}">
+              <span class="text-[9px] font-mono font-bold text-[#A6A39C] uppercase tracking-widest">Active Identity</span>
+              <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-semibold uppercase tracking-wider ${isAdmin ? "bg-[#FF7849]/10 text-[#FF7849] border border-[#FF7849]/20" : "bg-[#42D6A4]/10 text-[#42D6A4] border border-[#42D6A4]/20"}">
                 ${isAdmin ? "Admin Access" : "Developer Access"}
               </span>
             </div>
-            <p class="text-[13px] font-bold text-white truncate leading-tight">${user.name}</p>
-            <p class="text-[11px] text-[#8E98B0] font-medium truncate mt-0.5 font-mono">${user.email}</p>
+            <p class="text-[13px] font-semibold text-[#F2EFE8] truncate leading-tight">${user.name}</p>
+            <p class="text-[11px] text-[#A6A39C] font-normal truncate mt-0.5 font-mono">${user.email}</p>
           </div>
 
           <div class="flex flex-col gap-0.5 text-xs font-medium">
-            <a href="/app/settings" data-link class="flex items-center gap-2.5 px-3 py-2 text-[#8E98B0] hover:text-white hover:bg-[#161926] rounded-xl transition-colors">
-              <svg class="w-4 h-4 text-[#8E98B0]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            <a href="/app/settings" data-link class="flex items-center gap-2.5 px-3 py-2 text-[#A6A39C] hover:text-[#F2EFE8] hover:bg-[#1A1D1B] rounded-lg transition-colors">
+              <svg class="w-4 h-4 text-[#A6A39C]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
               Account Settings
             </a>
 
-            <a href="/app/api-keys" data-link class="flex items-center gap-2.5 px-3 py-2 text-[#8E98B0] hover:text-white hover:bg-[#161926] rounded-xl transition-colors">
-              <svg class="w-4 h-4 text-[#8E98B0]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+            <a href="/app/api-keys" data-link class="flex items-center gap-2.5 px-3 py-2 text-[#A6A39C] hover:text-[#F2EFE8] hover:bg-[#1A1D1B] rounded-lg transition-colors">
+              <svg class="w-4 h-4 text-[#A6A39C]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
               API Keys Console
             </a>
 
             ${isAdmin ? `
-              <a href="/admin" data-link class="flex items-center gap-2.5 px-3 py-2 text-purple-400 hover:text-purple-300 hover:bg-[#161926] rounded-xl transition-colors font-semibold">
-                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+              <a href="/admin" data-link class="flex items-center gap-2.5 px-3 py-2 text-[#FF7849] hover:text-[#ff926b] hover:bg-[#1A1D1B] rounded-lg transition-colors font-medium">
+                <svg class="w-4 h-4 text-[#FF7849]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                 Organization Admin Portal
               </a>
             ` : `
-              <a href="/app" data-link class="flex items-center gap-2.5 px-3 py-2 text-[#38BDF8] hover:bg-[#161926] rounded-xl transition-colors font-semibold">
-                <svg class="w-4 h-4 text-[#38BDF8]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+              <a href="/app" data-link class="flex items-center gap-2.5 px-3 py-2 text-[#42D6A4] hover:bg-[#1A1D1B] rounded-lg transition-colors font-medium">
+                <svg class="w-4 h-4 text-[#42D6A4]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                 Developer Dashboard
               </a>
             `}
           </div>
 
-          <div class="border-t border-[#1F2438] my-1.5"></div>
+          <div class="border-t border-[rgba(242,239,232,0.08)] my-1.5"></div>
 
           <button
             id="topbar-dropdown-logout-btn"
-            class="w-full flex items-center gap-2.5 px-3 py-2 text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-xl text-xs font-semibold transition-colors"
+            class="w-full flex items-center gap-2.5 px-3 py-2 text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-lg text-xs font-semibold transition-colors"
           >
             <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
             Log Out of Session
@@ -667,19 +666,18 @@ export const components = {
     const unreadCount = alerts.filter(a => !a.read).length;
 
     return `
-      <div class="min-h-screen flex bg-[#07080B] font-sans text-white">
-        <!-- Sidebar (Screen 04 Reference) -->
-        <aside id="dashboard-sidebar" class="fixed inset-y-0 left-0 z-30 w-60 bg-[#090B10] border-r border-[#1B1F2E] flex flex-col justify-between transition-transform duration-300 transform md:translate-x-0 -translate-x-full select-none">
+      <div class="min-h-screen flex bg-[#0B0C0D] font-sans text-[#F2EFE8]">
+        <!-- Sidebar -->
+        <aside id="dashboard-sidebar" class="fixed inset-y-0 left-0 z-30 w-60 bg-[#0B0C0D] border-r border-[rgba(242,239,232,0.08)] flex flex-col justify-between transition-transform duration-300 transform md:translate-x-0 -translate-x-full select-none">
           <div>
             <!-- Header -->
-            <div class="h-16 border-b border-[#1B1F2E] px-5 flex items-center justify-between">
-              <a href="/" data-link class="flex items-center gap-2">
-                <span class="text-sky-400 font-extrabold text-lg">✦</span>
-                <span class="font-sans font-bold text-lg tracking-tight text-white">UniLLM</span>
+            <div class="h-16 border-b border-[rgba(242,239,232,0.08)] px-5 flex items-center justify-between">
+              <a href="/" data-link class="flex items-center shrink-0" aria-label="UniLLM Home">
+                <img src="/unillm-logo.svg?v=2" alt="UniLLM" class="h-6 w-auto" />
               </a>
               
               <!-- Close btn mobile -->
-              <button id="sidebar-close-btn" class="md:hidden p-1.5 hover:bg-[#161926] rounded-lg text-slate-400">
+              <button id="sidebar-close-btn" class="md:hidden p-1.5 hover:bg-[#141615] rounded-lg text-[#A6A39C] hover:text-[#F2EFE8]">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
               </button>
             </div>
@@ -689,10 +687,10 @@ export const components = {
               ${menuItems.map(item => {
                 const isActive = currentPath === item.path || (item.path !== "/app" && currentPath.startsWith(item.path));
                 return `
-                  <a href="${item.path}" data-link class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                  <a href="${item.path}" data-link class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all ${
                     isActive
-                      ? "bg-[#161926] text-white font-bold border-l-2 border-[#38BDF8] shadow-xs"
-                      : "text-slate-400 hover:bg-[#10121A] hover:text-white"
+                      ? "bg-[#141615] text-[#F2EFE8] font-semibold border-l-2 border-[#42D6A4]"
+                      : "text-[#A6A39C] hover:bg-[#141615]/70 hover:text-[#F2EFE8] font-medium border-l-2 border-transparent"
                   }">
                     ${getSidebarIconSvg(item.icon, isActive)}
                     <span>${item.name}</span>
@@ -702,31 +700,31 @@ export const components = {
             </nav>
           </div>
           
-          <!-- Profile Footer Box (Screens 04-07 Reference) -->
-          <div class="p-3 border-t border-[#1B1F2E] flex items-center justify-between select-none bg-[#090B10]">
+          <!-- Profile Footer Box -->
+          <div class="p-3 border-t border-[rgba(242,239,232,0.08)] flex items-center justify-between select-none bg-[#0B0C0D]">
             <a href="/app/settings" data-link class="flex items-center gap-2.5 hover:opacity-90 transition-opacity max-w-[170px] group">
-              <div class="w-8 h-8 rounded-full bg-slate-800 border border-[#1F2438] flex items-center justify-center font-bold text-white font-mono text-xs shrink-0">
+              <div class="w-8 h-8 rounded-full bg-[#141615] border border-[rgba(242,239,232,0.12)] flex items-center justify-center font-bold text-[#F2EFE8] font-mono text-xs shrink-0">
                 ${(user.name || "User").slice(0, 1).toUpperCase()}
               </div>
               <div class="flex flex-col truncate">
-                <span class="text-xs font-bold text-white group-hover:text-sky-400 transition-colors truncate">${user.name || "Jaspreet"}</span>
-                <span class="text-[10px] text-slate-500 truncate">Personal</span>
+                <span class="text-xs font-semibold text-[#F2EFE8] group-hover:text-white transition-colors truncate">${user.name || "Jaspreet"}</span>
+                <span class="text-[10px] text-[#A6A39C] truncate">Personal</span>
               </div>
             </a>
             
-            <button id="logout-btn" class="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition-colors" title="Log Out">
+            <button id="logout-btn" class="p-1.5 text-[#A6A39C] hover:text-[#FF7849] hover:bg-[#141615] rounded-lg transition-colors" title="Log Out">
               <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
             </button>
           </div>
         </aside>
 
         <!-- Main Window Area -->
-        <div class="flex-grow md:pl-60 flex flex-col min-h-screen bg-[#07080B]">
+        <div class="flex-grow md:pl-60 flex flex-col min-h-screen bg-[#0B0C0D]">
           <!-- Top bar -->
-          <header class="h-16 border-b border-[#1B1F2E] bg-[#0A0B0F]/90 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-20 select-none">
+          <header class="h-16 border-b border-[rgba(242,239,232,0.08)] bg-[#0B0C0D]/90 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-20 select-none">
             <div class="flex items-center gap-4">
               <!-- Mobile Sidebar Toggle -->
-              <button id="mobile-sidebar-toggle" class="md:hidden p-2 rounded-lg hover:bg-[#161926] text-white">
+              <button id="mobile-sidebar-toggle" class="md:hidden p-2 rounded-lg hover:bg-[#141615] text-[#F2EFE8]">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
               </button>
               
@@ -734,42 +732,42 @@ export const components = {
               <div class="relative">
                 <button
                   id="workspace-dropdown-btn"
-                  class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-[#1F2438] bg-[#10121A] hover:bg-[#161926] hover:border-[#38BDF8]/40 transition-all text-xs font-semibold text-white shadow-xs group"
+                  class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-[rgba(242,239,232,0.12)] bg-[#141615] hover:bg-[#1A1D1B] hover:border-[rgba(242,239,232,0.22)] transition-all text-xs font-semibold text-[#F2EFE8] shadow-xs group"
                 >
-                  <div class="w-2 h-2 rounded-full bg-[#38BDF8] shadow-[0_0_8px_rgba(56,189,248,0.6)]"></div>
-                  <span id="current-workspace-name" class="font-sans font-bold text-white max-w-[120px] sm:max-w-[180px] truncate">${activeWorkspace}</span>
-                  <svg class="w-3.5 h-3.5 text-[#8E98B0] group-hover:text-white transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
+                  <div class="w-2 h-2 rounded-full bg-[#42D6A4] shadow-[0_0_8px_rgba(66,214,164,0.4)]"></div>
+                  <span id="current-workspace-name" class="font-sans font-bold text-[#F2EFE8] max-w-[120px] sm:max-w-[180px] truncate">${activeWorkspace}</span>
+                  <svg class="w-3.5 h-3.5 text-[#A6A39C] group-hover:text-[#F2EFE8] transition-colors" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path></svg>
                 </button>
-                <div id="workspace-menu" class="absolute left-0 mt-2 w-64 bg-[#10121A] border border-[#1F2438] rounded-2xl shadow-2xl p-2 hidden z-50 flex flex-col gap-1 animate-scale-up">
-                  <div class="px-3 py-1.5 text-[9px] font-mono font-bold text-[#8E98B0] uppercase tracking-widest select-none">Switch Workspace</div>
+                <div id="workspace-menu" class="absolute left-0 mt-2 w-64 bg-[#141615] border border-[rgba(242,239,232,0.14)] rounded-xl shadow-2xl p-2 hidden z-50 flex flex-col gap-1 animate-scale-up text-[#F2EFE8]">
+                  <div class="px-3 py-1.5 text-[9px] font-mono font-bold text-[#A6A39C] uppercase tracking-widest select-none">Switch Workspace</div>
                   <div id="workspace-options-list" class="flex flex-col gap-1 max-h-48 overflow-y-auto">
                     <!-- Populated dynamically -->
                   </div>
-                  <div class="border-t border-[#1F2438] my-1"></div>
-                  <a href="/admin/teams" data-link class="w-full text-left px-3 py-2 hover:bg-[#161926] text-[#38BDF8] rounded-xl flex items-center gap-1.5 font-medium text-xs transition-colors">
+                  <div class="border-t border-[rgba(242,239,232,0.08)] my-1"></div>
+                  <a href="/admin/teams" data-link class="w-full text-left px-3 py-2 hover:bg-[#1A1D1B] text-[#42D6A4] rounded-lg flex items-center gap-1.5 font-medium text-xs transition-colors">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg> Manage Workspaces
                   </a>
                 </div>
               </div>
 
               <!-- Cmd+K Palette Search trigger button -->
-              <button id="topbar-search-trigger" class="hidden sm:flex items-center gap-2 px-3 py-1.5 border border-[#1F2438] rounded-xl bg-[#10121A] hover:bg-[#161926] text-slate-400 text-xs font-medium w-56 select-none outline-none transition-colors">
-                <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <button id="topbar-search-trigger" class="hidden sm:flex items-center gap-2 px-3 py-1.5 border border-[rgba(242,239,232,0.1)] rounded-xl bg-[#141615] hover:bg-[#1A1D1B] text-[#A6A39C] hover:text-[#F2EFE8] text-xs font-medium w-56 select-none outline-none transition-colors">
+                <svg class="w-3.5 h-3.5 text-[#A6A39C]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 <span class="flex-grow text-left text-[11px]">Search docs...</span>
-                <kbd class="px-1.5 py-0.5 border border-[#1F2438] rounded bg-[#07080B] text-[9px] font-mono font-bold text-slate-400">⌘K</kbd>
+                <kbd class="px-1.5 py-0.5 border border-[rgba(242,239,232,0.12)] rounded bg-[#0B0C0D] text-[9px] font-mono font-bold text-[#A6A39C]">⌘K</kbd>
               </button>
             </div>
             
             <div class="flex items-center gap-4">
-              <a href="/docs" data-link class="hidden md:inline-flex text-xs font-semibold text-slate-400 hover:text-white transition-colors">Docs</a>
-              <a href="/api-reference" data-link class="hidden md:inline-flex text-xs font-semibold text-slate-400 hover:text-white transition-colors">API Reference</a>
+              <a href="/docs" data-link class="hidden md:inline-flex text-xs font-semibold text-[#A6A39C] hover:text-[#F2EFE8] transition-colors">Docs</a>
+              <a href="/api-reference" data-link class="hidden md:inline-flex text-xs font-semibold text-[#A6A39C] hover:text-[#F2EFE8] transition-colors">API Reference</a>
               
-              <div class="border-l border-[#1B1F2E] h-5 hidden md:block"></div>
+              <div class="border-l border-[rgba(242,239,232,0.08)] h-5 hidden md:block"></div>
               
               <!-- Notifications drawer toggle -->
-              <button id="notification-drawer-toggle" class="p-2 hover:bg-[#161926] rounded-xl text-slate-400 hover:text-white relative outline-none transition-colors">
+              <button id="notification-drawer-toggle" class="p-2 hover:bg-[#141615] rounded-xl text-[#A6A39C] hover:text-[#F2EFE8] relative outline-none transition-colors">
                 <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                ${unreadCount > 0 ? `<div class="absolute right-2.5 top-2.5 w-1.5 h-1.5 rounded-full bg-sky-400"></div>` : ""}
+                ${unreadCount > 0 ? `<div class="absolute right-2.5 top-2.5 w-1.5 h-1.5 rounded-full bg-[#FF7849]"></div>` : ""}
               </button>
 
               ${components.renderUserProfileDropdown(user)}
@@ -873,8 +871,12 @@ export const components = {
 
   // 4. BUSINESS / ORGANIZATION ADMIN LAYOUT
   AdminLayout: (content) => {
-    const user = apiService.getCurrentUser() || { name: "Sarah Connor", email: "sarah@cyberdyne.org" };
+    const user = apiService.getCurrentUser() || { name: "Organization Admin", email: "admin@unillm.ai", org: "UniLLM", role: "admin" };
     const currentPath = window.location.pathname;
+
+    const orgDisplayName = (user?.org || "UniLLM").replace(/\s+Systems|\s+Corp/i, "");
+    const roleDisplayName = user?.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase()) : "Admin";
+    const sidebarTitle = `${orgDisplayName} ${roleDisplayName}`.toUpperCase();
 
     const adminMenuItems = [
       { name: "Overview", path: "/admin", icon: "shield-alert" },
@@ -904,9 +906,8 @@ export const components = {
           <div>
             <!-- Branding Panel -->
             <div class="h-16 border-b border-[#1B1F2E] px-5 flex items-center justify-between">
-              <a href="/" data-link class="flex items-center gap-2">
-                <span class="text-sky-400 font-extrabold text-lg">✦</span>
-                <span class="font-sans font-bold text-lg tracking-tight text-white">UniLLM</span>
+              <a href="/" data-link class="flex items-center gap-2 shrink-0" aria-label="UniLLM Home">
+                <img src="/unillm-logo.svg?v=2" alt="UniLLM" class="h-6 w-auto" />
                 <span class="text-[8px] font-mono font-bold text-[#38BDF8] bg-[#38BDF8]/10 border border-[#38BDF8]/20 px-1.5 py-0.5 rounded-full uppercase shrink-0">ORG</span>
               </a>
               
@@ -915,12 +916,13 @@ export const components = {
               </button>
             </div>
             
-            <div class="px-5 py-3 border-b border-[#1B1F2E]">
-              <div class="flex items-center gap-2 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider select-none">
-                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                <span>Cyberdyne Admin</span>
+            <a href="/admin/settings" data-link class="px-5 py-3 border-b border-[#1B1F2E] flex items-center justify-between hover:bg-[#121520] transition-colors group cursor-pointer" title="Click to edit Organization & Admin profile">
+              <div class="flex items-center gap-2 text-[10px] font-mono font-bold text-slate-400 group-hover:text-white uppercase tracking-wider select-none truncate">
+                <svg class="w-4 h-4 text-purple-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                <span class="truncate">${sidebarTitle}</span>
               </div>
-            </div>
+              <svg class="w-3.5 h-3.5 text-slate-500 group-hover:text-sky-400 opacity-60 group-hover:opacity-100 transition-opacity shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+            </a>
             
             <!-- Admin Navigation links -->
             <nav class="px-3 py-3 flex flex-col gap-0.5 overflow-y-auto max-h-[calc(100vh-220px)]">
@@ -1007,7 +1009,7 @@ export const components = {
     components.bindAppLayout();
   },
 
-  // 5. DOCUMENTATION LAYOUT
+  // 5. DOCUMENTATION LAYOUT (Clean, Spacious 2-Column Developer Layout)
   DocsLayout: (content) => {
     const user = apiService.getCurrentUser();
     const currentPath = window.location.pathname;
@@ -1015,188 +1017,101 @@ export const components = {
     return `
       ${components.renderNavbar(user)}
 
-      <div class="flex max-w-[1440px] mx-auto min-h-[calc(100vh-64px)] font-sans pt-16 bg-[#07080B] text-white">
-        <!-- Premium Docs Sidebar -->
-        <aside class="hidden lg:flex w-72 border-r border-[#1F2438] bg-[#0A0C13] px-4 py-6 select-none shrink-0 sticky top-16 h-[calc(100vh-64px)] flex-col justify-between overflow-y-auto text-white">
+      <div class="min-h-screen bg-[#0B0C0D] text-[#F2EFE8] font-sans pt-16">
+        <div class="max-w-[1440px] mx-auto flex">
           
-          <div class="flex flex-col gap-5">
-            <!-- Search Filter Box -->
-            <div class="relative">
-              <svg class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              <input id="docs-sidebar-search" type="text" placeholder="Search documentation..." class="w-full bg-[#10121A] border border-[#1F2438] rounded-xl pl-8 pr-11 py-2 text-xs font-medium text-white placeholder-[#8E98B0]/60 outline-none focus:border-[#38BDF8] transition-all" />
-              <span class="absolute right-2.5 top-2 text-[9px] font-mono font-bold text-slate-400 border border-[#1F2438] px-1.5 py-0.5 rounded-md bg-[#161926] select-none">/</span>
-            </div>
-
-            <!-- Docs Menu Navigation -->
-            <nav id="docs-sidebar-nav" class="flex flex-col gap-6 text-xs">
+          <!-- Clean Fixed-Width Sidebar (250px) -->
+          <aside class="hidden lg:flex w-64 shrink-0 border-r border-[rgba(242,239,232,0.1)] bg-[#0B0C0D] px-4 py-8 select-none sticky top-16 h-[calc(100vh-64px)] flex-col justify-between overflow-y-auto">
+            
+            <div class="flex flex-col gap-6">
               
-              <!-- 1. GETTING STARTED -->
-              <div class="docs-nav-group flex flex-col gap-1">
-                <div class="flex items-center gap-1.5 px-2 mb-1 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
-                  <svg class="w-3 h-3 text-[#38BDF8]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                  <span>Getting Started</span>
-                </div>
-                <div class="flex flex-col gap-0.5">
-                  <a href="/docs#intro" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-all ${currentPath === "/docs" ? "bg-[#161926] text-white border-l-2 border-[#38BDF8]" : "text-slate-400 hover:bg-[#10121A] hover:text-white"}">
-                    <span class="flex items-center gap-2.5">
-                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                      Overview & Architecture
-                    </span>
-                  </a>
-                  <a href="/docs#quickstart" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium text-slate-400 hover:bg-[#10121A] hover:text-white transition-all">
-                    <span class="flex items-center gap-2.5">
-                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                      5-Min Quickstart
-                    </span>
-                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">DROP-IN</span>
-                  </a>
-                  <a href="/docs#demo-guide" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium text-slate-400 hover:bg-[#10121A] hover:text-white transition-all">
-                    <span class="flex items-center gap-2.5">
-                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                      Demo Integration Guide
-                    </span>
-                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded-md bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/20">CODE</span>
-                  </a>
-                </div>
+              <!-- Search Box -->
+              <div class="relative">
+                <svg class="w-3.5 h-3.5 text-[#A6A39C] absolute left-3 top-2.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input 
+                  id="docs-sidebar-search" 
+                  type="text" 
+                  placeholder="Search docs..." 
+                  class="w-full bg-[#141615] border border-[rgba(242,239,232,0.12)] rounded-lg pl-8 pr-8 py-1.5 text-xs text-[#F2EFE8] placeholder-[#A6A39C]/60 outline-none focus:border-[#42D6A4] transition-colors" 
+                />
+                <span class="absolute right-2 top-1.5 text-[9px] font-mono text-[#A6A39C] border border-[rgba(242,239,232,0.12)] px-1 rounded bg-[#1A1D1B]">/</span>
               </div>
 
-              <!-- 2. CORE GATEWAY LOGIC -->
-              <div class="docs-nav-group flex flex-col gap-1">
-                <div class="flex items-center gap-1.5 px-2 mb-1 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                  <span>Gateway Routing</span>
-                </div>
-                <div class="flex flex-col gap-0.5">
-                  <a href="/docs#endpoint" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium text-slate-400 hover:bg-[#10121A] hover:text-white transition-all">
-                    <span class="flex items-center gap-2.5">
-                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                      Live Request Simulator
-                    </span>
-                    <span class="flex h-2 w-2 relative">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
+              <!-- Clean Navigation Links -->
+              <nav id="docs-sidebar-nav" class="flex flex-col gap-5 text-xs">
+                
+                <!-- Group 1: Overview -->
+                <div class="flex flex-col gap-1 docs-nav-group">
+                  <span class="text-[10px] font-mono uppercase tracking-wider text-[#A6A39C] px-2 mb-0.5">Getting Started</span>
+                  <a href="/docs#quickstart" class="docs-nav-item flex items-center px-2.5 py-1.5 rounded-lg font-medium transition-colors border-l-2 ${currentPath === "/docs" ? "bg-[#141615] text-[#F2EFE8] border-[#42D6A4]" : "border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60"}">
+                    Quickstart
                   </a>
-                  <a href="/docs#caching" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium text-slate-400 hover:bg-[#10121A] hover:text-white transition-all">
-                    <span class="flex items-center gap-2.5">
-                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-                      Smart Semantic Caching
-                    </span>
-                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">~18ms</span>
+                  <a href="/docs#authentication" class="docs-nav-item flex items-center px-2.5 py-1.5 rounded-lg font-medium border-l-2 border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60 transition-colors">
+                    Authentication
                   </a>
-                  <a href="/docs#failover" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium text-slate-400 hover:bg-[#10121A] hover:text-white transition-all">
-                    <span class="flex items-center gap-2.5">
-                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                      Failover & Error Retry
-                    </span>
+                  <a href="/docs#making-requests" class="docs-nav-item flex items-center px-2.5 py-1.5 rounded-lg font-medium border-l-2 border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60 transition-colors">
+                    Making Requests
+                  </a>
+                  <a href="/docs#response-format" class="docs-nav-item flex items-center px-2.5 py-1.5 rounded-lg font-medium border-l-2 border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60 transition-colors">
+                    Response Format
                   </a>
                 </div>
-              </div>
 
-              <!-- 3. API & SDK REFERENCE -->
-              <div class="docs-nav-group flex flex-col gap-1">
-                <div class="flex items-center gap-1.5 px-2 mb-1 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
-                  <svg class="w-3 h-3 text-[#38BDF8]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                  <span>API Console & Specs</span>
-                </div>
-                <div class="flex flex-col gap-0.5">
-                  <a href="/api-reference" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-all ${currentPath === "/api-reference" ? "bg-[#161926] text-white border-l-2 border-[#38BDF8]" : "text-slate-400 hover:bg-[#10121A] hover:text-white"}">
-                    <span class="flex items-center gap-2.5">
-                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                      API Reference Explorer
-                    </span>
-                    <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/20">v1</span>
+                <!-- Group 2: Endpoints & Routing -->
+                <div class="flex flex-col gap-1 docs-nav-group">
+                  <span class="text-[10px] font-mono uppercase tracking-wider text-[#A6A39C] px-2 mb-0.5">Core Gateway</span>
+                  <a href="/api-reference" data-link class="docs-nav-item flex items-center justify-between px-2.5 py-1.5 rounded-lg font-medium border-l-2 ${currentPath === "/api-reference" ? "bg-[#141615] text-[#F2EFE8] border-[#42D6A4]" : "border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60"} transition-colors">
+                    <span>API Reference</span>
+                    <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#42D6A4]/10 text-[#42D6A4]">v1</span>
                   </a>
-                  <a href="/api-reference#chat-completions" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium text-slate-400 hover:bg-[#10121A] hover:text-white transition-all">
-                    <span class="flex items-center gap-2 truncate">
-                      <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400">POST</span>
-                      <span class="truncate">/chat/completions</span>
-                    </span>
+                  <a href="/models" data-link class="docs-nav-item flex items-center justify-between px-2.5 py-1.5 rounded-lg font-medium border-l-2 border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60 transition-colors">
+                    <span>Model Catalog</span>
+                    <span class="text-[9px] font-mono text-[#A6A39C]">50+</span>
                   </a>
-                  <a href="/api-reference#models-list" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium text-slate-400 hover:bg-[#10121A] hover:text-white transition-all">
-                    <span class="flex items-center gap-2 truncate">
-                      <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-400">GET</span>
-                      <span class="truncate">/models</span>
-                    </span>
+                  <a href="/docs#rate-limits" class="docs-nav-item flex items-center px-2.5 py-1.5 rounded-lg font-medium border-l-2 border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60 transition-colors">
+                    Rate Limits & Quotas
                   </a>
-                  <a href="/api-reference#embeddings" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium text-slate-400 hover:bg-[#10121A] hover:text-white transition-all">
-                    <span class="flex items-center gap-2 truncate">
-                      <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400">POST</span>
-                      <span class="truncate">/embeddings</span>
-                    </span>
+                  <a href="/docs#errors" class="docs-nav-item flex items-center px-2.5 py-1.5 rounded-lg font-medium border-l-2 border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60 transition-colors">
+                    Error Handling
                   </a>
                 </div>
-              </div>
 
-              <!-- 4. DEVELOPER TOOLS -->
-              <div class="docs-nav-group flex flex-col gap-1">
-                <div class="flex items-center gap-1.5 px-2 mb-1 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
-                  <svg class="w-3 h-3 text-[#38BDF8]" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                  <span>Quick Tools</span>
-                </div>
-                <div class="flex flex-col gap-0.5">
-                  <a href="/app/playground" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium text-slate-400 hover:bg-[#10121A] hover:text-white transition-all">
-                    <span class="flex items-center gap-2.5">
-                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 2v7.31L4.35 18A2 2 0 006 21h12a2 2 0 001.65-3L14 9.31V2"></path><path d="M8.5 2h7"></path><path d="M14 9.3l-3.5 5.7"></path></svg>
-                      Model Playground
-                    </span>
+                <!-- Group 3: SDKs & Tools -->
+                <div class="flex flex-col gap-1 docs-nav-group">
+                  <span class="text-[10px] font-mono uppercase tracking-wider text-[#A6A39C] px-2 mb-0.5">Resources</span>
+                  <a href="/developers" data-link class="docs-nav-item flex items-center px-2.5 py-1.5 rounded-lg font-medium border-l-2 border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60 transition-colors">
+                    SDK Libraries
                   </a>
-                  <a href="/app/api-keys" data-link class="docs-nav-item flex items-center justify-between px-3 py-2 rounded-xl font-medium text-slate-400 hover:bg-[#10121A] hover:text-white transition-all">
-                    <span class="flex items-center gap-2.5">
-                      <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 2l-2 2m-1.5 1.5L16 7l-1.5-1.5L13 7l-1.5-1.5L10 7l-1.5-1.5L7 7l-2-2a5 5 0 1 0-3 3l16 16 3-3-2-2 2-2-2-2 2-2z"></path></svg>
-                      API Keys Console
-                    </span>
+                  <a href="/app/playground" data-link class="docs-nav-item flex items-center px-2.5 py-1.5 rounded-lg font-medium border-l-2 border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60 transition-colors">
+                    Model Playground
+                  </a>
+                  <a href="/app/api-keys" data-link class="docs-nav-item flex items-center px-2.5 py-1.5 rounded-lg font-medium border-l-2 border-transparent text-[#A6A39C] hover:text-white hover:bg-[#141615]/60 transition-colors">
+                    API Keys
                   </a>
                 </div>
-              </div>
 
-            </nav>
-          </div>
-
-          <!-- Bottom Operational Status Card -->
-          <div class="mt-6 pt-4 border-t border-[#1F2438] flex flex-col gap-3">
-            <div class="p-3 rounded-xl bg-[#10121A] border border-[#1F2438] flex flex-col gap-2">
-              <div class="flex items-center justify-between text-[11px] font-bold">
-                <span class="text-white flex items-center gap-1.5">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  Gateway Proxy
-                </span>
-                <span class="text-emerald-400 font-mono text-[10px]">99.99%</span>
-              </div>
-              <div class="flex items-center justify-between text-[10px] text-[#8E98B0] font-mono">
-                <span>SDK Version</span>
-                <span class="font-mono font-bold text-slate-700">v2.4.1</span>
-              </div>
+              </nav>
             </div>
-          </div>
 
-        </aside>
-
-        <!-- Main Viewport -->
-        <main class="flex-grow px-6 py-8 md:p-12 max-w-4xl select-text">
-          ${content}
-        </main>
-        
-        <!-- TOC -->
-        <aside class="hidden xl:block w-60 px-6 py-8 text-[11px] select-none shrink-0 border-l border-brand-border/40">
-          <div class="sticky top-24 flex flex-col gap-4">
-            <span class="font-bold text-brand-text tracking-wider uppercase block text-xs">On This Page</span>
-            <ul class="flex flex-col gap-2.5 font-bold text-brand-muted">
-              <li><a href="#intro" class="hover:text-brand-primary transition-colors flex items-center gap-1.5"><span>•</span> Architecture Overview</a></li>
-              <li><a href="#quickstart" class="hover:text-brand-primary transition-colors flex items-center gap-1.5"><span>•</span> 5-Minute Quickstart</a></li>
-              <li><a href="#demo-guide" class="hover:text-brand-primary transition-colors flex items-center gap-1.5"><span>•</span> Demo Code Integration</a></li>
-              <li><a href="#endpoint" class="hover:text-brand-primary transition-colors flex items-center gap-1.5"><span>•</span> Live Request Simulator</a></li>
-              <li><a href="#caching" class="hover:text-brand-primary transition-colors flex items-center gap-1.5"><span>•</span> Smart Semantic Cache</a></li>
-              <li><a href="#failover" class="hover:text-brand-primary transition-colors flex items-center gap-1.5"><span>•</span> Failover Policy Matrix</a></li>
-            </ul>
-
-            <div class="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-100 flex flex-col gap-2 mt-4">
-              <span class="text-xs font-bold text-indigo-950">Need custom help?</span>
-              <p class="text-[10px] text-indigo-700 leading-relaxed font-medium">Join our developer Discord or talk directly with our systems engineers.</p>
-              <a href="/contact" data-link class="text-[11px] font-bold text-brand-primary hover:underline">Contact Support →</a>
+            <!-- Sidebar Footer Status -->
+            <div class="pt-4 border-t border-[rgba(242,239,232,0.1)] flex items-center justify-between text-[11px] font-mono text-[#A6A39C]">
+              <span class="flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#42D6A4]"></span>
+                API v1 Active
+              </span>
+              <span>0.8ms hop</span>
             </div>
-          </div>
-        </aside>
+
+          </aside>
+
+          <!-- Main Spacious Content Area (Max width 920px, clean centered breathing room) -->
+          <main class="flex-grow min-w-0 px-6 sm:px-12 py-10 max-w-[920px]">
+            ${content}
+          </main>
+
+        </div>
       </div>
     `;
   },
@@ -1249,35 +1164,47 @@ export const components = {
       const el = document.getElementById(targetId);
       if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
-        el.classList.add("ring-2", "ring-indigo-400/30", "transition-all", "duration-500", "rounded-2xl");
+        el.classList.add("ring-1", "ring-[#42D6A4]/30", "transition-all", "duration-500", "rounded-xl");
         setTimeout(() => {
-          el.classList.remove("ring-2", "ring-indigo-400/30");
-        }, 1500);
+          el.classList.remove("ring-1", "ring-[#42D6A4]/30");
+        }, 1200);
       }
     }
 
     function setActiveDocsLink(activeHref) {
       navLinks.forEach(link => {
         const linkHref = link.getAttribute("href") || "";
-        if (linkHref === activeHref) {
-          link.classList.add("bg-indigo-50/80", "text-brand-primary", "shadow-xs", "ring-1", "ring-indigo-200/60");
-          link.classList.remove("text-slate-600");
+        const isMatch = (linkHref === activeHref) || 
+                        ((activeHref === "/docs" || activeHref === "" || activeHref === "/docs#") && linkHref === "/docs#quickstart");
+
+        // Clean up any legacy light-mode classes if present
+        link.classList.remove("bg-indigo-50/80", "text-brand-primary", "shadow-xs", "ring-1", "ring-indigo-200/60", "text-slate-600");
+
+        if (isMatch) {
+          link.classList.add("bg-[#141615]", "text-[#F2EFE8]", "font-semibold", "border-[#42D6A4]");
+          link.classList.remove("text-[#A6A39C]", "border-transparent");
         } else if (linkHref.startsWith("/docs#") || linkHref === "/docs") {
-          link.classList.remove("bg-indigo-50/80", "text-brand-primary", "shadow-xs", "ring-1", "ring-indigo-200/60");
-          link.classList.add("text-slate-600");
+          link.classList.remove("bg-[#141615]", "text-[#F2EFE8]", "border-[#42D6A4]", "font-semibold", "text-white");
+          link.classList.add("text-[#A6A39C]", "border-transparent");
         }
       });
 
       rightTocLinks.forEach(link => {
         const linkHash = link.getAttribute("href") || "";
         if (activeHref.endsWith(linkHash)) {
-          link.classList.add("text-brand-primary", "font-bold");
-          link.classList.remove("text-brand-muted");
+          link.classList.add("text-[#42D6A4]", "font-semibold");
+          link.classList.remove("text-[#A6A39C]");
         } else {
-          link.classList.remove("text-brand-primary");
-          link.classList.add("text-brand-muted");
+          link.classList.remove("text-[#42D6A4]", "font-semibold");
+          link.classList.add("text-[#A6A39C]");
         }
       });
+    }
+
+    // Set initial active state based on hash or default to quickstart
+    if (window.location.pathname === "/docs") {
+      const currentHash = window.location.hash || "#quickstart";
+      setActiveDocsLink(`/docs${currentHash}`);
     }
 
     navLinks.forEach(link => {
@@ -1308,8 +1235,8 @@ export const components = {
       }
     });
 
-    // Scrollspy with Intersection Observer
-    const sectionIds = ["intro", "quickstart", "demo-guide", "endpoint", "caching", "failover"];
+    // Scrollspy with Intersection Observer for doc sections
+    const sectionIds = ["quickstart", "authentication", "making-requests", "response-format"];
     const sectionElements = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
 
     if (sectionElements.length > 0) {
@@ -1319,7 +1246,7 @@ export const components = {
             setActiveDocsLink(`/docs#${entry.target.id}`);
           }
         });
-      }, { rootMargin: "-15% 0px -70% 0px", threshold: 0 });
+      }, { rootMargin: "-10% 0px -65% 0px", threshold: 0 });
 
       sectionElements.forEach(sec => observer.observe(sec));
     }
@@ -1546,37 +1473,77 @@ export const components = {
     });
   },
 
-  // 9. DYNAMIC TOASTS
+  // 9. DYNAMIC TOASTS (Guaranteed Dark Obsidian Aesthetic)
   renderToast: (type, text) => {
+    // Remove any existing toast so toasts do not stack awkwardly
+    document.querySelectorAll(".unillm-toast-popup").forEach(el => el.remove());
+
     const toast = document.createElement("div");
-    toast.className = `fixed bottom-5 right-5 z-50 flex items-center gap-3 px-4 py-3 border rounded-xl shadow-xl transition-all transform translate-y-8 opacity-0 max-w-sm ${
-      type === "success" 
-        ? "bg-green-50 border-green-200 text-green-800" 
-        : type === "error"
-        ? "bg-red-50 border-red-200 text-red-800"
-        : "bg-indigo-50 border-indigo-200 text-brand-primary"
-    }`;
+    toast.className = "unillm-toast-popup";
+    
+    const isSuccess = type === "success";
+    const isError = type === "error";
+
+    // Bulletproof inline CSS - 0 dependency on Tailwind compilation
+    toast.style.position = "fixed";
+    toast.style.bottom = "24px";
+    toast.style.right = "24px";
+    toast.style.zIndex = "999999";
+    toast.style.display = "flex";
+    toast.style.alignItems = "center";
+    toast.style.gap = "10px";
+    toast.style.padding = "12px 18px";
+    toast.style.borderRadius = "12px";
+    toast.style.border = isSuccess 
+      ? "1px solid rgba(16, 185, 129, 0.4)" 
+      : isError 
+      ? "1px solid rgba(244, 63, 94, 0.4)" 
+      : "1px solid rgba(56, 189, 248, 0.4)";
+    toast.style.backgroundColor = isSuccess ? "#0D1813" : isError ? "#1A0F12" : "#11141A";
+    toast.style.color = "#FFFFFF";
+    toast.style.boxShadow = "0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 10px 10px -5px rgba(0, 0, 0, 0.6)";
+    toast.style.fontFamily = "Inter, system-ui, sans-serif";
+    toast.style.fontSize = "12px";
+    toast.style.fontWeight = "600";
+    toast.style.maxWidth = "360px";
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(16px)";
+    toast.style.transition = "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)";
+    toast.style.pointerEvents = "none";
+
+    const iconColor = isSuccess ? "#34D399" : isError ? "#FB7185" : "#38BDF8";
+    const iconSvg = isSuccess 
+      ? `<svg style="width:16px;height:16px;color:${iconColor};flex-shrink:0;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>`
+      : isError
+      ? `<svg style="width:16px;height:16px;color:${iconColor};flex-shrink:0;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`
+      : `<svg style="width:16px;height:16px;color:${iconColor};flex-shrink:0;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+
     toast.innerHTML = `
-      <div class="flex items-center gap-2 text-xs font-bold font-sans">
-        ${type === "success" 
-          ? `<svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>` 
-          : type === "error"
-          ? `<svg class="w-4 h-4 text-red-650" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>`
-          : `<svg class="w-4 h-4 text-brand-primary" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`}
-        <span>${text}</span>
-      </div>
+      ${iconSvg}
+      <span style="color:#FFFFFF;letter-spacing:0.01em;">${text}</span>
     `;
+
     document.body.appendChild(toast);
-    setTimeout(() => toast.classList.remove("translate-y-8", "opacity-0"), 50);
+
+    // Trigger smooth fade & slide up
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        toast.style.opacity = "1";
+        toast.style.transform = "translateY(0px)";
+      }, 10);
+    });
+
+    // Auto-dismiss after 2.6s
     setTimeout(() => {
-      toast.classList.add("translate-y-8", "opacity-0");
-      setTimeout(() => toast.remove(), 400);
-    }, 3000);
+      toast.style.opacity = "0";
+      toast.style.transform = "translateY(16px)";
+      setTimeout(() => toast.remove(), 300);
+    }, 2600);
   },
 
   // 10. DYNAMIC AREA CHART (Dark Cinematic SVG implementation)
   renderAreaChart: (data, labels, height = 180) => {
-    if (!data || data.length === 0) return `<div class="h-32 bg-[#10121A] rounded-xl border border-[#1F2438] flex items-center justify-center text-xs text-[#8E98B0] font-mono">No chart data available.</div>`;
+    if (!data || data.length === 0) return `<div class="h-32 bg-[#141615] rounded-xl border border-[rgba(242,239,232,0.08)] flex items-center justify-center text-xs text-[#A6A39C] font-mono">No telemetry data recorded.</div>`;
     
     const maxVal = Math.max(...data) || 10;
     const minVal = Math.min(...data) || 0;
@@ -1608,35 +1575,35 @@ export const components = {
       <svg viewBox="0 0 ${chartWidth} ${chartHeight}" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.28" />
-            <stop offset="60%" stop-color="#38BDF8" stop-opacity="0.06" />
-            <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.00" />
+            <stop offset="0%" stop-color="#42D6A4" stop-opacity="0.22" />
+            <stop offset="60%" stop-color="#42D6A4" stop-opacity="0.05" />
+            <stop offset="100%" stop-color="#42D6A4" stop-opacity="0.00" />
           </linearGradient>
         </defs>
         
         <!-- Grid horizontal lines -->
-        <line x1="${leftOffset}" y1="${topOffset}" x2="${chartWidth - rightOffset}" y2="${topOffset}" stroke="#1F2438" stroke-dasharray="3 3" stroke-width="1" />
-        <line x1="${leftOffset}" y1="${topOffset + heightActive / 2}" x2="${chartWidth - rightOffset}" y2="${topOffset + heightActive / 2}" stroke="#1F2438" stroke-dasharray="3 3" stroke-width="1" />
-        <line x1="${leftOffset}" y1="${chartHeight - bottomOffset}" x2="${chartWidth - rightOffset}" y2="${chartHeight - bottomOffset}" stroke="#1F2438" stroke-width="1.2" />
+        <line x1="${leftOffset}" y1="${topOffset}" x2="${chartWidth - rightOffset}" y2="${topOffset}" stroke="rgba(242, 239, 232, 0.07)" stroke-dasharray="3 3" stroke-width="1" />
+        <line x1="${leftOffset}" y1="${topOffset + heightActive / 2}" x2="${chartWidth - rightOffset}" y2="${topOffset + heightActive / 2}" stroke="rgba(242, 239, 232, 0.07)" stroke-dasharray="3 3" stroke-width="1" />
+        <line x1="${leftOffset}" y1="${chartHeight - bottomOffset}" x2="${chartWidth - rightOffset}" y2="${chartHeight - bottomOffset}" stroke="rgba(242, 239, 232, 0.1)" stroke-width="1" />
         
         <!-- Y Axis Labels -->
-        <text x="36" y="${topOffset + 4}" font-size="9" fill="#8E98B0" font-family="'JetBrains Mono', monospace" text-anchor="end">${maxVal >= 1000 ? (maxVal/1000).toFixed(1) + 'k' : maxVal.toFixed(maxVal > 10 ? 0 : 1)}</text>
-        <text x="36" y="${topOffset + heightActive / 2 + 4}" font-size="9" fill="#8E98B0" font-family="'JetBrains Mono', monospace" text-anchor="end">${((maxVal + minVal) / 2) >= 1000 ? (((maxVal + minVal) / 2)/1000).toFixed(1) + 'k' : ((maxVal + minVal) / 2).toFixed(maxVal > 10 ? 0 : 1)}</text>
-        <text x="36" y="${chartHeight - bottomOffset + 4}" font-size="9" fill="#8E98B0" font-family="'JetBrains Mono', monospace" text-anchor="end">${minVal.toFixed(0)}</text>
+        <text x="36" y="${topOffset + 4}" font-size="9" fill="#A6A39C" font-family="'JetBrains Mono', monospace" text-anchor="end">${maxVal >= 1000 ? (maxVal/1000).toFixed(1) + 'k' : maxVal.toFixed(maxVal > 10 ? 0 : 1)}</text>
+        <text x="36" y="${topOffset + heightActive / 2 + 4}" font-size="9" fill="#A6A39C" font-family="'JetBrains Mono', monospace" text-anchor="end">${((maxVal + minVal) / 2) >= 1000 ? (((maxVal + minVal) / 2)/1000).toFixed(1) + 'k' : ((maxVal + minVal) / 2).toFixed(maxVal > 10 ? 0 : 1)}</text>
+        <text x="36" y="${chartHeight - bottomOffset + 4}" font-size="9" fill="#A6A39C" font-family="'JetBrains Mono', monospace" text-anchor="end">${minVal.toFixed(0)}</text>
         
         <!-- Path -->
         <path d="${dArea}" fill="url(#${gradId})" />
-        <path d="${dLine}" fill="none" stroke="#38BDF8" stroke-width="2" class="chart-draw-line" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="${dLine}" fill="none" stroke="#42D6A4" stroke-width="2" class="chart-draw-line" stroke-linecap="round" stroke-linejoin="round" />
         
         <!-- Circle points -->
         ${points.map(p => `
-          <circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#07080B" stroke="#38BDF8" stroke-width="2" class="cursor-pointer hover:r-5 transition-all" />
+          <circle cx="${p.x}" cy="${p.y}" r="3.5" fill="#0B0C0D" stroke="#42D6A4" stroke-width="1.8" class="cursor-pointer hover:r-5 transition-all" />
         `).join("")}
         
         <!-- X Axis Labels -->
         ${labels.map((lbl, idx) => {
           const x = leftOffset + (idx * (widthActive / (labels.length - 1)));
-          return `<text x="${x}" y="${chartHeight - 6}" font-size="9" fill="#8E98B0" font-family="'Inter', sans-serif" text-anchor="middle">${lbl}</text>`;
+          return `<text x="${x}" y="${chartHeight - 6}" font-size="9" fill="#A6A39C" font-family="'JetBrains Mono', monospace" text-anchor="middle">${lbl}</text>`;
         }).join("")}
       </svg>
     `;
@@ -1644,7 +1611,7 @@ export const components = {
 
   // 11. DYNAMIC DONUT CHART (Dark Cinematic SVG implementation)
   renderDonutChart: (data) => {
-    const defaultColors = ["#38BDF8", "#818CF8", "#34D399", "#F59E0B", "#F43F5E", "#94A3B8"];
+    const defaultColors = ["#42D6A4", "#FF7849", "#38BDF8", "#A78BFA", "#F59E0B", "#A6A39C"];
     const total = data.reduce((acc, curr) => acc + curr.value, 0) || 1;
     const radius = 48;
     const circ = 2 * Math.PI * radius;
@@ -1662,12 +1629,12 @@ export const components = {
     return `
       <div class="flex items-center gap-6 w-full justify-around select-none">
         <svg viewBox="0 0 120 120" class="w-28 h-28 transform -rotate-90 shrink-0">
-          <circle cx="60" cy="60" r="${radius}" fill="none" stroke="#1F2438" stroke-width="12" />
+          <circle cx="60" cy="60" r="${radius}" fill="none" stroke="rgba(242, 239, 232, 0.08)" stroke-width="10" />
           ${slices.map(item => `
             <circle cx="60" cy="60" r="${radius}" 
               fill="none" 
               stroke="${item.color}" 
-              stroke-width="12" 
+              stroke-width="10" 
               stroke-dasharray="${item.strokeLength} ${circ - item.strokeLength}"
               stroke-dashoffset="${-item.strokeOffset}"
               stroke-linecap="round"
@@ -1681,9 +1648,9 @@ export const components = {
             <div class="flex items-center justify-between text-xs font-mono">
               <div class="flex items-center gap-2 min-w-0">
                 <div class="w-2 h-2 rounded-full shrink-0" style="background-color: ${item.color}"></div>
-                <span class="text-white truncate">${item.name}</span>
+                <span class="text-[#F2EFE8] truncate font-sans">${item.name}</span>
               </div>
-              <span class="text-[#8E98B0] pl-2">${item.percentage.toFixed(0)}%</span>
+              <span class="text-[#A6A39C] pl-2">${item.percentage.toFixed(0)}%</span>
             </div>
           `).join("")}
         </div>
@@ -1709,7 +1676,7 @@ export const components = {
 };
 
 function getSidebarIconSvg(iconName, isActive) {
-  const activeColor = isActive ? "text-brand-primary" : "text-brand-muted group-hover:text-brand-text";
+  const activeColor = isActive ? "text-[#42D6A4]" : "text-[#A6A39C] group-hover:text-[#F2EFE8]";
   
   if (iconName === "grid") {
     return `<svg class="w-4 h-4 ${activeColor}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>`;

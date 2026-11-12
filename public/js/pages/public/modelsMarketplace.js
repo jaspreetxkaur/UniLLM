@@ -1,4 +1,4 @@
-// PUBLIC / APP PAGE: modelsMarketplace (Redesigned for Screen 06 Dark Cinematic Model Catalogue)
+// PUBLIC / APP PAGE: modelsMarketplace (Obsidian Model Catalogue)
 import { apiService } from "../../apiService.js?v=2";
 import { components } from "../../components.js?v=2";
 import { router } from "../../router.js?v=2";
@@ -8,49 +8,54 @@ export function modelsMarketplace() {
   const models = apiService.getModels() || [];
   
   return `
-    <div class="relative overflow-hidden w-full bg-[#07080B] text-white">
-      <div class="relative w-full max-w-7xl mx-auto px-6 lg:px-12 py-10 flex flex-col gap-8 animate-fade-in-up">
+    <div class="relative overflow-hidden w-full bg-[#0B0C0D] text-[#F2EFE8] font-sans">
+      <div class="relative w-full max-w-[1400px] mx-auto px-6 lg:px-12 py-12 flex flex-col gap-8">
         
-        <!-- Header (Screen 06) -->
-        <div class="flex flex-col gap-1 select-none text-left">
-          <h1 class="font-sans font-bold text-3xl text-white tracking-tight">Models</h1>
-          <p class="text-xs text-[#8E98B0]">Access 50+ leading AI models through one API.</p>
+        <!-- Header -->
+        <div class="flex flex-col gap-2 text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#141615] border border-[rgba(242,239,232,0.14)] text-[11px] font-mono tracking-wider text-[#A6A39C] uppercase self-start">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            <span>Universal Model Registry</span>
+            <span class="text-white/20">•</span>
+            <span class="text-white">50+ Frontier Targets</span>
+          </div>
+          <h1 class="font-sans font-extrabold text-3xl sm:text-4xl text-white tracking-tight">Frontier Model Registry</h1>
+          <p class="text-sm text-[#A6A39C]">Compare token pricing, latency telemetry, context windows, and fallback compatibility across all major foundation providers.</p>
         </div>
 
-        <!-- Filter Pills Bar & Search (Screen 06) -->
+        <!-- Filter Pills Bar & Search -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 select-none">
           
           <!-- Category Pills -->
           <div class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
-            <button class="category-pill active px-4 py-1.5 rounded-full text-xs font-medium bg-white text-[#07080B] transition-all shrink-0" data-category="all">All</button>
-            <button class="category-pill px-4 py-1.5 rounded-full text-xs font-medium bg-[#10121A] text-[#8E98B0] hover:text-white border border-[#1F2438] transition-all shrink-0" data-category="llm">LLMs</button>
-            <button class="category-pill px-4 py-1.5 rounded-full text-xs font-medium bg-[#10121A] text-[#8E98B0] hover:text-white border border-[#1F2438] transition-all shrink-0" data-category="vision">Vision</button>
-            <button class="category-pill px-4 py-1.5 rounded-full text-xs font-medium bg-[#10121A] text-[#8E98B0] hover:text-white border border-[#1F2438] transition-all shrink-0" data-category="embedding">Embedding</button>
-            <button class="category-pill px-4 py-1.5 rounded-full text-xs font-medium bg-[#10121A] text-[#8E98B0] hover:text-white border border-[#1F2438] transition-all shrink-0" data-category="audio">Audio</button>
-            <button class="category-pill px-4 py-1.5 rounded-full text-xs font-medium bg-[#10121A] text-[#8E98B0] hover:text-white border border-[#1F2438] transition-all shrink-0" data-category="moderation">Moderation</button>
+            <button class="category-pill active px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#FF7849] text-[#0B0C0D] transition-all shrink-0 cursor-pointer shadow-[0_2px_15px_rgba(255,120,73,0.3)]" data-category="all">All Models</button>
+            <button class="category-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-[#141615] text-[#A6A39C] hover:text-white border border-[rgba(242,239,232,0.14)] transition-all shrink-0 cursor-pointer" data-category="llm">LLMs</button>
+            <button class="category-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-[#141615] text-[#A6A39C] hover:text-white border border-[rgba(242,239,232,0.14)] transition-all shrink-0 cursor-pointer" data-category="vision">Vision</button>
+            <button class="category-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-[#141615] text-[#A6A39C] hover:text-white border border-[rgba(242,239,232,0.14)] transition-all shrink-0 cursor-pointer" data-category="embedding">Embedding</button>
+            <button class="category-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-[#141615] text-[#A6A39C] hover:text-white border border-[rgba(242,239,232,0.14)] transition-all shrink-0 cursor-pointer" data-category="audio">Audio</button>
+            <button class="category-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-[#141615] text-[#A6A39C] hover:text-white border border-[rgba(242,239,232,0.14)] transition-all shrink-0 cursor-pointer" data-category="moderation">Moderation</button>
           </div>
 
           <!-- Search & View Toggle -->
           <div class="flex items-center gap-3">
             <div class="relative w-full sm:w-64">
-              <svg class="w-3.5 h-3.5 text-[#8E98B0] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              <input type="text" id="model-search" placeholder="Search models..." class="w-full pl-9 pr-3 py-1.5 rounded-lg bg-[#10121A] border border-[#1F2438] text-xs text-white placeholder-[#8E98B0]/60 outline-none focus:border-[#38BDF8] transition-colors" />
+              <input type="text" id="model-search" placeholder="Search by name, provider..." class="w-full px-3 py-1.5 rounded-lg bg-[#141615] border border-[rgba(242,239,232,0.14)] text-xs text-white placeholder-[#A6A39C]/60 outline-none focus:border-white/50 transition-colors" />
             </div>
 
             <!-- View Switcher -->
-            <div class="flex items-center border border-[#1F2438] rounded-lg p-0.5 bg-[#10121A] shrink-0">
-              <button id="view-grid-btn" class="px-2.5 py-1 rounded text-xs font-medium bg-[#161926] text-white transition-all" title="Card Grid View">
+            <div class="flex items-center border border-[rgba(242,239,232,0.14)] rounded-lg p-0.5 bg-[#141615] shrink-0 font-mono text-xs">
+              <button id="view-grid-btn" class="px-3 py-1 rounded-md text-xs font-semibold bg-[#1A1D1B] text-white transition-all" title="Grid View">
                 Grid
               </button>
-              <button id="view-table-btn" class="px-2.5 py-1 rounded text-xs font-medium text-[#8E98B0] hover:text-white transition-all" title="Table View">
+              <button id="view-table-btn" class="px-3 py-1 rounded-md text-xs font-semibold text-[#A6A39C] hover:text-white transition-all" title="Table View">
                 Table
               </button>
             </div>
           </div>
         </div>
 
-        <!-- GRID VIEW CONTAINER (Screen 06 Dark Model Cards) -->
-        <div id="models-grid-view" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- GRID VIEW CONTAINER -->
+        <div id="models-grid-view" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           ${models.map(m => {
             const rawIn = m.inputCost ?? m.inputCost1M ?? 0;
             const rawOut = m.outputCost ?? m.outputCost1M ?? 0;
@@ -60,111 +65,112 @@ export function modelsMarketplace() {
             const provider = (m.provider || "Standard").toLowerCase();
             const type = m.type || "LLM";
             
-            // Provider logo
-            let iconSvg = `<span class="text-xs font-mono font-bold text-white uppercase">${provider.slice(0, 2)}</span>`;
-            if (provider.includes("openai")) {
-              iconSvg = `<svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M22.28 10.05a5.57 5.57 0 0 0-.46-4.41 5.68 5.68 0 0 0-4.88-2.83 5.76 5.76 0 0 0-1.87.31 5.6 5.6 0 0 0-3.92-1.74A5.67 5.67 0 0 0 6 3.65a5.71 5.71 0 0 0-3.7 2.68 5.63 5.63 0 0 0 .74 6.24 5.6 5.6 0 0 0 .46 4.41 5.67 5.67 0 0 0 4.88 2.83c.63 0 1.25-.1 1.84-.31a5.61 5.61 0 0 0 3.94 1.74c2.8 0 5.16-2.03 5.6-4.74a5.67 5.67 0 0 0 3.7-2.68 5.6 5.6 0 0 0-.74-3.77z"/></svg>`;
-            } else if (provider.includes("anthropic")) {
-              iconSvg = `<div class="w-5 h-5 rounded-md bg-[#D97706]/20 flex items-center justify-center font-bold text-[#F59E0B] text-xs">A</div>`;
-            } else if (provider.includes("google") || provider.includes("gemini")) {
-              iconSvg = `<div class="w-5 h-5 rounded-md bg-blue-500/20 flex items-center justify-center font-bold text-[#38BDF8] text-xs">G</div>`;
-            } else if (provider.includes("meta") || provider.includes("llama")) {
-              iconSvg = `<svg class="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm0-8h-2V7h2v2zm4 8h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>`;
-            } else if (provider.includes("mistral")) {
-              iconSvg = `<div class="w-5 h-5 rounded-md bg-amber-500/20 flex items-center justify-center font-mono font-bold text-amber-400 text-xs">M</div>`;
-            } else if (provider.includes("cohere")) {
-              iconSvg = `<div class="w-5 h-5 rounded-md bg-teal-500/20 flex items-center justify-center font-mono font-bold text-teal-400 text-xs">Co</div>`;
-            }
-
             return `
-              <div class="model-card-item rounded-xl bg-[#10121A] border border-[#1F2438] hover:border-[#38BDF8]/40 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_-10px_rgba(56,189,248,0.12)] p-5 flex flex-col justify-between gap-4 transition-all duration-200 group" data-name="${m.name.toLowerCase()}" data-provider="${provider}" data-category="${type.toLowerCase()}">
+              <div class="model-card-item rounded-xl bg-[#141615] border border-[rgba(242,239,232,0.14)] hover:border-white/40 p-5 flex flex-col justify-between gap-4 transition-all duration-200 group" data-name="${m.name.toLowerCase()}" data-provider="${provider}" data-category="${type.toLowerCase()}">
                 
-                <!-- Card Top: Provider Icon & Chat Button (Screen 06) -->
+                <!-- Card Top: Provider & Detail Link -->
                 <div class="flex items-center justify-between">
-                  <div class="w-8 h-8 rounded-lg bg-[#161926] border border-[#1F2438] flex items-center justify-center">
-                    ${iconSvg}
+                  <div class="flex items-center gap-2">
+                    <span class="w-7 h-7 rounded-md bg-[#1A1D1B] border border-[rgba(242,239,232,0.14)] flex items-center justify-center font-mono font-bold text-xs text-white uppercase">
+                      ${provider.slice(0, 2)}
+                    </span>
+                    <span class="text-xs font-mono text-[#A6A39C] uppercase">${m.provider || "Standard"}</span>
                   </div>
                   
-                  <a href="/app/playground" data-link class="px-3 py-1 rounded-full bg-[#161926] hover:bg-[#1E2235] text-xs font-medium text-white border border-[#1F2438] hover:border-[#38BDF8]/40 transition-colors">
-                    Chat
+                  <a href="/models/${m.id}" data-link class="px-3 py-1 rounded-md bg-[#1A1D1B] hover:bg-[#20242B] text-xs font-semibold text-white border border-[rgba(242,239,232,0.14)] transition-colors">
+                    Details
                   </a>
                 </div>
 
                 <!-- Model Name & Description -->
                 <div>
-                  <h3 class="font-sans font-bold text-base text-white group-hover:text-[#38BDF8] transition-colors">
+                  <h3 class="font-sans font-bold text-base text-white group-hover:text-neutral-200 transition-colors">
                     ${m.name}
                   </h3>
-                  <p class="text-xs text-[#8E98B0] mt-1 line-clamp-2 leading-relaxed">
+                  <p class="text-xs text-[#A6A39C] mt-1 line-clamp-2 leading-relaxed">
                     ${m.description || "High-performance inference with unified token routing."}
                   </p>
                 </div>
 
-                <!-- Footer: Specs & View Link -->
-                <div class="flex items-center justify-between pt-3 border-t border-[#1F2438]/70 text-xs">
-                  <span class="text-[#8E98B0] font-mono text-[11px]">$${inCost} / $${outCost} M</span>
-                  <a href="/models/${m.id}" data-link class="inline-flex items-center gap-1 text-[#8E98B0] group-hover:text-white font-medium transition-colors">
-                    <span>View</span>
+                <!-- Specs & Metrics -->
+                <div class="pt-3 border-t border-[rgba(242,239,232,0.14)] grid grid-cols-3 gap-2 font-mono text-[11px]">
+                  <div>
+                    <span class="text-[#A6A39C] text-[10px] block">In / 1M</span>
+                    <span class="text-white font-semibold">$${inCost}</span>
+                  </div>
+                  <div>
+                    <span class="text-[#A6A39C] text-[10px] block">Out / 1M</span>
+                    <span class="text-white font-semibold">$${outCost}</span>
+                  </div>
+                  <div>
+                    <span class="text-[#A6A39C] text-[10px] block">P95 Latency</span>
+                    <span class="text-emerald-400 font-semibold">${latency}ms</span>
+                  </div>
+                </div>
+
+                <!-- Footer Action -->
+                <div class="flex items-center justify-between pt-1">
+                  <span class="text-[10px] font-mono text-[#A6A39C]">Context: ${m.contextLength || "128k"}</span>
+                  <a href="/app/playground?model=${encodeURIComponent(m.id)}" data-link class="text-xs font-semibold text-white hover:text-neutral-300 transition-colors inline-flex items-center gap-1">
+                    <span>Try in Playground</span>
                     <span>→</span>
                   </a>
                 </div>
-
               </div>
             `;
           }).join("")}
         </div>
 
-        <!-- TABLE VIEW CONTAINER (Hidden by Default) -->
-        <div id="models-table-view" class="hidden rounded-xl border border-[#1F2438] bg-[#10121A] overflow-hidden select-text">
-          <table class="w-full text-xs text-left">
-            <thead class="bg-[#0D0E15] text-[10px] font-mono uppercase tracking-wider text-[#8E98B0] border-b border-[#1F2438] select-none">
-              <tr>
-                <th class="px-5 py-3.5">Model Name</th>
-                <th class="px-5 py-3.5">Provider</th>
-                <th class="px-5 py-3.5">Type</th>
-                <th class="px-5 py-3.5">Input / 1M</th>
-                <th class="px-5 py-3.5">Output / 1M</th>
-                <th class="px-5 py-3.5">Avg Latency</th>
-                <th class="px-5 py-3.5 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-[#1F2438]/70 text-[#8E98B0] font-mono">
-              ${models.map(m => {
-                const rawIn = m.inputCost ?? m.inputCost1M ?? 0;
-                const rawOut = m.outputCost ?? m.outputCost1M ?? 0;
-                const inCost = rawIn > 0 && rawIn < 0.1 ? rawIn.toFixed(3).replace(/0$/, '') : rawIn.toFixed(2);
-                const outCost = rawOut.toFixed(2);
-                const latency = m.latency ?? m.averageLatency ?? 280;
-                const provider = (m.provider || "Standard").toLowerCase();
-                const type = m.type || "LLM";
+        <!-- TABLE VIEW CONTAINER -->
+        <div id="models-table-view" class="hidden rounded-xl border border-[rgba(242,239,232,0.14)] bg-[#141615] overflow-hidden font-mono text-xs">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead>
+                <tr class="border-b border-[rgba(242,239,232,0.14)] bg-[#0B0C0D] text-[#A6A39C] text-[10px] uppercase tracking-wider">
+                  <th class="px-6 py-4">Model Name</th>
+                  <th class="px-6 py-4">Provider</th>
+                  <th class="px-6 py-4">Context</th>
+                  <th class="px-6 py-4">Input / 1M</th>
+                  <th class="px-6 py-4">Output / 1M</th>
+                  <th class="px-6 py-4">Avg Latency</th>
+                  <th class="px-6 py-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[rgba(242,239,232,0.14)] text-[#A6A39C]">
+                ${models.map(m => {
+                  const rawIn = m.inputCost ?? m.inputCost1M ?? 0;
+                  const rawOut = m.outputCost ?? m.outputCost1M ?? 0;
+                  const inCost = rawIn > 0 && rawIn < 0.1 ? rawIn.toFixed(3).replace(/0$/, '') : rawIn.toFixed(2);
+                  const outCost = rawOut.toFixed(2);
+                  const latency = m.latency ?? m.averageLatency ?? 280;
+                  const provider = (m.provider || "Standard").toLowerCase();
 
-                return `
-                  <tr class="model-row-item hover:bg-[#161926]/40 transition-colors" data-name="${m.name.toLowerCase()}" data-provider="${provider}">
-                    <td class="px-5 py-3.5 font-sans font-bold text-white">
-                      <a href="/models/${m.id}" data-link class="hover:text-[#38BDF8] transition-colors">${m.name}</a>
-                    </td>
-                    <td class="px-5 py-3.5 uppercase text-xs">${provider}</td>
-                    <td class="px-5 py-3.5 text-xs font-sans text-white">${type}</td>
-                    <td class="px-5 py-3.5 text-white">$${inCost}</td>
-                    <td class="px-5 py-3.5 text-white">$${outCost}</td>
-                    <td class="px-5 py-3.5 text-white">${latency}ms</td>
-                    <td class="px-5 py-3.5 text-right">
-                      <a href="/app/playground" data-link class="px-3 py-1 rounded-full bg-[#161926] hover:bg-[#1E2235] text-xs font-sans font-medium text-white border border-[#1F2438] transition-colors">
-                        Chat
-                      </a>
-                    </td>
-                  </tr>
-                `;
-              }).join("")}
-            </tbody>
-          </table>
+                  return `
+                    <tr class="model-row-item hover:bg-[#1A1D1B] transition-colors" data-name="${m.name.toLowerCase()}" data-provider="${provider}">
+                      <td class="px-6 py-3.5 font-bold text-white font-sans">${m.name}</td>
+                      <td class="px-6 py-3.5 uppercase text-xs">${m.provider || "Standard"}</td>
+                      <td class="px-6 py-3.5">${m.contextLength || "128k"}</td>
+                      <td class="px-6 py-3.5 text-white">$${inCost}</td>
+                      <td class="px-6 py-3.5 text-white">$${outCost}</td>
+                      <td class="px-6 py-3.5 text-emerald-400 font-bold">${latency}ms</td>
+                      <td class="px-6 py-3.5 text-right font-sans">
+                        <a href="/app/playground?model=${encodeURIComponent(m.id)}" data-link class="px-3 py-1 rounded bg-[#1A1D1B] hover:bg-[#20242B] text-white border border-[rgba(242,239,232,0.14)] text-[11px] font-semibold transition-colors">
+                          Test
+                        </a>
+                      </td>
+                    </tr>
+                  `;
+                }).join("")}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <!-- Empty State (Hidden) -->
-        <div id="models-empty-state" class="hidden py-16 text-center select-none bg-[#10121A] border border-[#1F2438] rounded-xl">
-          <span class="text-3xl">🤖</span>
-          <h3 class="font-bold text-base text-white mt-3">No models found</h3>
-          <p class="text-xs text-[#8E98B0] mt-1">Try broadening your search term or selecting 'All'.</p>
+        <!-- Empty State -->
+        <div id="models-empty-state" class="hidden rounded-xl border border-[rgba(242,239,232,0.14)] bg-[#141615] p-12 text-center flex flex-col items-center gap-3">
+          <span class="text-2xl">🔍</span>
+          <h3 class="text-base font-bold text-white">No models matched your query</h3>
+          <p class="text-xs text-[#A6A39C]">Try searching by foundation provider name or clear filters.</p>
         </div>
 
       </div>
@@ -175,7 +181,6 @@ export function modelsMarketplace() {
 export function bindModelsMarketplace() {
   const searchInput = document.getElementById("model-search");
   const categoryPills = document.querySelectorAll(".category-pill");
-  
   const viewGridBtn = document.getElementById("view-grid-btn");
   const viewTableBtn = document.getElementById("view-table-btn");
   const gridView = document.getElementById("models-grid-view");
@@ -190,15 +195,15 @@ export function bindModelsMarketplace() {
 
   // View Switchers
   viewGridBtn?.addEventListener("click", () => {
-    viewGridBtn.className = "px-2.5 py-1 rounded text-xs font-medium bg-[#161926] text-white transition-all";
-    viewTableBtn.className = "px-2.5 py-1 rounded text-xs font-medium text-[#8E98B0] hover:text-white transition-all";
+    viewGridBtn.className = "px-3 py-1 rounded-md text-xs font-semibold bg-[#1A1D1B] text-white transition-all";
+    viewTableBtn.className = "px-3 py-1 rounded-md text-xs font-semibold text-[#A6A39C] hover:text-white transition-all";
     if (gridView) gridView.classList.remove("hidden");
     if (tableView) tableView.classList.add("hidden");
   });
 
   viewTableBtn?.addEventListener("click", () => {
-    viewTableBtn.className = "px-2.5 py-1 rounded text-xs font-medium bg-[#161926] text-white transition-all";
-    viewGridBtn.className = "px-2.5 py-1 rounded text-xs font-medium text-[#8E98B0] hover:text-white transition-all";
+    viewTableBtn.className = "px-3 py-1 rounded-md text-xs font-semibold bg-[#1A1D1B] text-white transition-all";
+    viewGridBtn.className = "px-3 py-1 rounded-md text-xs font-semibold text-[#A6A39C] hover:text-white transition-all";
     if (tableView) tableView.classList.remove("hidden");
     if (gridView) gridView.classList.add("hidden");
   });
@@ -241,7 +246,7 @@ export function bindModelsMarketplace() {
       if (tableView) tableView.classList.add("hidden");
     } else {
       if (emptyState) emptyState.classList.add("hidden");
-      const isGrid = viewGridBtn?.classList.contains("bg-[#161926]");
+      const isGrid = viewGridBtn?.classList.contains("bg-[#1A1D1B]");
       if (isGrid) {
         if (gridView) gridView.classList.remove("hidden");
         if (tableView) tableView.classList.add("hidden");
@@ -260,9 +265,9 @@ export function bindModelsMarketplace() {
   categoryPills.forEach(pill => {
     pill.addEventListener("click", () => {
       categoryPills.forEach(x => {
-        x.className = "category-pill px-4 py-1.5 rounded-full text-xs font-medium bg-[#10121A] text-[#8E98B0] hover:text-white border border-[#1F2438] transition-all shrink-0";
+        x.className = "category-pill px-3.5 py-1.5 rounded-lg text-xs font-mono bg-[#141615] text-[#A6A39C] hover:text-white border border-[rgba(242,239,232,0.14)] transition-all shrink-0 cursor-pointer";
       });
-      pill.className = "category-pill active px-4 py-1.5 rounded-full text-xs font-medium bg-white text-[#07080B] transition-all shrink-0";
+      pill.className = "category-pill active px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-[#FF7849] text-[#0B0C0D] transition-all shrink-0 cursor-pointer shadow-[0_2px_15px_rgba(255,120,73,0.3)]";
       
       activeCategory = pill.getAttribute("data-category") || "all";
       applyFilters();

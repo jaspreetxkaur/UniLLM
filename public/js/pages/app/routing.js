@@ -8,19 +8,19 @@ export function appRouting() {
     <div class="flex flex-col gap-6 animate-fade-in-up font-sans relative overflow-hidden select-none">
       <div class="flex justify-between items-center">
         <div class="flex flex-col gap-1">
-          <span class="text-[9px] font-bold text-brand-primary uppercase tracking-widest">Routing Core</span>
-          <h1 class="font-display font-black text-2xl text-brand-text uppercase leading-none">Dynamic Routing Engine</h1>
-          <p class="text-xs text-brand-muted font-semibold">Enforce server-side routing policies by matching prompt criteria and model fallbacks.</p>
+          <span class="text-[9px] font-bold text-white uppercase tracking-widest">Routing Core</span>
+          <h1 class="font-display font-black text-2xl text-white uppercase leading-none">Dynamic Routing Engine</h1>
+          <p class="text-xs text-[#A1A5AD] font-semibold">Enforce server-side routing policies by matching prompt criteria and model fallbacks.</p>
         </div>
-        <button id="add-rule-btn" class="text-xs font-bold px-4 py-2.5 bg-brand-primary hover:bg-indigo-700 text-white rounded-lg transition-all shadow-sm uppercase tracking-wider font-bold">
+        <button id="add-rule-btn" class="text-xs font-bold px-4 py-2.5 bg-white hover:bg-neutral-200 text-black rounded-lg transition-all shadow-sm uppercase tracking-wider font-bold">
           Create Rule
         </button>
       </div>
       
       <div id="routing-rules-container" class="flex flex-col gap-4">
-        <div class="border border-[#1F2438] bg-[#10121A] rounded-xl p-8 shadow-sm text-center text-[#8E98B0]">
+        <div class="border border-[#292D34] bg-[#101216] rounded-xl p-8 shadow-sm text-center text-[#A1A5AD]">
           <div class="flex items-center justify-center gap-2">
-            <svg class="animate-spin h-4 w-4 text-[#38BDF8]" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+            <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
             <span>Loading routing policies from database...</span>
           </div>
         </div>
@@ -28,45 +28,45 @@ export function appRouting() {
     </div>
 
     <!-- Add Rule Modal Overlay -->
-    <div id="rule-modal" class="fixed inset-0 z-50 bg-[#07080B]/80 backdrop-blur-sm hidden items-center justify-center p-4">
-      <div class="w-full max-w-md bg-[#10121A] border border-[#1F2438] rounded-xl p-6 shadow-2xl animate-fade-in-up">
-        <div class="flex justify-between items-center pb-3 border-b border-[#1F2438] mb-4">
+    <div id="rule-modal" class="fixed inset-0 z-50 bg-[#08090B]/80 backdrop-blur-sm hidden items-center justify-center p-4">
+      <div class="w-full max-w-md bg-[#101216] border border-[#292D34] rounded-xl p-6 shadow-2xl animate-fade-in-up">
+        <div class="flex justify-between items-center pb-3 border-b border-[#292D34] mb-4">
           <span class="font-display font-bold text-sm text-white uppercase tracking-wider">Create Routing Policy</span>
-          <button id="rule-modal-close" class="p-1.5 hover:bg-[#161926] rounded-lg text-[#8E98B0]">
+          <button id="rule-modal-close" class="p-1.5 hover:bg-[#15181D] rounded-lg text-[#A1A5AD]">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
         </div>
         
         <form id="rule-modal-form" class="flex flex-col gap-4 font-semibold text-xs text-white">
           <div class="flex flex-col gap-1.5">
-            <label class="text-[9px] uppercase tracking-wider text-[#8E98B0]">Policy Name</label>
-            <input id="rule-name-input" type="text" required placeholder="e.g. Code Keyword Router" class="p-3 border border-[#1F2438] rounded-lg bg-[#07080B] text-white placeholder-[#8E98B0]/60 focus:bg-[#07080B] focus:border-[#38BDF8] outline-none font-semibold text-xs" />
+            <label class="text-[9px] uppercase tracking-wider text-[#A1A5AD]">Policy Name</label>
+            <input id="rule-name-input" type="text" required placeholder="e.g. Code Keyword Router" class="p-3 border border-[#292D34] rounded-lg bg-[#08090B] text-white placeholder-[#A1A5AD]/60 focus:bg-[#08090B] focus:border-white outline-none font-semibold text-xs" />
           </div>
 
           <div class="flex flex-col gap-1.5">
-            <label class="text-[9px] uppercase tracking-wider text-[#8E98B0]">Evaluation Priority (1 = Highest)</label>
-            <input id="rule-priority-input" type="number" required value="10" min="1" max="1000" class="p-2.5 border border-[#1F2438] rounded-lg bg-[#07080B] text-white placeholder-[#8E98B0]/60 focus:bg-[#07080B] focus:border-[#38BDF8] outline-none font-mono text-xs" />
+            <label class="text-[9px] uppercase tracking-wider text-[#A1A5AD]">Evaluation Priority (1 = Highest)</label>
+            <input id="rule-priority-input" type="number" required value="10" min="1" max="1000" class="p-2.5 border border-[#292D34] rounded-lg bg-[#08090B] text-white placeholder-[#A1A5AD]/60 focus:bg-[#08090B] focus:border-white outline-none font-mono text-xs" />
           </div>
           
-          <div class="flex flex-col gap-3 bg-[#161926] border border-[#1F2438] rounded-lg p-4 select-none">
+          <div class="flex flex-col gap-3 bg-[#15181D] border border-[#292D34] rounded-lg p-4 select-none">
             <div class="flex flex-wrap items-center gap-3">
-              <span class="font-black text-[#38BDF8]">IF</span>
-              <select id="rule-cond-type" class="p-2 border border-[#1F2438] rounded bg-[#10121A] text-white font-semibold text-xs outline-none">
+              <span class="font-black text-white">IF</span>
+              <select id="rule-cond-type" class="p-2 border border-[#292D34] rounded bg-[#101216] text-white font-semibold text-xs outline-none">
                 <option value="keyword">Prompt Contains Keyword</option>
                 <option value="model">Requested Model Is</option>
                 <option value="always">Always Apply (Default)</option>
               </select>
-              <span class="text-[#8E98B0] font-bold">=</span>
-              <input type="text" id="rule-cond-val" placeholder="e.g. python, debug, sql" class="p-2 border border-[#1F2438] rounded font-mono text-xs flex-grow outline-none bg-[#10121A] text-white placeholder-[#8E98B0]/60" />
+              <span class="text-[#A1A5AD] font-bold">=</span>
+              <input type="text" id="rule-cond-val" placeholder="e.g. python, debug, sql" class="p-2 border border-[#292D34] rounded font-mono text-xs flex-grow outline-none bg-[#101216] text-white placeholder-[#A1A5AD]/60" />
             </div>
             
             <div class="flex flex-wrap items-center gap-3">
-              <span class="font-black text-[#818CF8]">THEN</span>
-              <select id="rule-action-type" class="p-2 border border-[#1F2438] rounded bg-[#10121A] text-white font-semibold text-xs outline-none">
+              <span class="font-black text-[#F5F5F5]">THEN</span>
+              <select id="rule-action-type" class="p-2 border border-[#292D34] rounded bg-[#101216] text-white font-semibold text-xs outline-none">
                 <option value="route_model">Route to Target Model</option>
                 <option value="fallback_chain">Fallback Chain</option>
               </select>
-              <select id="rule-target-model" class="p-2 border border-[#1F2438] rounded bg-[#10121A] text-white font-semibold text-xs outline-none">
+              <select id="rule-target-model" class="p-2 border border-[#292D34] rounded bg-[#101216] text-white font-semibold text-xs outline-none">
                 <option value="gemini-3.6-flash">Gemini 3.6 Flash (Fast)</option>
                 <option value="gemini-3.7-flash">Gemini 3.7 Flash (Reasoning)</option>
                 <option value="gemini-flash-latest">Gemini Flash (Latest)</option>
@@ -76,7 +76,7 @@ export function appRouting() {
             </div>
           </div>
           
-          <button type="submit" id="submit-rule-btn" class="w-full py-3.5 bg-[#38BDF8] hover:bg-sky-400 text-[#07080B] font-bold rounded-lg uppercase tracking-wider transition-colors shadow-sm">
+          <button type="submit" id="submit-rule-btn" class="w-full py-3.5 bg-white hover:bg-sky-400 text-[#08090B] font-bold rounded-lg uppercase tracking-wider transition-colors shadow-sm">
             Publish Routing Policy
           </button>
         </form>
@@ -99,7 +99,7 @@ export async function bindAppRouting() {
 
     if (!policies || policies.length === 0) {
       container.innerHTML = `
-        <div class="border border-dashed border-[#1F2438] rounded-xl p-8 text-center text-[#8E98B0] text-xs bg-[#10121A]">
+        <div class="border border-dashed border-[#292D34] rounded-xl p-8 text-center text-[#A1A5AD] text-xs bg-[#101216]">
           <p class="font-bold">No custom routing policies configured yet.</p>
           <p class="text-[11px] mt-1">Click "Create Rule" above to add dynamic model routing conditions.</p>
         </div>
@@ -130,26 +130,26 @@ export async function bindAppRouting() {
       }
 
       return `
-        <div class="border border-[#1F2438] bg-[#10121A] rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-semibold text-xs text-white">
+        <div class="border border-[#292D34] bg-[#101216] rounded-xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-semibold text-xs text-white">
           <div class="flex flex-col gap-1">
             <div class="flex items-center gap-2">
               <span class="font-bold text-white text-sm">${p.name}</span>
-              <span class="text-[8px] font-mono font-bold text-[#8E98B0] border border-[#1F2438] px-1.5 py-0.5 rounded bg-[#161926] uppercase">Priority ${p.priority || 10}</span>
-              <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${isEnabled ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-[#161926] text-[#8E98B0]'}">
+              <span class="text-[8px] font-mono font-bold text-[#A1A5AD] border border-[#292D34] px-1.5 py-0.5 rounded bg-[#15181D] uppercase">Priority ${p.priority || 10}</span>
+              <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${isEnabled ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-[#15181D] text-[#A1A5AD]'}">
                 ${isEnabled ? 'Active' : 'Disabled'}
               </span>
             </div>
-            <div class="flex items-center gap-2 text-[#8E98B0] font-mono text-[11px] mt-1">
+            <div class="flex items-center gap-2 text-[#A1A5AD] font-mono text-[11px] mt-1">
               <span>IF: <strong class="text-white">${condText}</strong></span>
               <span>&rarr;</span>
-              <span>THEN: <strong class="text-[#38BDF8]">${actText}</strong></span>
+              <span>THEN: <strong class="text-white">${actText}</strong></span>
             </div>
           </div>
           <div class="flex items-center gap-2 shrink-0">
-            <button class="toggle-rule-btn text-[10px] font-bold px-3 py-1.5 border border-[#1F2438] rounded hover:bg-[#161926] bg-[#10121A] text-white" data-id="${p.id}">
+            <button class="toggle-rule-btn text-[10px] font-bold px-3 py-1.5 border border-[#292D34] rounded hover:bg-[#15181D] bg-[#101216] text-white" data-id="${p.id}">
               ${isEnabled ? "Disable" : "Enable"}
             </button>
-            <button class="delete-rule-btn text-[10px] font-bold px-3 py-1.5 border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 rounded bg-[#10121A]" data-id="${p.id}">
+            <button class="delete-rule-btn text-[10px] font-bold px-3 py-1.5 border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 rounded bg-[#101216]" data-id="${p.id}">
               Delete
             </button>
           </div>

@@ -1,5 +1,5 @@
 // AUTH PAGE: login
-import { apiService } from "../../apiService.js?v=2";
+import { apiService, extractErrorMessage } from "../../apiService.js?v=2";
 import { components } from "../../components.js?v=2";
 import { router } from "../../router.js?v=2";
 
@@ -150,16 +150,17 @@ export function bindLogin() {
   // Step 1: Submit Credentials
   loginForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const email = document.getElementById("login-email").value;
+    const email = (document.getElementById("login-email").value || "").trim();
     const pass = document.getElementById("login-password").value;
     
     const submitBtn = loginForm.querySelector("button[type='submit']");
+    const originalBtnText = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.innerText = "VERIFYING SECURITY...";
     
     const res = await apiService.login(email, pass);
     submitBtn.disabled = false;
-    submitBtn.innerText = "Authenticate Credentials";
+    submitBtn.innerHTML = originalBtnText;
 
     if (res.success) {
       components.renderToast("success", `Welcome back, ${res.user.name}`);
@@ -184,22 +185,23 @@ export function bindLogin() {
         components.renderToast("success", `Account pending verification. Code: ${res.otp}`);
       }
     } else {
-      components.renderToast("error", res.message || "Access denied. Check credentials.");
+      components.renderToast("error", extractErrorMessage(res, "Access denied. Check credentials."));
     }
   });
 
   // Step 2: Submit OTP code verification
   otpForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const otp = document.getElementById("login-otp-val").value;
+    const otp = (document.getElementById("login-otp-val").value || "").trim();
     const submitBtn = otpForm.querySelector("button[type='submit']");
+    const originalBtnText = submitBtn.innerHTML;
     
     submitBtn.disabled = true;
     submitBtn.innerText = "ACTIVATING SANDBOX...";
 
     const res = await apiService.verifyOtp(unverifiedEmail, otp);
     submitBtn.disabled = false;
-    submitBtn.innerText = "Verify and Activate Account";
+    submitBtn.innerHTML = originalBtnText;
 
     if (res.success) {
       components.renderToast("success", "Account verified and active!");
@@ -211,7 +213,7 @@ export function bindLogin() {
         router.navigate("/app");
       }
     } else {
-      components.renderToast("error", res.message || "Invalid verification code.");
+      components.renderToast("error", extractErrorMessage(res, "Invalid verification code."));
     }
   });
 
@@ -229,16 +231,20 @@ export function bindLogin() {
     resendBtn.disabled = true;
     resendBtn.innerText = "Resending...";
     
-    // Call forgot-password backend endpoint to re-generate OTP for verification
-    const res = await apiService.forgotPassword(unverifiedEmail);
+    const res = await apiService.resendOtp(unverifiedEmail);
     resendBtn.disabled = false;
     resendBtn.innerText = "Resend Code";
 
-    if (res.success && res.otp) {
-      devCode.innerText = res.otp;
-      components.renderToast("success", `New OTP generated: ${res.otp}`);
+    if (res.success) {
+      if (res.otp) {
+        devCode.innerText = res.otp;
+        devAlert.classList.remove("hidden");
+        components.renderToast("success", `New OTP generated: ${res.otp}`);
+      } else {
+        components.renderToast("success", "New verification code generated!");
+      }
     } else {
-      components.renderToast("error", "Error re-generating security code.");
+      components.renderToast("error", extractErrorMessage(res, "Error re-generating security code."));
     }
   });
 }

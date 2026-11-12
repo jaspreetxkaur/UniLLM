@@ -7,7 +7,20 @@ export const policyController = {
    */
   getPolicies: async (req, res) => {
     try {
-      const organizationId = req.user.organizationId;
+      let organizationId = req.user.organizationId;
+      if (!organizationId) {
+        const { OrganizationMember, Organization } = await import('../models/index.js');
+        const member = await OrganizationMember.findOne({ user_id: req.user.id }).lean();
+        if (member) {
+          organizationId = member.organization_id;
+        } else {
+          const org = await Organization.findOne().lean();
+          if (org) organizationId = org._id;
+        }
+      }
+      if (!organizationId) {
+        return res.json({ success: true, policies: [] });
+      }
       const policies = await policyService.getPolicies(organizationId);
       return res.json({ success: true, policies });
     } catch (err) {
@@ -21,7 +34,12 @@ export const policyController = {
    */
   getPolicyById: async (req, res) => {
     try {
-      const organizationId = req.user.organizationId;
+      let organizationId = req.user.organizationId;
+      if (!organizationId) {
+        const { OrganizationMember } = await import('../models/index.js');
+        const member = await OrganizationMember.findOne({ user_id: req.user.id }).lean();
+        if (member) organizationId = member.organization_id;
+      }
       const { id } = req.params;
       const policy = await policyService.getPolicyById(organizationId, id);
       if (!policy) {
@@ -39,7 +57,31 @@ export const policyController = {
    */
   createPolicy: async (req, res) => {
     try {
-      const organizationId = req.user.organizationId;
+      let organizationId = req.user.organizationId;
+      if (!organizationId) {
+        const { OrganizationMember, Organization } = await import('../models/index.js');
+        const member = await OrganizationMember.findOne({ user_id: req.user.id }).lean();
+        if (member) {
+          organizationId = member.organization_id;
+        } else {
+          let org = await Organization.findOne().lean();
+          if (!org) {
+            org = await Organization.create({
+              name: 'Cyberdyne Systems',
+              slug: 'cyberdyne-systems',
+              referral_code: 'CYBER-PROMO'
+            });
+          }
+          organizationId = org._id;
+          await OrganizationMember.create({
+            organization_id: organizationId,
+            user_id: req.user.id,
+            role: 'owner',
+            status: 'active'
+          });
+        }
+        req.user.organizationId = organizationId;
+      }
       const userId = req.user.id;
       const ipAddress = req.ip || req.connection.remoteAddress;
 
@@ -52,7 +94,7 @@ export const policyController = {
       return res.status(201).json({ success: true, message: 'Routing policy created successfully.', policy: created });
     } catch (err) {
       console.error('[Policy Controller Error - createPolicy]:', err);
-      return res.status(500).json({ success: false, message: 'Failed to create routing policy.' });
+      return res.status(500).json({ success: false, message: err.message || 'Failed to create routing policy.' });
     }
   },
 
