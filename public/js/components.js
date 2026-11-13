@@ -654,6 +654,7 @@ export const components = {
     const menuItems = [
       { name: "Overview", path: "/app", icon: "grid" },
       { name: "Playground", path: "/app/playground", icon: "terminal" },
+      { name: "Documents (Multer)", path: "/admin/teams", icon: "file-text" },
       { name: "Models", path: "/app/models", icon: "cpu" },
       { name: "API Keys", path: "/app/api-keys", icon: "key" },
       { name: "Usage", path: "/app/usage", icon: "bar-chart" },
@@ -880,6 +881,7 @@ export const components = {
 
     const adminMenuItems = [
       { name: "Overview", path: "/admin", icon: "shield-alert" },
+      { name: "Documents (Multer)", path: "/admin/teams", icon: "file-text" },
       { name: "Employees Catalog", path: "/admin/employees", icon: "users" },
       { name: "Employee Referral", path: "/admin/referrals", icon: "user-plus" },
       { name: "Team Settings", path: "/admin/teams", icon: "briefcase" },

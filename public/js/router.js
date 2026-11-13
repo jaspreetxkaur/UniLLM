@@ -1,7 +1,7 @@
 // Client-side Router for UniLLM SPA (Single Page Application)
-import { apiService } from "./apiService.js?v=35";
-import { components } from "./components.js?v=35";
-import { pages } from "./pages.js?v=35";
+import { apiService } from "./apiService.js?v=36";
+import { components } from "./components.js?v=36";
+import { pages } from "./pages.js?v=36";
 
 // Helper to convert route path (e.g. '/app/requests/:id') to Regex
 const pathToRegex = (path) => new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");

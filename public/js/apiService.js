@@ -614,6 +614,10 @@ export const apiService = {
     }
   },
 
+  uploadWorkspaceDocument: async function(workspaceId, file) {
+    return this.uploadDocument(workspaceId, file);
+  },
+
   getDocuments: async (workspaceId) => {
     try {
       const response = await fetch(`/api/workspaces/${workspaceId}/documents`, {
@@ -629,6 +633,7 @@ export const apiService = {
   downloadDocument: async (workspaceId, documentId) => {
     try {
       const response = await fetch(`/api/workspaces/${workspaceId}/documents/${documentId}/download`, {
+        headers: apiService.getAuthHeaders(),
         credentials: "same-origin"
       });
       if (!response.ok) {

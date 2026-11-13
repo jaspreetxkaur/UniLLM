@@ -128,6 +128,18 @@ export function appPlayground() {
           
           <!-- Bottom Prompt Input Form -->
           <div class="p-3 border-t border-white/[0.08] bg-[#0A0B0E]/90 backdrop-blur-md">
+            <!-- Multer File Attachment Chip -->
+            <div id="play-attached-file-badge" class="hidden mb-2 px-3 py-1.5 rounded-lg bg-[#141820] border border-emerald-500/30 text-emerald-400 text-xs font-mono flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                <span class="font-bold text-[10px] tracking-wider uppercase text-emerald-400">Multer Attached:</span>
+                <span id="play-attached-name" class="text-white truncate max-w-[200px] text-[11px] font-mono">file.pdf</span>
+                <span class="text-[9px] bg-emerald-500/20 px-1.5 py-0.5 rounded text-emerald-300 font-mono">Uploaded</span>
+              </div>
+              <button type="button" id="play-remove-attach-btn" class="text-neutral-400 hover:text-rose-400 font-bold px-1 text-sm leading-none">&times;</button>
+            </div>
+            <input type="file" id="play-file-input" class="hidden" accept=".pdf,.txt,.json,.md,.csv" />
+
             <form id="play-prompt-form" class="flex items-center gap-2 p-1 rounded-xl bg-[#121419] border border-white/10 focus-within:border-white/30 transition-all">
               <input
                 id="play-input"
@@ -138,10 +150,11 @@ export function appPlayground() {
                 class="flex-1 bg-transparent px-3 py-2 text-xs text-white placeholder-[#8A8F98]/50 outline-none font-sans"
               />
               
-              <!-- Quick Attachment Action -->
+              <!-- Quick Attachment Action (Multer Upload) -->
               <div class="flex items-center gap-1 text-[#8A8F98] px-1">
-                <button type="button" id="play-attach-btn" class="p-1.5 hover:text-white hover:bg-white/5 rounded transition-colors" title="Attach file context">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                <button type="button" id="play-attach-btn" class="p-1.5 hover:text-white hover:bg-white/5 rounded transition-colors flex items-center gap-1" title="Upload document context via Multer">
+                  <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                  <span class="font-mono text-[10px] text-emerald-400 font-bold hidden sm:inline">Upload (Multer)</span>
                 </button>
               </div>
 
@@ -715,10 +728,59 @@ export function bindAppPlayground() {
     components.renderToast("success", "cURL spec copied to clipboard!");
   });
 
+  // Multer Document Attachment in Playground
+  const playAttachBtn = document.getElementById("play-attach-btn");
+  const playFileInput = document.getElementById("play-file-input");
+  const playAttachedBadge = document.getElementById("play-attached-file-badge");
+  const playAttachedName = document.getElementById("play-attached-name");
+  const playRemoveAttachBtn = document.getElementById("play-remove-attach-btn");
+  let activeAttachedDoc = null;
+
+  playAttachBtn?.addEventListener("click", () => {
+    playFileInput?.click();
+  });
+
+  playFileInput?.addEventListener("change", async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      components.renderToast("error", "File exceeds Multer 5MB payload limit.");
+      return;
+    }
+
+    const currentWs = apiService.getActiveWorkspace() || { id: "default" };
+    components.renderToast("info", `Uploading "${file.name}" to Multer engine...`);
+
+    const res = await apiService.uploadDocument(currentWs.id, file);
+    if (res.success) {
+      activeAttachedDoc = res.document || { originalName: file.name };
+      if (playAttachedName) playAttachedName.innerText = file.name;
+      playAttachedBadge?.classList.remove("hidden");
+      components.renderToast("success", `Multer processed & attached: ${file.name}`);
+    } else {
+      components.renderToast("error", extractErrorMessage(res, "Failed to upload file via Multer."));
+    }
+  });
+
+  playRemoveAttachBtn?.addEventListener("click", () => {
+    activeAttachedDoc = null;
+    if (playFileInput) playFileInput.value = "";
+    playAttachedBadge?.classList.add("hidden");
+  });
+
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const prompt = input.value.trim();
     if (!prompt) return;
+
+    let finalPrompt = prompt;
+    if (activeAttachedDoc) {
+      finalPrompt = `${prompt}\n\n[Attached Knowledge Base via Multer: ${activeAttachedDoc.originalName}]`;
+      activeAttachedDoc = null;
+      if (playFileInput) playFileInput.value = "";
+      playAttachedBadge?.classList.add("hidden");
+    }
 
     let currentSession = sessions.find(s => s.id === activeSessionId);
     if (!currentSession) {
@@ -735,7 +797,7 @@ export function bindAppPlayground() {
     currentSession.model = modelSel?.value || "gemini-3.6-flash";
 
     // Save user message to session
-    currentSession.messages.push({ role: 'user', content: prompt });
+    currentSession.messages.push({ role: 'user', content: finalPrompt });
     
     // Ensure active session is at top of sessions history list
     const sIndex = sessions.findIndex(s => s.id === currentSession.id);
