@@ -128,11 +128,11 @@ export function appPlayground() {
           
           <!-- Bottom Prompt Input Form -->
           <div class="p-3 border-t border-white/[0.08] bg-[#0A0B0E]/90 backdrop-blur-md">
-            <!-- Multer File Attachment Chip -->
+            <!-- File Attachment Chip -->
             <div id="play-attached-file-badge" class="hidden mb-2 px-3 py-1.5 rounded-lg bg-[#141820] border border-emerald-500/30 text-emerald-400 text-xs font-mono flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                <span class="font-bold text-[10px] tracking-wider uppercase text-emerald-400">Multer Attached:</span>
+                <span class="font-bold text-[10px] tracking-wider uppercase text-emerald-400">Attached:</span>
                 <span id="play-attached-name" class="text-white truncate max-w-[200px] text-[11px] font-mono">file.pdf</span>
                 <span class="text-[9px] bg-emerald-500/20 px-1.5 py-0.5 rounded text-emerald-300 font-mono">Uploaded</span>
               </div>
@@ -150,11 +150,11 @@ export function appPlayground() {
                 class="flex-1 bg-transparent px-3 py-2 text-xs text-white placeholder-[#8A8F98]/50 outline-none font-sans"
               />
               
-              <!-- Quick Attachment Action (Multer Upload) -->
+              <!-- Quick Attachment Action -->
               <div class="flex items-center gap-1 text-[#8A8F98] px-1">
-                <button type="button" id="play-attach-btn" class="p-1.5 hover:text-white hover:bg-white/5 rounded transition-colors flex items-center gap-1" title="Upload document context via Multer">
+                <button type="button" id="play-attach-btn" class="p-1.5 hover:text-white hover:bg-white/5 rounded transition-colors flex items-center gap-1" title="Upload document context">
                   <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
-                  <span class="font-mono text-[10px] text-emerald-400 font-bold hidden sm:inline">Upload (Multer)</span>
+                  <span class="font-mono text-[10px] text-emerald-400 font-bold hidden sm:inline">Upload File</span>
                 </button>
               </div>
 
@@ -745,21 +745,21 @@ export function bindAppPlayground() {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      components.renderToast("error", "File exceeds Multer 5MB payload limit.");
+      components.renderToast("error", "File exceeds 5MB payload limit.");
       return;
     }
 
     const currentWs = apiService.getActiveWorkspace() || { id: "default" };
-    components.renderToast("info", `Uploading "${file.name}" to Multer engine...`);
+    components.renderToast("info", `Uploading "${file.name}"...`);
 
     const res = await apiService.uploadDocument(currentWs.id, file);
     if (res.success) {
       activeAttachedDoc = res.document || { originalName: file.name };
       if (playAttachedName) playAttachedName.innerText = file.name;
       playAttachedBadge?.classList.remove("hidden");
-      components.renderToast("success", `Multer processed & attached: ${file.name}`);
+      components.renderToast("success", `File attached: ${file.name}`);
     } else {
-      components.renderToast("error", extractErrorMessage(res, "Failed to upload file via Multer."));
+      components.renderToast("error", extractErrorMessage(res, "Failed to upload file."));
     }
   });
 
@@ -776,7 +776,7 @@ export function bindAppPlayground() {
 
     let finalPrompt = prompt;
     if (activeAttachedDoc) {
-      finalPrompt = `${prompt}\n\n[Attached Knowledge Base via Multer: ${activeAttachedDoc.originalName}]`;
+      finalPrompt = `${prompt}\n\n[Attached Knowledge Document: ${activeAttachedDoc.originalName}]`;
       activeAttachedDoc = null;
       if (playFileInput) playFileInput.value = "";
       playAttachedBadge?.classList.add("hidden");

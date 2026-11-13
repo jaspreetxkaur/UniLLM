@@ -28,14 +28,14 @@ export function adminTeams() {
         </div>
       </div>
 
-      <!-- Knowledge Base & Workspace Document Management (Powered by Multer) -->
+      <!-- Knowledge Base & Workspace Document Management -->
       <div id="documents-section" class="border border-[#292D34] bg-[#101216] rounded-2xl p-6 shadow-xl flex flex-col gap-6 mt-4">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#292D34] pb-4">
           <div class="flex flex-col gap-1">
             <div class="flex items-center gap-2">
               <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-widest font-mono">Storage Engine</span>
               <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Multer Engine Active
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Storage Engine Active
               </span>
             </div>
             <h2 class="font-display font-black text-xl text-white uppercase leading-none">Workspace Knowledge Base & Files</h2>
@@ -94,7 +94,7 @@ export function adminTeams() {
           <div class="flex justify-end gap-3 items-center">
             <button type="submit" id="submit-doc-upload-btn" disabled class="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold text-xs rounded-xl shadow-md transition-all flex items-center gap-2 uppercase tracking-wider">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-              Upload via Multer
+              Upload Document
             </button>
           </div>
         </form>
@@ -429,7 +429,7 @@ export async function bindAdminTeams() {
               </button>
               <button class="view-ws-docs-btn text-[10px] font-mono font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 transition-colors" data-id="${w.id}">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                Multer Files
+                Files
               </button>
             </div>
             ${!isDef ? `
@@ -567,14 +567,14 @@ export async function bindAdminTeams() {
 
     // Client-side quick validation
     if (file.size > 5 * 1024 * 1024) {
-      components.renderToast("error", "File exceeds the 5MB maximum limit enforced by Multer.");
+      components.renderToast("error", "File exceeds the 5MB maximum limit.");
       return;
     }
 
     submitDocUploadBtn.disabled = true;
     submitDocUploadBtn.innerHTML = `
       <svg class="animate-spin h-4 w-4 text-black" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
-      Processing in Multer...
+      Uploading document...
     `;
 
     const res = await apiService.uploadDocument(wsId, file);
@@ -582,11 +582,11 @@ export async function bindAdminTeams() {
     submitDocUploadBtn.disabled = false;
     submitDocUploadBtn.innerHTML = `
       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-      Upload via Multer
+      Upload Document
     `;
 
     if (res.success) {
-      components.renderToast("success", `Document "${file.name}" uploaded successfully via Multer!`);
+      components.renderToast("success", `Document "${file.name}" uploaded successfully!`);
       // Clear file input
       if (docFileInput) docFileInput.value = "";
       selectedFileBadge?.classList.add("hidden");
