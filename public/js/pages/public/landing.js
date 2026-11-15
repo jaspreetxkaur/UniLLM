@@ -1051,7 +1051,7 @@ export function landing() {
                 1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8
               </div>
               <pre class="flex-1 text-[#F2EFE8] leading-relaxed" id="editor-code-snippet"><code><span class="text-[#FF7849] font-bold">curl</span> https://api.unillm.com/v1/chat/completions \\
-  -H <span class="text-[#A6A39C]">"Authorization: Bearer sk-unillm-live-token"</span> \\
+  -H <span class="text-[#A6A39C]">"Authorization: Bearer YOUR_API_KEY"</span> \\
   -H <span class="text-[#A6A39C]">"Content-Type: application/json"</span> \\
   -d '{
     <span class="text-[#A6A39C]">"model"</span>: <span class="text-[#42D6A4]">"gemini-3.6-flash"</span>,
@@ -1112,11 +1112,11 @@ export function landing() {
                 </div>
                 <div class="space-y-2">
                   <div class="flex items-center justify-between p-2 rounded bg-[#141615]">
-                    <span class="text-[#F2EFE8]">sk-unillm-prod-gateway-8x</span>
+                    <span class="text-[#F2EFE8]">unillm-prod-gateway-8x</span>
                     <span class="text-[#42D6A4] font-bold">Active • $2,500 Cap</span>
                   </div>
                   <div class="flex items-center justify-between p-2 rounded bg-[#141615]">
-                    <span class="text-[#F2EFE8]">sk-unillm-staging-eval-2b</span>
+                    <span class="text-[#F2EFE8]">unillm-staging-eval-2b</span>
                     <span class="text-[#42D6A4] font-bold">Active • $250 Cap</span>
                   </div>
                 </div>
@@ -1652,7 +1652,7 @@ export function bindLanding() {
 
   const codeTemplates = {
     curl: `<span class="text-[#FF7849] font-bold">curl</span> https://api.unillm.com/v1/chat/completions \\
-  -H <span class="text-[#A6A39C]">"Authorization: Bearer sk-unillm-live-token"</span> \\
+  -H <span class="text-[#A6A39C]">"Authorization: Bearer YOUR_API_KEY"</span> \\
   -H <span class="text-[#A6A39C]">"Content-Type: application/json"</span> \\
   -d '{
     <span class="text-[#A6A39C]">"model"</span>: <span class="text-[#42D6A4]">"gemini-3.6-flash"</span>,
@@ -1707,7 +1707,7 @@ completion = client.chat.completions.create(
     const activeTab = document.querySelector(".code-tab-btn.active")?.getAttribute("data-lang") || "curl";
     let text = "";
     if (activeTab === "curl") {
-      text = `curl https://api.unillm.com/v1/chat/completions \\\n  -H "Authorization: Bearer sk-unillm-live-token" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "model": "gemini-3.6-flash",\n    "messages": [{"role": "user", "content": "Explain quantum computing simply."}],\n    "temperature": 0.2\n  }'`;
+      text = `curl https://api.unillm.com/v1/chat/completions \\\n  -H "Authorization: Bearer YOUR_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "model": "gemini-3.6-flash",\n    "messages": [{"role": "user", "content": "Explain quantum computing simply."}],\n    "temperature": 0.2\n  }'`;
     } else if (activeTab === "nodejs") {
       text = `import OpenAI from "openai";\n\nconst client = new OpenAI({\n  baseURL: "https://api.unillm.com/v1",\n  apiKey: process.env.UNILLM_API_KEY\n});\n\nconst completion = await client.chat.completions.create({\n  model: "gemini-3.6-flash",\n  messages: [{ role: "user", content: "Explain quantum computing simply." }]\n});`;
     } else if (activeTab === "python") {

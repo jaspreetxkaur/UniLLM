@@ -16,7 +16,7 @@ UniLLM is an enterprise-grade AI gateway and governance platform that provides a
                       │          Client Applications & SDKs           │
                       │       (Python, Node.js, cURL, REST API)      │
                       └──────────────────────┬───────────────────────┘
-                                             │ HTTP / Authorization: Bearer <sk-...>
+                                             │ HTTP / Authorization: Bearer <YOUR_API_KEY>
                                              ▼
                       ┌──────────────────────────────────────────────┐
                       │              UniLLM Edge Gateway             │

@@ -521,7 +521,7 @@ export async function bindAppOverview() {
                     <td class="px-5 py-3 text-[#F2EFE8] font-sans font-medium">${k.name}</td>
                     <td class="px-5 py-3">
                       <div class="flex items-center gap-1.5">
-                        <code class="text-[11px] text-[#F2EFE8] bg-[#0B0C0D] px-2 py-0.5 rounded border border-[rgba(242,239,232,0.1)]">${k.keyPrefix || k.key_prefix || 'sk-...'}</code>
+                        <code class="text-[11px] text-[#F2EFE8] bg-[#0B0C0D] px-2 py-0.5 rounded border border-[rgba(242,239,232,0.1)]">${k.keyPrefix || k.key_prefix || 'unillm_live_...'}</code>
                         <button class="overview-copy-key-btn px-2 py-0.5 text-[10px] font-sans text-neutral-300 hover:text-white rounded bg-[#1A1D1B] hover:bg-[#252926] border border-[rgba(242,239,232,0.1)] cursor-pointer" data-key="${k.keySecret || k.keyPrefix || ''}" title="Copy API Key">Copy</button>
                       </div>
                     </td>

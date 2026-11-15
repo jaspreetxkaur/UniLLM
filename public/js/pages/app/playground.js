@@ -723,7 +723,7 @@ export function bindAppPlayground() {
   exportCurlBtn?.addEventListener("click", () => {
     const modelId = modelSel?.value || "gemini-3.6-flash";
     const temp = tempSlider?.value || "0.7";
-    const cURL = `curl https://api.unillm.com/v1/chat/completions \\\n  -H "Authorization: Bearer sk-unillm-live-token" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "model": "${modelId}",\n    "messages": [{"role": "user", "content": "Hello UniLLM!"}],\n    "temperature": ${temp}\n  }'`;
+    const cURL = `curl https://api.unillm.com/v1/chat/completions \\\n  -H "Authorization: Bearer YOUR_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "model": "${modelId}",\n    "messages": [{"role": "user", "content": "Hello UniLLM!"}],\n    "temperature": ${temp}\n  }'`;
     navigator.clipboard.writeText(cURL);
     components.renderToast("success", "cURL spec copied to clipboard!");
   });

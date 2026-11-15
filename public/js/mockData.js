@@ -491,7 +491,7 @@ export const mockApiKeys = [
     lastUsed: "2026-08-19T11:58:32Z",
     requests: 489500,
     status: "Active",
-    value: "sk-unillm-live-cyb840s93nf820sks8e2n"
+    value: "YOUR_DEMO_API_KEY_1"
   },
   {
     id: "key-2",
@@ -500,7 +500,7 @@ export const mockApiKeys = [
     lastUsed: "2026-08-19T11:05:40Z",
     requests: 25400,
     status: "Active",
-    value: "sk-unillm-dev-sar840sn82js9s81nd8e"
+    value: "YOUR_DEMO_API_KEY_2"
   },
   {
     id: "key-3",
@@ -509,7 +509,7 @@ export const mockApiKeys = [
     lastUsed: "2026-08-19T10:45:00Z",
     requests: 120400,
     status: "Active",
-    value: "sk-unillm-stage-pipe940sjf83js82nsle"
+    value: "YOUR_DEMO_API_KEY_3"
   },
   {
     id: "key-4",
@@ -518,7 +518,7 @@ export const mockApiKeys = [
     lastUsed: "2026-03-12T14:30:00Z",
     requests: 450,
     status: "Revoked",
-    value: "sk-unillm-rev-test002kfj83ns82ldoe"
+    value: "YOUR_DEMO_API_KEY_4"
   }
 ];
 

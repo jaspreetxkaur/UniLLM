@@ -76,7 +76,7 @@ export function docsHome() {
 # Initialize standard client with UniLLM gateway endpoint
 client = OpenAI(
     base_url="https://api.unillm.com/v1",
-    api_key="sk-unillm-live-token"
+    api_key="YOUR_API_KEY"
 )
 
 # Route across any model (Gemini, Claude, GPT-4o, Llama) with 0ms code change
@@ -106,7 +106,7 @@ print(response.choices[0].message.content)</code></pre>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs pt-2">
           <div class="p-4 rounded-xl bg-[#141615] border border-[rgba(242,239,232,0.1)] flex flex-col gap-2">
             <div class="text-[#42D6A4] font-bold text-[11px] uppercase">Live Master Tokens</div>
-            <p class="text-[#A6A39C] text-[11px] leading-normal">Prefix <code class="text-white font-mono">sk-unillm-...</code>. Scoped to workspace spend budgets, model allowlists, and audit logs.</p>
+            <p class="text-[#A6A39C] text-[11px] leading-normal">Prefix <code class="text-white font-mono">unillm_live_...</code>. Scoped to workspace spend budgets, model allowlists, and audit logs.</p>
           </div>
           <div class="p-4 rounded-xl bg-[#141615] border border-[rgba(242,239,232,0.1)] flex flex-col gap-2">
             <div class="text-[#FF7849] font-bold text-[11px] uppercase">Tenant Isolation</div>
@@ -203,10 +203,10 @@ export function bindDocsHome() {
   const copyBtn = document.getElementById("docs-copy-code-btn");
 
   const snippets = {
-    python: `from openai import OpenAI\n\nclient = OpenAI(\n    base_url="https://api.unillm.com/v1",\n    api_key="sk-unillm-live-token"\n)\n\nresponse = client.chat.completions.create(\n    model="gemini-3.6-flash",\n    messages=[{"role": "user", "content": "Summarize system ingress performance."}]\n)\n\nprint(response.choices[0].message.content)`,
+    python: `from openai import OpenAI\n\nclient = OpenAI(\n    base_url="https://api.unillm.com/v1",\n    api_key="YOUR_API_KEY"\n)\n\nresponse = client.chat.completions.create(\n    model="gemini-3.6-flash",\n    messages=[{"role": "user", "content": "Summarize system ingress performance."}]\n)\n\nprint(response.choices[0].message.content)`,
     javascript: `import OpenAI from "openai";\n\nconst client = new OpenAI({\n  baseURL: "https://api.unillm.com/v1",\n  apiKey: process.env.UNILLM_API_KEY\n});\n\nconst completion = await client.chat.completions.create({\n  model: "gemini-3.6-flash",\n  messages: [{ role: "user", content: "Summarize system ingress performance." }]\n});\n\nconsole.log(completion.choices[0].message.content);`,
-    curl: `curl https://api.unillm.com/v1/chat/completions \\\n  -H "Authorization: Bearer sk-unillm-live-token" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "model": "gemini-3.6-flash",\n    "messages": [{"role": "user", "content": "Summarize system ingress performance."}]\n  }'`,
-    rest: `POST /v1/chat/completions HTTP/1.1\nHost: api.unillm.com\nAuthorization: Bearer sk-unillm-live-token\nContent-Type: application/json\n\n{\n  "model": "gemini-3.6-flash",\n  "messages": [{"role": "user", "content": "Summarize system ingress performance."}]\n}`
+    curl: `curl https://api.unillm.com/v1/chat/completions \\\n  -H "Authorization: Bearer YOUR_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '{\n    "model": "gemini-3.6-flash",\n    "messages": [{"role": "user", "content": "Summarize system ingress performance."}]\n  }'`,
+    rest: `POST /v1/chat/completions HTTP/1.1\nHost: api.unillm.com\nAuthorization: Bearer YOUR_API_KEY\nContent-Type: application/json\n\n{\n  "model": "gemini-3.6-flash",\n  "messages": [{"role": "user", "content": "Summarize system ingress performance."}]\n}`
   };
 
   tabs.forEach(tab => {
